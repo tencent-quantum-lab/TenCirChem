@@ -1,0 +1,40 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+          cache: "pip"
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -r requirements.txt
+          pip install --no-cache-dir -r requirements-dev.txt
+      - name: run black
+        run: |
+          black . --check --verbose || echo "return 0"
+      - name: run pylint
+        run : |
+          pylint tencirchem example tests || echo "return 0"
+      - name: test scripts
+        run: |
+          pytest tencirchem tests --durations=0 --cov=tencirchem
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+      - name: test build doc
+        run: |
+          sudo apt install pandoc
+          cd docs
+          make html
+          touch ./build/html/.nojekyll
+      - name: doc to pages 🚀
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs/build/html

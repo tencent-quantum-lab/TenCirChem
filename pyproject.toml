@@ -1,0 +1,40 @@
+[tool.black]
+line-length = 120
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+
+[tool.pylint.format]
+max-line-length = 120
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format = "LF"
+
+[tool.pylint."MESSAGES CONTROL"]
+# Disable the message, report, category or checker with the given id(s).
+disable = "all"
+
+# Enable the message, report, category or checker with the given id(s).
+enable="""
+       c-extension-no-member,
+       bad-indentation,
+       bare-except,
+       broad-except,
+       dangerous-default-value,
+       function-redefined,
+       len-as-condition,
+       line-too-long,
+       misplaced-future,
+       missing-final-newline,
+       mixed-line-endings,
+       multiple-imports,
+       multiple-statements,
+       singleton-comparison,
+       trailing-comma-tuple,
+       trailing-newlines,
+       trailing-whitespace,
+       unexpected-line-ending-format,
+       unused-import,
+       unused-variable,
+       wildcard-import,
+       wrong-import-order
+       """
