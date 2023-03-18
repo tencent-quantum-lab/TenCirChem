@@ -1,0 +1,483 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>tencirchem.static.puccd - TenCirChem documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">TenCirChem  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../../_static/logov0.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/ucc_functions.html">UCC Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/h2o_pes.html">Potential Energy Surface of the Water Molecule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/adapt_vqe.html">ADAPT VQE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/engine_benchmark.html">Benchmark engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/hubbard_model.html">Hubbard Model by UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/noisy_simulation.html">Noisy Circuit Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/sbm_dynamics.html">Dynamics of the Spin-Boson Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/marcus.html">Observing Marcus Inverted Region</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/uccsd.html">UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/kupccgsd.html">k-UpCCGSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/puccd.html">Paired UCCD (pUCCD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/ucc.html">UCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/hea.html">Headware-Efficient Ansatz and Noisy Circuit Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for tencirchem.static.puccd</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyscf.gto.mole</span> <span class="kn">import</span> <span class="n">Mole</span>
+<span class="kn">from</span> <span class="nn">pyscf.cc.addons</span> <span class="kn">import</span> <span class="n">spatial2spin</span>
+<span class="kn">from</span> <span class="nn">pyscf.fci</span> <span class="kn">import</span> <span class="n">cistring</span>
+<span class="kn">from</span> <span class="nn">tensorcircuit</span> <span class="kn">import</span> <span class="n">Circuit</span>
+
+<span class="kn">from</span> <span class="nn">tencirchem.utils.misc</span> <span class="kn">import</span> <span class="n">rdm_mo2ao</span>
+<span class="kn">from</span> <span class="nn">tencirchem.static.ucc</span> <span class="kn">import</span> <span class="n">UCC</span>
+<span class="kn">from</span> <span class="nn">tencirchem.static.ci_utils</span> <span class="kn">import</span> <span class="n">get_ci_strings</span>
+<span class="kn">from</span> <span class="nn">tencirchem.static.evolve_tensornetwork</span> <span class="kn">import</span> <span class="n">get_circuit_givens_swap</span>
+
+
+<div class="viewcode-block" id="PUCCD"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD">[docs]</a><span class="k">class</span> <span class="nc">PUCCD</span><span class="p">(</span><span class="n">UCC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run paired UCC calculation.</span>
+<span class="sd">    The interfaces are similar to :class:`UCCSD &lt;tencirchem.UCCSD&gt;`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># todo: more documentation here and make the references right.</span>
+    <span class="c1"># separate docstring examples for a variety of methods, such as energy()</span>
+    <span class="c1"># also need to add a few comment on make_rdm1/2</span>
+    <span class="c1"># https://arxiv.org/pdf/2002.00035.pdf</span>
+    <span class="c1"># https://arxiv.org/pdf/1503.04878.pdf</span>
+
+<div class="viewcode-block" id="PUCCD.__init__"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mol</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span>
+        <span class="n">init_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp2&quot;</span><span class="p">,</span>
+        <span class="n">active_space</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">mo_coeff</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">run_hf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">run_mp2</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">run_ccsd</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">run_fci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the class with molecular input.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mol: Mole</span>
+<span class="sd">            The molecule as PySCF ``Mole`` object.</span>
+<span class="sd">        init_method: str, optional</span>
+<span class="sd">            How to determine the initial amplitude guess. Accepts ``&quot;mp2&quot;`` (default), ``&quot;ccsd&quot;``</span>
+<span class="sd">            and ``&quot;zeros&quot;``.</span>
+<span class="sd">        active_space: Tuple[int, int], optional</span>
+<span class="sd">            Active space approximation. The first integer is the number of electrons and the second integer is</span>
+<span class="sd">            the number or spatial-orbitals. Defaults to None.</span>
+<span class="sd">        mo_coeff: np.ndarray, optional</span>
+<span class="sd">            Molecule coefficients. If provided then RHF is skipped.</span>
+<span class="sd">            Can be used in combination with the ``init_state`` attribute.</span>
+<span class="sd">            Defaults to None which means RHF orbitals are used.</span>
+<span class="sd">        engine: str, optional</span>
+<span class="sd">            The engine to run the calculation. See :ref:`advanced:Engines` for details.</span>
+<span class="sd">        run_hf: bool, optional</span>
+<span class="sd">            Whether run HF for molecule orbitals. Defaults to ``True``.</span>
+<span class="sd">        run_mp2: bool, optional</span>
+<span class="sd">            Whether run MP2 for initial guess and energy reference. Defaults to ``True``.</span>
+<span class="sd">        run_ccsd: bool, optional</span>
+<span class="sd">            Whether run CCSD for initial guess and energy reference. Defaults to ``True``.</span>
+<span class="sd">        run_fci: bool, optional</span>
+<span class="sd">            Whether run FCI  for energy reference. Defaults to ``True``.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        tencirchem.UCCSD</span>
+<span class="sd">        tencirchem.KUPCCGSD</span>
+<span class="sd">        tencirchem.UCC</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">mol</span><span class="p">,</span>
+            <span class="n">init_method</span><span class="p">,</span>
+            <span class="n">active_space</span><span class="p">,</span>
+            <span class="n">mo_coeff</span><span class="p">,</span>
+            <span class="n">hcb</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">run_hf</span><span class="o">=</span><span class="n">run_hf</span><span class="p">,</span>
+            <span class="n">run_mp2</span><span class="o">=</span><span class="n">run_mp2</span><span class="p">,</span>
+            <span class="n">run_ccsd</span><span class="o">=</span><span class="n">run_ccsd</span><span class="p">,</span>
+            <span class="n">run_fci</span><span class="o">=</span><span class="n">run_fci</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ex_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PUCCD.get_ex1_ops"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex1_ops">[docs]</a>    <span class="k">def</span> <span class="nf">get_ex1_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Not applicable. Use :func:`get_ex_ops`.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="PUCCD.get_ex2_ops"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex2_ops">[docs]</a>    <span class="k">def</span> <span class="nf">get_ex2_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Not applicable. Use :func:`get_ex_ops`.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="PUCCD.get_ex_ops"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex_ops">[docs]</a>    <span class="k">def</span> <span class="nf">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get paired excitation operators for pUCCD ansatz.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t1: np.ndarray, optional</span>
+<span class="sd">            Not used. Kept for consistency with the parent method.</span>
+<span class="sd">        t2: np.ndarray, optional</span>
+<span class="sd">            Not used. Kept for consistency with the parent method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ex_op: List[Tuple]</span>
+<span class="sd">            The excitation operators. Each operator is represented by a tuple of ints.</span>
+<span class="sd">        param_ids: List[int]</span>
+<span class="sd">            The mapping from excitations to parameters.</span>
+<span class="sd">        init_guess: List[float]</span>
+<span class="sd">            The initial guess for the parameters.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from tencirchem import PUCCD</span>
+<span class="sd">        &gt;&gt;&gt; from tencirchem.molecule import h2</span>
+<span class="sd">        &gt;&gt;&gt; puccd = PUCCD(h2)</span>
+<span class="sd">        &gt;&gt;&gt; ex_op, param_ids, init_guess = puccd.get_ex_ops()</span>
+<span class="sd">        &gt;&gt;&gt; ex_op</span>
+<span class="sd">        [(1, 0)]</span>
+<span class="sd">        &gt;&gt;&gt; param_ids</span>
+<span class="sd">        [0]</span>
+<span class="sd">        &gt;&gt;&gt; init_guess  # doctest:+ELLIPSIS</span>
+<span class="sd">        [...]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">no</span><span class="p">,</span> <span class="n">nv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span>
+        <span class="k">if</span> <span class="n">t2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> <span class="n">nv</span><span class="p">))</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">spatial2spin</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+
+        <span class="n">ex_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ex_init_guess</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># to be consistent with givens rotation circuit</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nv</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">ex_ops</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">no</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="n">ex_init_guess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t2</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ex_ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ex_ops</span><span class="p">))),</span> <span class="n">ex_init_guess</span></div>
+
+<div class="viewcode-block" id="PUCCD.make_rdm1"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.make_rdm1">[docs]</a>    <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
+        <span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">make_rdm1</span><span class="o">.</span><span class="vm">__doc__</span>
+
+        <span class="n">civector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statevector_to_civector</span><span class="p">(</span><span class="n">statevector</span><span class="p">)</span>
+        <span class="n">ci_strings</span> <span class="o">=</span> <span class="n">get_ci_strings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hcb</span><span class="p">)</span>
+
+        <span class="n">n_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span>
+        <span class="n">rdm1_cas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_active</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_active</span><span class="p">):</span>
+            <span class="n">bitmask</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+            <span class="n">arraymask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ci_strings</span> <span class="o">&amp;</span> <span class="n">bitmask</span><span class="p">)</span> <span class="o">==</span> <span class="n">bitmask</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">civector</span> <span class="o">@</span> <span class="p">(</span><span class="n">arraymask</span> <span class="o">*</span> <span class="n">civector</span><span class="p">))</span>
+            <span class="n">rdm1_cas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">value</span>
+        <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_rdm_cas</span><span class="p">(</span><span class="n">rdm1_cas</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">basis</span> <span class="o">==</span> <span class="s2">&quot;MO&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rdm1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rdm_mo2ao</span><span class="p">(</span><span class="n">rdm1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PUCCD.make_rdm2"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.make_rdm2">[docs]</a>    <span class="k">def</span> <span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
+        <span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">make_rdm2</span><span class="o">.</span><span class="vm">__doc__</span>
+
+        <span class="n">civector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statevector_to_civector</span><span class="p">(</span><span class="n">statevector</span><span class="p">)</span>
+        <span class="n">ci_strings</span> <span class="o">=</span> <span class="n">get_ci_strings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hcb</span><span class="p">)</span>
+
+        <span class="n">n_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span>
+        <span class="n">rdm2_cas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_active</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_active</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">maskq</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">q</span>
+                <span class="n">maskp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">p</span>
+                <span class="n">maskpq</span> <span class="o">=</span> <span class="n">maskp</span> <span class="o">+</span> <span class="n">maskq</span>
+                <span class="n">arraymask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ci_strings</span> <span class="o">&amp;</span> <span class="n">maskq</span><span class="p">)</span> <span class="o">==</span> <span class="n">maskq</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">q</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">civector</span> <span class="o">@</span> <span class="p">(</span><span class="n">arraymask</span> <span class="o">*</span> <span class="n">civector</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">arraymask</span> <span class="o">&amp;=</span> <span class="p">((</span><span class="o">~</span><span class="n">ci_strings</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">maskp</span><span class="p">)</span> <span class="o">==</span> <span class="n">maskp</span>
+                    <span class="n">excitation</span> <span class="o">=</span> <span class="n">ci_strings</span> <span class="o">^</span> <span class="n">maskpq</span>
+                    <span class="n">addr</span> <span class="o">=</span> <span class="n">cistring</span><span class="o">.</span><span class="n">strs2addr</span><span class="p">(</span><span class="n">n_active</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">excitation</span><span class="p">)</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">civector</span> <span class="o">@</span> <span class="p">(</span><span class="n">arraymask</span> <span class="o">*</span> <span class="n">civector</span><span class="p">[</span><span class="n">addr</span><span class="p">]))</span>
+
+                <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">q</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">arraymask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ci_strings</span> <span class="o">&amp;</span> <span class="n">maskpq</span><span class="p">)</span> <span class="o">==</span> <span class="n">maskpq</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">civector</span> <span class="o">@</span> <span class="p">(</span><span class="n">arraymask</span> <span class="o">*</span> <span class="n">civector</span><span class="p">))</span>
+
+                <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">value</span>
+                <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdm2_cas</span><span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">value</span>
+        <span class="n">rdm2_cas</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_rdm_cas</span><span class="p">(</span><span class="n">rdm2_cas</span><span class="p">)</span>
+        <span class="c1"># no need to transpose</span>
+        <span class="k">if</span> <span class="n">basis</span> <span class="o">==</span> <span class="s2">&quot;MO&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rdm2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rdm_mo2ao</span><span class="p">(</span><span class="n">rdm2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PUCCD.get_circuit"><a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trotter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">givens_swap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the circuit as TensorCircuit ``Circuit`` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params: Tensor, optional</span>
+<span class="sd">            The circuit parameters. Defaults to None, which uses the optimized parameter.</span>
+<span class="sd">            If :func:`kernel` is not called before, the initial guess is used.</span>
+<span class="sd">        trotter: bool, optional</span>
+<span class="sd">            Whether Trotterize the UCC factor into Pauli strings.</span>
+<span class="sd">            Defaults to False.</span>
+<span class="sd">        givens_swap: bool, optional</span>
+<span class="sd">            Whether return the circuit with Givens-Swap gates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        circuit: :class:`tc.Circuit`</span>
+<span class="sd">            The quantum circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">givens_swap</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">trotter</span><span class="o">=</span><span class="n">trotter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_params_argument</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">get_circuit_givens_swap</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">e_puccd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns pUCCD energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, The TenCirChem Authors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,1032 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Potential Energy Surface of the Water Molecule" href="h2o_pes.html" /><link rel="prev" title="Tutorials" href="../tutorials.html" />
+
+    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>UCC Functions - TenCirChem documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">TenCirChem  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logov0.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">UCC Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="h2o_pes.html">Potential Energy Surface of the Water Molecule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapt_vqe.html">ADAPT VQE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engine_benchmark.html">Benchmark engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hubbard_model.html">Hubbard Model by UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="noisy_simulation.html">Noisy Circuit Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbm_dynamics.html">Dynamics of the Spin-Boson Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marcus.html">Observing Marcus Inverted Region</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/uccsd.html">UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/kupccgsd.html">k-UpCCGSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/puccd.html">Paired UCCD (pUCCD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ucc.html">UCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/hea.html">Headware-Efficient Ansatz and Noisy Circuit Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="UCC-Functions">
+<h1>UCC Functions<a class="headerlink" href="#UCC-Functions" title="Permalink to this heading">#</a></h1>
+<section id="Overview">
+<h2>Overview<a class="headerlink" href="#Overview" title="Permalink to this heading">#</a></h2>
+<p>In this notebook, we will introduce the basic functions of the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class. We will use <code class="docutils literal notranslate"><span class="pre">UCCSD</span></code> as a typical example. Other classes such as <code class="docutils literal notranslate"><span class="pre">kUpCCGSD</span></code> share the same interface.</p>
+<p>We will show that, along with nice high-level interface, the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class also offers great flexibility and allows users to easily build their own algorithms.</p>
+</section>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+</pre></div>
+</div>
+</div>
+<p>TenCirChem provides a set of molecules in the <code class="docutils literal notranslate"><span class="pre">molecule</span></code> module for debugging and fast-prototyping.</p>
+<p>TenCirChem uses PySCF <code class="docutils literal notranslate"><span class="pre">Mole</span></code> object to handle molecules. In other words, custom molecules can be built with exact the same interface as PySCF.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;pyscf.gto.mole.Mole at 0x7f132bfd3990&gt;
+</pre></div></div>
+</div>
+</section>
+<section id="Hello-world">
+<h2>Hello world<a class="headerlink" href="#Hello-world" title="Permalink to this heading">#</a></h2>
+<p>This cell illustrates a simple UCC calculation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">print_summary</span><span class="p">(</span><span class="n">include_circuit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################ Ansatz ###############################
+ #qubits  #params  #excitations initial condition
+       4        2             3               RHF
+############################### Circuit ###############################
+ #qubits  #gates  #CNOT  #multicontrol  depth #FLOP
+       4      15     10              1      9  2160
+############################### Energy ################################
+       energy (Hartree)  error (mH) correlation energy (%)
+HF            -1.116706   20.568268                 -0.000
+MP2           -1.129868    7.406850                 63.989
+CCSD          -1.137275   -0.000165                100.001
+UCCSD         -1.137274    0.000000                100.000
+FCI           -1.137274    0.000000                100.000
+############################# Excitations #############################
+     excitation configuration     parameter  initial guess
+0        (3, 2)          1001  1.082849e-16       0.000000
+1        (1, 0)          0110  1.082849e-16       0.000000
+2  (1, 3, 2, 0)          1010 -1.129866e-01      -0.072608
+######################### Optimization Result #########################
+            e: -1.1372744055294384
+          fun: array(-1.13727441)
+     hess_inv: &lt;2x2 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: [0.0, -0.07260814651571333]
+          jac: array([-9.60813938e-19, -1.11022302e-16])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 6
+          nit: 4
+         njev: 6
+     opt_time: 0.010929584503173828
+ staging_time: 3.337860107421875e-06
+       status: 0
+      success: True
+            x: array([ 1.08284918e-16, -1.12986561e-01])
+</pre></div></div>
+</div>
+<p>UCC class has a convenient method <code class="docutils literal notranslate"><span class="pre">print_summary</span></code> for a quick glance of the calculation. The summary contains 5 parts:</p>
+<ul class="simple">
+<li><p>Ansatz.</p></li>
+<li><p>Circuit. TenCirChem by default uses a compact circuit for excitations (see the Circuit section below), in which multi-control gates are involved. The circuit part also gives an estimation of the FLOP required for a full statevector simulation of the circuit.</p></li>
+<li><p>Energy. Includes optimized UCC energy along with HF, MP2, CCSD and FCI energy for reference.</p></li>
+<li><p>Excitations. Includes optimized UCC parameters and their initial guess. See the documentation for the convention of excitation operators and configurations.</p></li>
+<li><p>Optimization Results. This is simply a modified SciPy <code class="docutils literal notranslate"><span class="pre">OptimizeResult</span></code> object.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">print_summary</span></code> by default will not print circuit information since it is sometimes significantly more time-consuming than other parts.</p>
+<p>One may print different parts of the summary separately using corresponding standalone method such as <code class="docutils literal notranslate"><span class="pre">print_ansatz</span></code>.</p>
+</section>
+<section id="The-Circuit">
+<h2>The Circuit<a class="headerlink" href="#The-Circuit" title="Permalink to this heading">#</a></h2>
+<p>TenCirChem uses TensorCircuit <code class="docutils literal notranslate"><span class="pre">circuit</span></code> object for quantum circuit.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">()</span>
+<span class="n">circuit</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;tensorcircuit.circuit.Circuit at 0x7f131c17fe10&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_ucc_functions_11_0.png" src="../_images/tutorial_jupyter_ucc_functions_11_0.png" />
+</div>
+</div>
+<p>TenCirChem uses the compact circuit for excitations described in <a class="reference external" href="https://arxiv.org/pdf/2005.14475.pdf">https://arxiv.org/pdf/2005.14475.pdf</a>. To decompose the multicontroled <span class="math notranslate nohighlight">\(R_y\)</span> gate into elementary gates, use the <code class="docutils literal notranslate"><span class="pre">decompose_multicontrol</span></code> argument.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">(</span><span class="n">decompose_multicontrol</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_ucc_functions_13_0.png" src="../_images/tutorial_jupyter_ucc_functions_13_0.png" />
+</div>
+</div>
+<p>For traditional Trotterized circuit, use the <code class="docutils literal notranslate"><span class="pre">trotter</span></code> argument.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">(</span><span class="n">trotter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_ucc_functions_15_0.png" src="../_images/tutorial_jupyter_ucc_functions_15_0.png" />
+</div>
+</div>
+</section>
+<section id="Useful-Attributes">
+<h2>Useful Attributes<a class="headerlink" href="#Useful-Attributes" title="Permalink to this heading">#</a></h2>
+<p>TenCirChem chooses to expose its internal data whenever possible and in the simplest way. The intention is to make TenCirChem easy to hack and useful as a handy toolbox.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4, 2)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PySCF objects</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">mol</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">hf</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;pyscf.gto.mole.Mole at 0x7f13232ed950&gt;,
+ &lt;pyscf.scf.hf_symm.SymAdaptedRHF at 0x7f132bafc850&gt;)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">e_hf</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_mp2</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_ccsd</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_ucc</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_fci</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_nuc</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-1.116706137236105,
+ -1.1298675557838804,
+ -1.1372745709766439,
+ -1.1372744055294384,
+ -1.1372744055294384,
+ 0.7141392859919029)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># one and two electron integral in molecular orbital basis</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">int1e</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">int2e</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((2, 2), (2, 2, 2, 2))
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hamiltonian as openfermion FermionOperator</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">h_fermion_op</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.7141392859919029 [] +
+-1.2527052599711868 [0^ 0] +
+-0.48227117798977825 [0^ 1^ 0 1] +
+-0.6745650967143663 [0^ 2^ 0 2] +
+-0.18126641677772592 [0^ 2^ 1 3] +
+-0.6635375947675042 [0^ 3^ 0 3] +
+-0.18126641677772592 [0^ 3^ 1 2] +
+-0.47569770336145906 [1^ 1] +
+-0.18126641677772592 [1^ 2^ 0 3] +
+-0.6635375947675038 [1^ 2^ 1 2] +
+-0.18126641677772592 [1^ 3^ 0 2] +
+-0.6974673850129379 [1^ 3^ 1 3] +
+-1.2527052599711868 [2^ 2] +
+-0.48227117798977825 [2^ 3^ 2 3] +
+-0.47569770336145906 [3^ 3]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hamiltonian as openfermion QubitOperator</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">h_qubit_op</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-0.09835117053027564+0j) [] +
+(0.04531660419443148+0j) [X0 X1 X2 X3] +
+(0.04531660419443148+0j) [X0 X1 Y2 Y3] +
+(0.04531660419443148+0j) [Y0 Y1 X2 X3] +
+(0.04531660419443148+0j) [Y0 Y1 Y2 Y3] +
+(-0.22297018776182556+0j) [Z0] +
+(0.12056779449744456+0j) [Z0 Z1] +
+(0.17436684625323448+0j) [Z0 Z2] +
+(0.16588439869187604+0j) [Z0 Z3] +
+(0.1712591626176813+0j) [Z1] +
+(0.16588439869187596+0j) [Z1 Z2] +
+(0.16864127417859157+0j) [Z1 Z3] +
+(-0.22297018776182548+0j) [Z2] +
+(0.12056779449744456+0j) [Z2 Z3] +
+(0.1712591626176812+0j) [Z3]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># t1, t2 amplitude based on MP2 or CCSD (determined by the `init_method` argument)</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">t2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(None, array([[[[-0.07260815]]]]))
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># `param_ids` maps excitation operators to parameters.</span>
+<span class="c1"># Some excitation operators share the same parameter due to symmetry</span>
+<span class="c1"># refer to the documentation for the convention of excitation operators</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">ex_ops</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">param_ids</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">init_guess</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+([(3, 2), (1, 0), (1, 3, 2, 0)], [0, 0, 1], [0.0, -0.07260814651571333])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Scipy `OptimizeResult` object</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">opt_res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+            e: -1.1372744055294384
+          fun: array(-1.13727441)
+     hess_inv: &lt;2x2 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: [0.0, -0.07260814651571333]
+          jac: array([-9.60813938e-19, -1.11022302e-16])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 6
+          nit: 4
+         njev: 6
+     opt_time: 0.010929584503173828
+ staging_time: 3.337860107421875e-06
+       status: 0
+      success: True
+            x: array([ 1.08284918e-16, -1.12986561e-01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the optimized parameters</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">params</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 1.08284918e-16, -1.12986561e-01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimized circuit statevector</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">statevector</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 0.00000000e+00,  0.00000000e+00,  0.00000000e+00,  0.00000000e+00,
+        0.00000000e+00,  9.93623806e-01,  1.08284918e-16,  0.00000000e+00,
+        0.00000000e+00,  1.08284918e-16, -1.12746318e-01,  0.00000000e+00,
+        0.00000000e+00,  0.00000000e+00,  0.00000000e+00,  0.00000000e+00])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration interaction vector</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">civector</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 9.93623806e-01,  1.08284918e-16,  1.08284918e-16, -1.12746318e-01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># bitstring for each element in the CI vector</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">get_ci_strings</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 5,  6,  9, 10], dtype=uint64)
+</pre></div></div>
+</div>
+</section>
+<section id="Active-Space-Approximation">
+<h2>Active Space Approximation<a class="headerlink" href="#Active-Space-Approximation" title="Permalink to this heading">#</a></h2>
+<p>TenCirChem offers the simplest API for active space approximation among available packages.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h8</span>
+
+<span class="c1"># (2e, 2o) active space</span>
+<span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h8</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################ Ansatz ###############################
+ #qubits  #params  #excitations initial condition
+       4        2             3               RHF
+############################### Energy ################################
+       energy (Hartree)    error (mH) correlation energy (%)
+HF            -4.149619  1.343542e+01                 -0.000
+MP2           -4.157573  5.480558e+00                 59.208
+CCSD          -4.163054 -1.932076e-04                100.001
+UCCSD         -4.163054 -8.881784e-13                100.000
+FCI           -4.163054  0.000000e+00                100.000
+############################# Excitations #############################
+     excitation configuration     parameter  initial guess
+0        (3, 2)          1001  1.112312e-15       0.000000
+1        (1, 0)          0110  1.112312e-15       0.000000
+2  (1, 3, 2, 0)          1010 -1.377274e-01      -0.082065
+######################### Optimization Result #########################
+            e: -4.163053957291894
+          fun: array(-4.16305396)
+     hess_inv: &lt;2x2 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: [0.0, -0.08206541779079227]
+          jac: array([-1.21074365e-17, -5.55111512e-17])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 6
+          nit: 4
+         njev: 6
+     opt_time: 0.003999471664428711
+ staging_time: 1.6689300537109375e-06
+       status: 0
+      success: True
+            x: array([ 1.11231160e-15, -1.37727434e-01])
+</pre></div></div>
+</div>
+<p>The reference energies including MP2, CCSD nad FCI are also based on the active space.</p>
+</section>
+<section id="Starting-from-the-Integrals">
+<h2>Starting from the Integrals<a class="headerlink" href="#Starting-from-the-Integrals" title="Permalink to this heading">#</a></h2>
+<p>One may start the UCC calculation from custom integrals without the need to define a molecule.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd_from_integral</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="o">.</span><span class="n">from_integral</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_core</span><span class="p">)</span>
+<span class="c1"># the energy is the same with the last calculation</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uccsd_from_integral</span><span class="o">.</span><span class="n">kernel</span><span class="p">(),</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_ucc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-4.163053957291894 -4.163053957291894
+</pre></div></div>
+</div>
+</section>
+<section id="Feeding-in-Custom-Parameters">
+<h2>Feeding in Custom Parameters<a class="headerlink" href="#Feeding-in-Custom-Parameters" title="Permalink to this heading">#</a></h2>
+<p>In TenCirChem, it is also fairly easy to feed in customized parameters to get desired properties</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">n_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">),</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_hf</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-4.149618533807672, -4.1496185338076685)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># energy and gradient, can be used in optimization</span>
+<span class="c1"># one caveat is that TenCirChem by default uses float32, while SciPy assumes float64</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">energy_and_grad</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-4.149618533807672, array([-2.27679890e-15,  1.93866451e-01]))
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">statevector</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configuration Interaction vector. Compatible with PySCF.</span>
+<span class="n">civector</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">civector</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">civector</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([1., 0., 0., 0.])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the energy by hand</span>
+<span class="n">civector</span> <span class="o">@</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">(</span><span class="n">civector</span><span class="p">)</span> <span class="o">+</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_core</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-4.149618533807672
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set the parameters, and use the class as usual</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+<span class="n">uccsd</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################ Ansatz ###############################
+ #qubits  #params  #excitations initial condition
+       4        2             3               RHF
+############################### Energy ################################
+       energy (Hartree)  error (mH) correlation energy (%)
+HF            -4.149619   13.435423                 -0.000
+MP2           -4.157573    5.480558                 59.208
+CCSD          -4.163054   -0.000193                100.001
+UCCSD         -4.149619   13.435423                  0.000
+FCI           -4.163054    0.000000                100.000
+############################# Excitations #############################
+     excitation configuration  parameter  initial guess
+0        (3, 2)          1001        0.0       0.000000
+1        (1, 0)          0110        0.0       0.000000
+2  (1, 3, 2, 0)          1010        0.0      -0.082065
+######################### Optimization Result #########################
+            e: -4.163053957291894
+          fun: array(-4.16305396)
+     hess_inv: &lt;2x2 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: [0.0, -0.08206541779079227]
+          jac: array([-1.21074365e-17, -5.55111512e-17])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 6
+          nit: 4
+         njev: 6
+     opt_time: 0.003999471664428711
+ staging_time: 1.6689300537109375e-06
+       status: 0
+      success: True
+            x: array([ 1.11231160e-15, -1.37727434e-01])
+</pre></div></div>
+</div>
+</section>
+<section id="Reduced-Density-Matrix">
+<h2>Reduced Density Matrix<a class="headerlink" href="#Reduced-Density-Matrix" title="Permalink to this heading">#</a></h2>
+<p>Calculate reduced density matrix in atomic orbital or molecule orbital basis</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((8, 8), (8, 8, 8, 8))
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uccsd</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">basis</span><span class="o">=</span><span class="s2">&quot;MO&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">basis</span><span class="o">=</span><span class="s2">&quot;MO&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((8, 8), (8, 8, 8, 8))
+</pre></div></div>
+</div>
+<p>Note that the RDM is for the whole space, beyond the active space.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="h2o_pes.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Potential Energy Surface of the Water Molecule</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../tutorials.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Tutorials</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, The TenCirChem Authors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">UCC Functions</a><ul>
+<li><a class="reference internal" href="#Overview">Overview</a></li>
+<li><a class="reference internal" href="#Setup">Setup</a></li>
+<li><a class="reference internal" href="#Hello-world">Hello world</a></li>
+<li><a class="reference internal" href="#The-Circuit">The Circuit</a></li>
+<li><a class="reference internal" href="#Useful-Attributes">Useful Attributes</a></li>
+<li><a class="reference internal" href="#Active-Space-Approximation">Active Space Approximation</a></li>
+<li><a class="reference internal" href="#Starting-from-the-Integrals">Starting from the Integrals</a></li>
+<li><a class="reference internal" href="#Feeding-in-Custom-Parameters">Feeding in Custom Parameters</a></li>
+<li><a class="reference internal" href="#Reduced-Density-Matrix">Reduced Density Matrix</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

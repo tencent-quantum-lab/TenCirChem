@@ -1,0 +1,690 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Benchmark engines" href="engine_benchmark.html" /><link rel="prev" title="Potential Energy Surface of the Water Molecule" href="h2o_pes.html" />
+
+    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>ADAPT VQE - TenCirChem documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">TenCirChem  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logov0.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ucc_functions.html">UCC Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="h2o_pes.html">Potential Energy Surface of the Water Molecule</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">ADAPT VQE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engine_benchmark.html">Benchmark engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hubbard_model.html">Hubbard Model by UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="noisy_simulation.html">Noisy Circuit Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbm_dynamics.html">Dynamics of the Spin-Boson Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marcus.html">Observing Marcus Inverted Region</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/uccsd.html">UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/kupccgsd.html">k-UpCCGSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/puccd.html">Paired UCCD (pUCCD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ucc.html">UCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/hea.html">Headware-Efficient Ansatz and Noisy Circuit Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="ADAPT-VQE">
+<h1>ADAPT VQE<a class="headerlink" href="#ADAPT-VQE" title="Permalink to this heading">#</a></h1>
+<section id="Overview">
+<h2>Overview<a class="headerlink" href="#Overview" title="Permalink to this heading">#</a></h2>
+<p>In this notebook, we will implement <a class="reference external" href="https://www.nature.com/articles/s41467-019-10988-2">ADAPT-VQE</a>, to show how to use TenCirChem to build novel algorithms.</p>
+</section>
+<section id="Form-Operator-Pool">
+<h2>Form Operator Pool<a class="headerlink" href="#Form-Operator-Pool" title="Permalink to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
+<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h4</span>
+
+<span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h4</span><span class="p">)</span>
+
+<span class="c1"># get single and double excitations</span>
+<span class="c1"># param_id maps operators to parameters (some operators share the same parameter)</span>
+<span class="n">ex1_ops</span><span class="p">,</span> <span class="n">ex1_param_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">get_ex1_ops</span><span class="p">()</span>
+<span class="n">ex2_ops</span><span class="p">,</span> <span class="n">ex2_param_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">get_ex2_ops</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The meanings of the numbers are best summarized in the following figure. The elements in the tuples are spin-orbital indices, with the first half and the second half corresponds to creation and annihilation operators, respectively.</p>
+<p><img alt="excitation" src="../_images/excitation.png" /></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ex1_ops</span><span class="p">,</span> <span class="n">ex1_param_ids</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[((6, 4), 0),
+ ((2, 0), 0),
+ ((7, 4), 1),
+ ((3, 0), 1),
+ ((6, 5), 2),
+ ((2, 1), 2),
+ ((7, 5), 3),
+ ((3, 1), 3)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ex2_ops</span><span class="p">,</span> <span class="n">ex2_param_ids</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[((6, 7, 5, 4), 0),
+ ((2, 3, 1, 0), 0),
+ ((2, 6, 4, 0), 1),
+ ((2, 7, 4, 0), 2),
+ ((6, 3, 0, 4), 2),
+ ((3, 7, 4, 0), 3),
+ ((2, 6, 5, 0), 4),
+ ((6, 2, 1, 4), 4),
+ ((2, 7, 5, 0), 5),
+ ((6, 3, 1, 4), 5),
+ ((3, 6, 5, 0), 6),
+ ((7, 2, 1, 4), 6),
+ ((3, 7, 5, 0), 7),
+ ((7, 3, 1, 4), 7),
+ ((2, 6, 5, 1), 8),
+ ((2, 7, 5, 1), 9),
+ ((6, 3, 1, 5), 9),
+ ((3, 7, 5, 1), 10)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># group the operators to form an operator pool</span>
+<span class="c1"># operators with the same parameter are grouped together.</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="n">op_pool</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ex1_op</span><span class="p">,</span> <span class="n">ex1_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ex1_ops</span><span class="p">,</span> <span class="n">ex1_param_ids</span><span class="p">):</span>
+    <span class="n">op_pool</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ex1_id</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ex1_op</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ex2_op</span><span class="p">,</span> <span class="n">ex2_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ex2_ops</span><span class="p">,</span> <span class="n">ex2_param_ids</span><span class="p">):</span>
+    <span class="n">op_pool</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ex2_id</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ex2_op</span><span class="p">)</span>
+<span class="n">op_pool</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">op_pool</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">op_pool</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[(6, 4), (2, 0)],
+ [(7, 4), (3, 0)],
+ [(6, 5), (2, 1)],
+ [(7, 5), (3, 1)],
+ [(6, 7, 5, 4), (2, 3, 1, 0)],
+ [(2, 6, 4, 0)],
+ [(2, 7, 4, 0), (6, 3, 0, 4)],
+ [(3, 7, 4, 0)],
+ [(2, 6, 5, 0), (6, 2, 1, 4)],
+ [(2, 7, 5, 0), (6, 3, 1, 4)],
+ [(3, 6, 5, 0), (7, 2, 1, 4)],
+ [(3, 7, 5, 0), (7, 3, 1, 4)],
+ [(2, 6, 5, 1)],
+ [(2, 7, 5, 1), (6, 3, 1, 5)],
+ [(3, 7, 5, 1)]]
+</pre></div></div>
+</div>
+</section>
+<section id="ADAPT-VQE-Iteration">
+<h2>ADAPT-VQE Iteration<a class="headerlink" href="#ADAPT-VQE-Iteration" title="Permalink to this heading">#</a></h2>
+<p>Once the operator pool is formed, ADAPT-VQE constructs the ansatz by picking operators in the pool iteratively. The criteria for picking the operators is to maximize the absolute energy gradient if the operator is picked. Supposing the original ansatz wavefunction is <span class="math notranslate nohighlight">\(| \psi \rangle\)</span> and the operator picked is <span class="math notranslate nohighlight">\(G_k\)</span>, the new ansatz with <span class="math notranslate nohighlight">\(G_k\)</span> is</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[| \Psi \rangle = e^{\theta_k G_k} | \psi \rangle \ ,\]</div>
+</div>
+<p>and the energy gradient is</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\frac{\partial \langle E \rangle }{\partial \theta_k} =2 \langle \Psi|HG_k|\Psi \rangle \ .\]</div>
+</div>
+<p>With <span class="math notranslate nohighlight">\(\theta_k = 0\)</span>, the gradient is then</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\frac{\partial \langle E \rangle }{\partial \theta_k}\bigg{|}_{\theta_k=0} = 2 \langle \psi|HG_k|\psi \rangle \ .\]</div>
+</div>
+<p>If multiple operators sharing the same parameter are added at the same time, then their gradient should be added together. The iteration stops when the norm of the gradient vector is below a predefined threshold <span class="math notranslate nohighlight">\(\epsilon\)</span>. In the following, <span class="math notranslate nohighlight">\(| \psi \rangle\)</span> is obtained by <code class="docutils literal notranslate"><span class="pre">ucc.civector()</span></code> as a vector in the configuration interaction space.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">ucc</span><span class="o">.</span><span class="n">ex_ops</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ucc</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ucc</span><span class="o">.</span><span class="n">param_ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">MAX_ITER</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">EPSILON</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">MAX_ITER</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;######## Iter </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> ########&quot;</span><span class="p">)</span>
+    <span class="c1"># calculate gradient of each operator from the pool</span>
+    <span class="n">op_gradient_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">psi</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">civector</span><span class="p">()</span>
+    <span class="n">bra</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">op_list</span> <span class="ow">in</span> <span class="n">op_pool</span><span class="p">:</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">bra</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">ucc</span><span class="o">.</span><span class="n">apply_excitation</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">op_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">op_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">+=</span> <span class="n">bra</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">ucc</span><span class="o">.</span><span class="n">apply_excitation</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">op_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">op_gradient_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">grad</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gradient vector norm: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">op_gradient_list</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nonzero gradient vector elements:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">op_list</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">op_pool</span><span class="p">,</span> <span class="n">op_gradient_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">g</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">op_list</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">op_gradient_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">EPSILON</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converged. Norm of gradient: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">op_gradient_list</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="n">chosen_op_list</span> <span class="o">=</span> <span class="n">op_pool</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">op_gradient_list</span><span class="p">))]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Picked operator&quot;</span><span class="p">,</span> <span class="n">chosen_op_list</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ucc</span><span class="o">.</span><span class="n">ex_ops</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">chosen_op_list</span><span class="p">)</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">chosen_op_list</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converged. Same operator picked in succession&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="c1"># update ansatz and run calculation</span>
+    <span class="n">ucc</span><span class="o">.</span><span class="n">ex_ops</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chosen_op_list</span><span class="p">)</span>
+    <span class="n">ucc</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ucc</span><span class="o">.</span><span class="n">param_ids</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">chosen_op_list</span><span class="p">))</span>
+    <span class="n">ucc</span><span class="o">.</span><span class="n">init_guess</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">params</span>
+    <span class="n">ucc</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimized energy: </span><span class="si">{</span><span class="n">ucc</span><span class="o">.</span><span class="n">e_ucc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum number of iteration reached&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+######## Iter 0 ########
+Gradient vector norm:  0.6413625239691856
+Nonzero gradient vector elements:
+0.0000001787 [(6, 4), (2, 0)]
+-0.0000001938 [(7, 5), (3, 1)]
+0.2103420256 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.2141378225 [(2, 6, 4, 0)]
+0.1874444822 [(3, 7, 4, 0)]
+0.3756623781 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.1653203524 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.2765500090 [(2, 6, 5, 1)]
+0.2029254292 [(3, 7, 5, 1)]
+Picked operator [(2, 7, 5, 0), (6, 3, 1, 4)]
+Optimized energy: -2.130032459500918
+######## Iter 1 ########
+Gradient vector norm:  0.5218024526621244
+Nonzero gradient vector elements:
+-0.0125038973 [(6, 4), (2, 0)]
+0.0167842115 [(7, 5), (3, 1)]
+0.1713002616 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.2226765539 [(2, 6, 4, 0)]
+0.2132785933 [(3, 7, 4, 0)]
+0.1071344471 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.3020073191 [(2, 6, 5, 1)]
+0.2115115746 [(3, 7, 5, 1)]
+Picked operator [(2, 6, 5, 1)]
+Optimized energy: -2.1521053433859345
+######## Iter 2 ########
+Gradient vector norm:  0.4071773446367265
+Nonzero gradient vector elements:
+0.0401782688 [(6, 4), (2, 0)]
+-0.0344678940 [(7, 5), (3, 1)]
+0.1829807723 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.1754330302 [(2, 6, 4, 0)]
+0.2209264766 [(3, 7, 4, 0)]
+0.0035378050 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.1519036061 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.1638188641 [(3, 7, 5, 1)]
+Picked operator [(3, 7, 4, 0)]
+Optimized energy: -2.1560078326527474
+######## Iter 3 ########
+Gradient vector norm:  0.3397631170243717
+Nonzero gradient vector elements:
+0.0447472512 [(6, 4), (2, 0)]
+-0.0390906463 [(7, 5), (3, 1)]
+0.1863194802 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.1647591097 [(2, 6, 4, 0)]
+0.0000000382 [(3, 7, 4, 0)]
+-0.0000000803 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.1629033819 [(3, 6, 5, 0), (7, 2, 1, 4)]
+-0.0000000722 [(2, 6, 5, 1)]
+0.1533315226 [(3, 7, 5, 1)]
+Picked operator [(6, 7, 5, 4), (2, 3, 1, 0)]
+Optimized energy: -2.158313503086184
+######## Iter 4 ########
+Gradient vector norm:  0.2904720974252725
+Nonzero gradient vector elements:
+0.0507437926 [(6, 4), (2, 0)]
+-0.0431791207 [(7, 5), (3, 1)]
+-0.0000000009 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.1548519273 [(2, 6, 4, 0)]
+0.0000000012 [(3, 7, 4, 0)]
+-0.0000000017 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.1881028425 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.0000000006 [(2, 6, 5, 1)]
+0.1434324638 [(3, 7, 5, 1)]
+Picked operator [(3, 6, 5, 0), (7, 2, 1, 4)]
+Optimized energy: -2.160631774640665
+######## Iter 5 ########
+Gradient vector norm:  0.23155645245221745
+Nonzero gradient vector elements:
+0.0418683900 [(6, 4), (2, 0)]
+-0.0344273185 [(7, 5), (3, 1)]
+0.1647882822 [(2, 6, 4, 0)]
+-0.0000000002 [(3, 7, 4, 0)]
+0.1533786504 [(3, 7, 5, 1)]
+Picked operator [(2, 6, 4, 0)]
+Optimized energy: -2.164921018130742
+######## Iter 6 ########
+Gradient vector norm:  0.16766398932285673
+Nonzero gradient vector elements:
+0.0241699861 [(6, 4), (2, 0)]
+-0.0308084251 [(7, 5), (3, 1)]
+0.0004344058 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.0012217449 [(3, 7, 4, 0)]
+0.0008976241 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.0004632254 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.0003003856 [(2, 6, 5, 1)]
+0.1630186312 [(3, 7, 5, 1)]
+Picked operator [(3, 7, 5, 1)]
+Optimized energy: -2.1674443274948185
+######## Iter 7 ########
+Gradient vector norm:  0.026968274543560385
+Nonzero gradient vector elements:
+0.0206092184 [(6, 4), (2, 0)]
+-0.0173939056 [(7, 5), (3, 1)]
+-0.0000000813 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.0000000039 [(2, 6, 4, 0)]
+0.0000001792 [(3, 7, 4, 0)]
+0.0000001301 [(2, 7, 5, 0), (6, 3, 1, 4)]
+-0.0000000779 [(3, 6, 5, 0), (7, 2, 1, 4)]
+-0.0000000055 [(2, 6, 5, 1)]
+0.0000000310 [(3, 7, 5, 1)]
+Picked operator [(6, 4), (2, 0)]
+Optimized energy: -2.1674988485893616
+######## Iter 8 ########
+Gradient vector norm:  0.022742856617093358
+Nonzero gradient vector elements:
+-0.0000000004 [(6, 4), (2, 0)]
+-0.0227422801 [(7, 5), (3, 1)]
+0.0001099764 [(6, 7, 5, 4), (2, 3, 1, 0)]
+0.0000004105 [(2, 6, 4, 0)]
+0.0000167703 [(3, 7, 4, 0)]
+0.0001173127 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.0000073356 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.0000055027 [(2, 6, 5, 1)]
+Picked operator [(7, 5), (3, 1)]
+Optimized energy: -2.1675452943964704
+######## Iter 9 ########
+Gradient vector norm:  2.482330523964407e-05
+Nonzero gradient vector elements:
+-0.0000000015 [(6, 4), (2, 0)]
+-0.0000000041 [(7, 5), (3, 1)]
+-0.0000059866 [(6, 7, 5, 4), (2, 3, 1, 0)]
+-0.0000001058 [(2, 6, 4, 0)]
+0.0000190189 [(3, 7, 4, 0)]
+0.0000015227 [(2, 7, 5, 0), (6, 3, 1, 4)]
+0.0000075106 [(3, 6, 5, 0), (7, 2, 1, 4)]
+0.0000041626 [(2, 6, 5, 1)]
+0.0000119403 [(3, 7, 5, 1)]
+Converged. Norm of gradient: 2.482330523964407e-05
+</pre></div></div>
+</div>
+<p>The final ansatz, optimized parameters and reference energies are available by <code class="docutils literal notranslate"><span class="pre">print_summary</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ucc</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+################################ Ansatz ###############################
+ #qubits  #params  #excitations initial condition
+       8        9            14               RHF
+############################### Energy ################################
+      energy (Hartree)  error (mH) correlation energy (%)
+HF           -2.121387   46.173788                 -0.000
+MP2          -2.151794   15.766505                 65.854
+CCSD         -2.167556    0.004979                 99.989
+UCC          -2.167545    0.015250                 99.967
+FCI          -2.167561    0.000000                100.000
+############################# Excitations #############################
+      excitation configuration  parameter  initial guess
+0   (2, 7, 5, 0)      10010110  -0.051907      -0.052049
+1   (6, 3, 1, 4)      01101001  -0.051907      -0.052049
+2   (2, 6, 5, 1)      01010101  -0.140231      -0.139297
+3   (3, 7, 4, 0)      10101010  -0.033405      -0.033263
+4   (6, 7, 5, 4)      11000011  -0.024488      -0.024327
+5   (2, 3, 1, 0)      00111100  -0.024488      -0.024327
+6   (3, 6, 5, 0)      01011010  -0.028461      -0.028758
+7   (7, 2, 1, 4)      10100101  -0.028461      -0.028758
+8   (2, 6, 4, 0)      01100110  -0.052825      -0.053072
+9   (3, 7, 5, 1)      10011001  -0.030435      -0.030805
+10        (6, 4)      01100011  -0.006359      -0.005294
+11        (2, 0)      00110110  -0.006359      -0.005294
+12        (7, 5)      10010011   0.004086       0.000000
+13        (3, 1)      00111001   0.004086       0.000000
+######################### Optimization Result #########################
+            e: -2.1675452943964704
+          fun: array(-2.16754529)
+     hess_inv: &lt;9x9 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: [-0.052049049877468376, -0.13929721882902535, -0.033262956584275416, -0.02432719362945896, -0.02875765729787159, -0.05307218567505374, -0.030805233161950704, -0.005294244026331024, 0]
+          jac: array([ 5.07062545e-09, -8.83791785e-11,  1.30782196e-08,  1.70760122e-09,
+        4.83647155e-09, -3.33705792e-11,  3.54077142e-09, -1.48813139e-09,
+       -4.13038187e-09])
+      message: &#39;CONVERGENCE: REL_REDUCTION_OF_F_&lt;=_FACTR*EPSMCH&#39;
+         nfev: 13
+          nit: 11
+         njev: 13
+     opt_time: 0.014690637588500977
+ staging_time: 4.76837158203125e-07
+       status: 0
+      success: True
+            x: array([-0.0519072 , -0.14023057, -0.03340521, -0.02448758, -0.02846146,
+       -0.0528252 , -0.03043539, -0.00635861,  0.00408631])
+</pre></div></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="engine_benchmark.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Benchmark engines</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="h2o_pes.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Potential Energy Surface of the Water Molecule</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, The TenCirChem Authors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ADAPT VQE</a><ul>
+<li><a class="reference internal" href="#Overview">Overview</a></li>
+<li><a class="reference internal" href="#Form-Operator-Pool">Form Operator Pool</a></li>
+<li><a class="reference internal" href="#ADAPT-VQE-Iteration">ADAPT-VQE Iteration</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

@@ -1,0 +1,807 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Dynamics of the Spin-Boson Model" href="sbm_dynamics.html" /><link rel="prev" title="Hubbard Model by UCCSD" href="hubbard_model.html" />
+
+    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Noisy Circuit Simulation - TenCirChem documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">TenCirChem  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logov0.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ucc_functions.html">UCC Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="h2o_pes.html">Potential Energy Surface of the Water Molecule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapt_vqe.html">ADAPT VQE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engine_benchmark.html">Benchmark engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hubbard_model.html">Hubbard Model by UCCSD</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Noisy Circuit Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbm_dynamics.html">Dynamics of the Spin-Boson Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marcus.html">Observing Marcus Inverted Region</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/uccsd.html">UCCSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/kupccgsd.html">k-UpCCGSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/puccd.html">Paired UCCD (pUCCD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ucc.html">UCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/hea.html">Headware-Efficient Ansatz and Noisy Circuit Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="Noisy-Circuit-Simulation">
+<h1>Noisy Circuit Simulation<a class="headerlink" href="#Noisy-Circuit-Simulation" title="Permalink to this heading">#</a></h1>
+<section id="Overview">
+<h2>Overview<a class="headerlink" href="#Overview" title="Permalink to this heading">#</a></h2>
+<p>In this notebook, we will show how to perform noisy circuit simulation using TenCirChem. The hydrogen molecule <span class="math notranslate nohighlight">\(\rm{H}_2\)</span> is used for the demonstration. Using parity transformation, the system corresponds to 2 qubits. We will firstly illustrate the workflow step by step, and then use well-wrapped high-level interfaces to complete the same task with much fewer lines of code. We will also show it is possible to use Qiskit ansatz directly in TenCirChem. In the end, we study the effect of gate
+noise and the number of measurement shots on the accuracy and uncertainty of VQE.</p>
+</section>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading">#</a></h2>
+<p>TenCirChem uses the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class for noisy circuit simulation, which has a different set of interfaces from the UCC classes. A primary reason is that <em>all</em> ideal UCC circuits are too large for both noisy circuit simulation and execution on state of the art quantum devices. Consequently, usually hardware-efficient ansatz (HEA) have to be adopted for such tasks. Another reason is that inherently the workflow for the noiseless UCC circuit simulation and noisy HEA circuit simulation are very
+different.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">HEA</span>
+<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-Hamiltonian">
+<h2>Define the Hamiltonian<a class="headerlink" href="#Define-the-Hamiltonian" title="Permalink to this heading">#</a></h2>
+<p>The first difference between <code class="docutils literal notranslate"><span class="pre">UCC</span></code> and <code class="docutils literal notranslate"><span class="pre">HEA</span></code> is that the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class is not initialized by molecular inputs. Rather, <code class="docutils literal notranslate"><span class="pre">HEA</span></code> accepts the Hamiltonian in <code class="docutils literal notranslate"><span class="pre">openfermion.QubitOperator</span></code> form and the circuit ansatz for inputs. To facilitate defining the Hamiltonian, the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class provides several useful shortcuts via class attributes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
+
+<span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
+<span class="c1"># Hamiltonian as openfermion.FermionOperator</span>
+<span class="n">h_fermion_op</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">h_fermion_op</span>
+<span class="n">h_fermion_op</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.7141392859919029 [] +
+-1.2527052599711868 [0^ 0] +
+-0.48227117798977825 [0^ 1^ 0 1] +
+-0.6745650967143663 [0^ 2^ 0 2] +
+-0.18126641677772592 [0^ 2^ 1 3] +
+-0.6635375947675042 [0^ 3^ 0 3] +
+-0.18126641677772592 [0^ 3^ 1 2] +
+-0.47569770336145906 [1^ 1] +
+-0.18126641677772592 [1^ 2^ 0 3] +
+-0.6635375947675038 [1^ 2^ 1 2] +
+-0.18126641677772592 [1^ 3^ 0 2] +
+-0.6974673850129379 [1^ 3^ 1 3] +
+-1.2527052599711868 [2^ 2] +
+-0.48227117798977825 [2^ 3^ 2 3] +
+-0.47569770336145906 [3^ 3]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">parity</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># use parity transformation for qubit Hamiltonian and remove 2 qubits</span>
+<span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">parity</span><span class="p">(</span><span class="n">h_fermion_op</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span><span class="p">)</span>
+<span class="n">h_qubit_op</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.33948675952516477 [] +
+0.18126641677772592 [X0 X1] +
+-0.39422935037950685 [Z0] +
+-0.01123932304807404 [Z0 Z1] +
+0.3942293503795067 [Z1]
+</pre></div></div>
+</div>
+<p>An alternative approach is to use openfermion tools such as <code class="docutils literal notranslate"><span class="pre">openfermion.MolecularData</span></code>.</p>
+</section>
+<section id="Define-the-ansatz">
+<h2>Define the ansatz<a class="headerlink" href="#Define-the-ansatz" title="Permalink to this heading">#</a></h2>
+<p>Next, define the ansatz using TensorCircuit. A 1-layer <span class="math notranslate nohighlight">\(R_y\)</span> ansatz composed of 4 parameters is constructed. A TensorCircuit ansatz is a function that has one argument (the circuit parameters) and returns the parameterized circuit.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorcircuit</span> <span class="kn">import</span> <span class="n">Circuit</span>
+
+<span class="c1"># the ansatz</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">init_guess</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="c1"># the ansatz body</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">c</span>
+
+
+<span class="n">get_circuit</span><span class="p">(</span><span class="n">init_guess</span><span class="p">)</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_noisy_simulation_8_0.png" src="../_images/tutorial_jupyter_noisy_simulation_8_0.png" />
+</div>
+</div>
+</section>
+<section id="Noisy-simulation-with-the-HEA-class">
+<h2>Noisy simulation with the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class<a class="headerlink" href="#Noisy-simulation-with-the-HEA-class" title="Permalink to this heading">#</a></h2>
+<p>The rest of the workflow is similar to <code class="docutils literal notranslate"><span class="pre">UCC</span></code>: create an <code class="docutils literal notranslate"><span class="pre">HEA</span></code> instance, run the kernel and print the summary.</p>
+<p>By using the <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&quot;</span></code> engine, a depolarizing noise with probability <span class="math notranslate nohighlight">\(p=0.02\)</span> for the CNOT gate is added</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\mathcal{E}(\rho) = (1 - p)\rho + \frac{p}{15} \sum_{i} P_j \rho P_j\]</div>
+</div>
+<p>Here <span class="math notranslate nohighlight">\(P_j\)</span> are two qubit Pauli matrices except <span class="math notranslate nohighlight">\(I\)</span>. An alternative form is</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\mathcal{E}(\rho) = \frac{16p}{15} \frac{I}{4} + (1 - \frac{16p}{15}) \rho\]</div>
+</div>
+<p>When <span class="math notranslate nohighlight">\(p=0\)</span>, no error is introduced. When <span class="math notranslate nohighlight">\(p=\frac{15}{16}\)</span>, this is a completely depolarizing channel. If <span class="math notranslate nohighlight">\(\rho\)</span> is a pure state, the gate fidelity is <span class="math notranslate nohighlight">\(1-\frac{4}{5}p\)</span>, which is is approximately 98% if <span class="math notranslate nohighlight">\(p=0.02\)</span>.</p>
+<p>The gradient of the parameters is evaluated by the parameter-shift rule and not by auto-differentiation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+############################### Circuit ###############################
+   #qubits  #gates  #CNOT  #multicontrol  depth #FLOP
+0        2       5      1              0      3    96
+######################### Optimization Result #########################
+            e: -1.1202549357480136
+          fun: array(-1.12025494)
+     hess_inv: &lt;4x4 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: array([0.        , 3.14159265, 0.        , 0.        ])
+          jac: array([5.16941739e-10, 5.55111512e-17, 0.00000000e+00, 0.00000000e+00])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 5
+          nit: 3
+         njev: 5
+     opt_time: 0.25640320777893066
+ staging_time: 1.1920928955078125e-06
+       status: 0
+      success: True
+            x: array([-2.25973122e-01,  3.14159265e+00, -6.82347069e-17,  7.19412730e-17])
+</pre></div></div>
+</div>
+<p>Different noise models can be specified using the <code class="docutils literal notranslate"><span class="pre">NoiseConf</span></code> class from TensorCircuit. Here we show a customized noise model with <span class="math notranslate nohighlight">\(p=0.25\)</span> and gate fidelity of 80%. The energy obtained is higher than the <span class="math notranslate nohighlight">\(p=0.02\)</span> result.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorcircuit.noisemodel</span> <span class="kn">import</span> <span class="n">NoiseConf</span>
+<span class="kn">from</span> <span class="nn">tensorcircuit.channels</span> <span class="kn">import</span> <span class="n">isotropicdepolarizingchannel</span>
+
+<span class="n">engine_conf</span> <span class="o">=</span> <span class="n">NoiseConf</span><span class="p">()</span>
+<span class="c1"># larger noise, corresponding to 80% fidelity</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">isotropicdepolarizingchannel</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">num_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">engine_conf</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="s2">&quot;cnot&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="p">)</span>
+
+<span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">,</span> <span class="n">engine_conf</span><span class="o">=</span><span class="n">engine_conf</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+############################### Circuit ###############################
+   #qubits  #gates  #CNOT  #multicontrol  depth #FLOP
+0        2       5      1              0      3    96
+######################### Optimization Result #########################
+            e: -0.9245310332616318
+          fun: array(-0.92453103)
+     hess_inv: &lt;4x4 LbfgsInvHessProduct with dtype=float64&gt;
+   init_guess: array([0.        , 3.14159265, 0.        , 0.        ])
+          jac: array([ 3.87354315e-10, -5.55111512e-17, -5.55111512e-17,  0.00000000e+00])
+      message: &#39;CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL&#39;
+         nfev: 5
+          nit: 3
+         njev: 5
+     opt_time: 0.25928783416748047
+ staging_time: 9.5367431640625e-07
+       status: 0
+      success: True
+            x: array([-2.25973122e-01,  3.14159265e+00, -1.83807579e-16, -9.76918418e-17])
+</pre></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&quot;</span></code> engine does not consider measurement uncertainty. In other words, the engine assumes that infinite shots are taken for each term in the Hamiltonian. In order to take measurement uncertainty into account, use the <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> engine. By default the number of shots for each term is 4096. Note that the engine is significantly slower to run due to the computational overhead. Similar to the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class, the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class supports switching engine at
+runtime. The following example shows that by increasing measurement shots the energy uncertainty is suppressed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># default shots is 4096</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;shots number: 4096&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;shots number: 4096 * 128&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">shots</span> <span class="o">=</span> <span class="mi">4096</span> <span class="o">*</span> <span class="mi">128</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+shots number: 4096
+-0.9187451689899536
+-0.9285959899718158
+-0.9285225235212169
+-0.9349106044977904
+-0.9264353453475235
+shots number: 4096 * 128
+-0.9250756148331946
+-0.9245772630966033
+-0.9238598336661094
+-0.924377692124025
+-0.923522568588401
+</pre></div></div>
+</div>
+<p>Finally, noiseless results are available by using the <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork&quot;</span></code> engine, in which case the energy is in exact agreement with the FCI energy for the hydrogen molecule system.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork&quot;</span><span class="p">),</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_fci</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-1.1372744055294381, -1.1372744055294384)
+</pre></div></div>
+</div>
+</section>
+<section id="Built-in-ansatz,-UCC-ansatz-and-Qiskit-ansatz">
+<h2>Built-in ansatz, UCC ansatz and Qiskit ansatz<a class="headerlink" href="#Built-in-ansatz,-UCC-ansatz-and-Qiskit-ansatz" title="Permalink to this heading">#</a></h2>
+<p>TenCirChem has implemented the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz. We can rebuild the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> instance using the <code class="docutils literal notranslate"><span class="pre">HEA.ry</span></code> function, which builds the qubit Hamiltonian and the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz automatically, and then run the kernel. Note that the default initial guess is randomly generated. The result is exactly the same as what we’ve done step by step in the above code.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">init_guess</span> <span class="o">=</span> <span class="n">init_guess</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1.1202549357480136
+</pre></div></div>
+</div>
+<p>If desired, the UCC ansatz defined in the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class can be fed into the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class for noisy circuit simulation. Note that TenCirChem by default uses a multi-qubit controlled <span class="math notranslate nohighlight">\(R_y\)</span> gate for UCC circuit simulation, which has to be decomposed into elementary gates first for actual execution on quantum computers. The gradient is turned off because parameter-shift rule is not applicable to the circuit. The energy obtained is significantly higher than HEA ansatz, because there are so
+many CNOT gates in the circuit.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="n">get_circuit</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">decompose_multicontrol</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="s2">&quot;free&quot;</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">(),</span> <span class="n">get_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">gate_count</span><span class="p">([</span><span class="s2">&quot;cnot&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(-0.8208126798813514, 18)
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">HEA</span></code> also directly accepts qiskit parameterized circuit as input. While qiskit offers a rich library of circuits, TenCirChem offers much faster simulation speed and friendly user interfaces.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qiskit.circuit.library</span> <span class="kn">import</span> <span class="n">TwoLocal</span>
+
+<span class="n">ansatz</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ansatz</span> <span class="o">=</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">TwoLocal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">rotation_blocks</span><span class="o">=</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="n">entanglement_blocks</span><span class="o">=</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decompose</span><span class="p">())</span>
+<span class="n">ansatz</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_noisy_simulation_22_0.png" src="../_images/tutorial_jupyter_noisy_simulation_22_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1.1202549357480136
+</pre></div></div>
+</div>
+</section>
+<section id="Effect-of-gate-noise-on-VQE-energy">
+<h2>Effect of gate noise on VQE energy<a class="headerlink" href="#Effect-of-gate-noise-on-VQE-energy" title="Permalink to this heading">#</a></h2>
+<p>Here we show how the CNOT depolarizing error affects the optimized VQE energy. If a one-layer ansatz is adopted, the energy increases linearly with the error probability up to <span class="math notranslate nohighlight">\(p=0.8\)</span>. This is a consequence of the special form of the ansatz: there’s only one CNOT gate in the circuit. Increasing the number of layers does not lead to more accurate energy estimation. Rather, the noise caused by more CNOT gates deteriorates the result.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">get_noise_conf</span><span class="p">,</span> <span class="n">set_backend</span>
+
+<span class="c1"># cnot error probabilities</span>
+<span class="n">error_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">]</span>
+<span class="c1"># number of layers in the ansatz</span>
+<span class="n">n_layers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">e_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># record run time</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">n_layer</span> <span class="ow">in</span> <span class="n">n_layers</span><span class="p">:</span>
+    <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="n">n_layer</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+    <span class="c1"># set HF init state</span>
+    <span class="n">hea</span><span class="o">.</span><span class="n">init_guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">init_guess</span><span class="p">)</span>
+    <span class="n">hea</span><span class="o">.</span><span class="n">init_guess</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">for</span> <span class="n">error_prob</span> <span class="ow">in</span> <span class="n">error_probs</span><span class="p">:</span>
+        <span class="n">hea</span><span class="o">.</span><span class="n">engine_conf</span> <span class="o">=</span> <span class="n">get_noise_conf</span><span class="p">(</span><span class="n">error_prob</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+        <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">e_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_list</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+14.445068836212158
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">mpl_config</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">error_probs</span><span class="p">,</span> <span class="n">e_array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Noisy 1-layer&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">error_probs</span><span class="p">,</span> <span class="n">e_array</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Noisy 2-layer&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">error_probs</span><span class="p">,</span> <span class="n">e_array</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Noisy 3-layer&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">error_probs</span><span class="p">,</span> <span class="p">[</span><span class="n">uccsd</span><span class="o">.</span><span class="n">e_fci</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">error_probs</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FCI&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;CNOT error probability $p$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$E$ (Hartree)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;error-probability.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_noisy_simulation_26_0.png" src="../_images/tutorial_jupyter_noisy_simulation_26_0.png" />
+</div>
+</div>
+</section>
+<section id="Effect-of-measurement-shots-on-VQE-energy-uncertainty">
+<h2>Effect of measurement shots on VQE energy uncertainty<a class="headerlink" href="#Effect-of-measurement-shots-on-VQE-energy-uncertainty" title="Permalink to this heading">#</a></h2>
+<p>Here we show how measurement shots affect the standard deviation of the optimized VQE energy. As expected, the standard deviation is in linear relation with <span class="math notranslate nohighlight">\(\sqrt{\frac{1}{N}}\)</span>. In general, increasing <span class="math notranslate nohighlight">\(p\)</span> causes a larger standard deviation of the energy, yet the effect is far less significant than adjusting <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
+<span class="n">hea</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="c1"># cnot error probabilities</span>
+<span class="n">error_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">]</span>
+<span class="c1"># number of measurement shots</span>
+<span class="n">shots_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">14</span><span class="p">)]</span>
+<span class="n">e_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># record run time</span>
+<span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">error_prob</span> <span class="ow">in</span> <span class="n">error_probs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">shots</span> <span class="ow">in</span> <span class="n">shots_list</span><span class="p">:</span>
+        <span class="n">hea</span><span class="o">.</span><span class="n">engine_conf</span> <span class="o">=</span> <span class="n">get_noise_conf</span><span class="p">(</span><span class="n">error_prob</span><span class="p">)</span>
+        <span class="n">hea</span><span class="o">.</span><span class="n">shots</span> <span class="o">=</span> <span class="n">shots</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">):</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">))</span>
+        <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">e_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_list</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">error_probs</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+11.673604011535645
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shots_list</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e_array</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p=0.10$&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shots_list</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e_array</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p=0.20$&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shots_list</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e_array</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p=0.40$&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\sqrt{1 / N_{\rm</span><span class="si">{shots}</span><span class="s2">}}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\sqrt{\textrm</span><span class="si">{Var}</span><span class="s2">(E)}$ (Hartree)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;uncertainty.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_jupyter_noisy_simulation_29_0.png" src="../_images/tutorial_jupyter_noisy_simulation_29_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="sbm_dynamics.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Dynamics of the Spin-Boson Model</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="hubbard_model.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Hubbard Model by UCCSD</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, The TenCirChem Authors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Noisy Circuit Simulation</a><ul>
+<li><a class="reference internal" href="#Overview">Overview</a></li>
+<li><a class="reference internal" href="#Setup">Setup</a></li>
+<li><a class="reference internal" href="#Define-the-Hamiltonian">Define the Hamiltonian</a></li>
+<li><a class="reference internal" href="#Define-the-ansatz">Define the ansatz</a></li>
+<li><a class="reference internal" href="#Noisy-simulation-with-the-HEA-class">Noisy simulation with the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class</a></li>
+<li><a class="reference internal" href="#Built-in-ansatz,-UCC-ansatz-and-Qiskit-ansatz">Built-in ansatz, UCC ansatz and Qiskit ansatz</a></li>
+<li><a class="reference internal" href="#Effect-of-gate-noise-on-VQE-energy">Effect of gate noise on VQE energy</a></li>
+<li><a class="reference internal" href="#Effect-of-measurement-shots-on-VQE-energy-uncertainty">Effect of measurement shots on VQE energy uncertainty</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>
