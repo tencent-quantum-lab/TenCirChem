@@ -359,28 +359,6 @@ Install JAX and CuPy with appropriate GPU driver and set the backend in the foll
 </pre></div>
 </div>
 </section>
-<section id="how-do-i-use-a-different-optimizer-in-vqe">
-<h2>How do I use a different optimizer in VQE?<a class="headerlink" href="#how-do-i-use-a-different-optimizer-in-vqe" title="Permalink to this heading">#</a></h2>
-<p>By default, TenCirChem uses the L-BFGS-B/COBYLA optimizer for gradient/gradient-free optimization.
-To use a different optimizer, the recommended way is to extract the optimization cost function
-from the <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a>,
-and then call any optimizer with any preferred configuration to perform the optimization,
-and finally set the optimized parameters back to <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a>.
-The following code shows how to use a different SciPy optimizer to perform the optimization.
-Line 5 sets the externally optimized variational parameters back to the <a class="reference internal" href="api/uccsd.html#tencirchem.UCCSD" title="tencirchem.UCCSD"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCCSD</span></code></a> class,
-and then the <a class="reference internal" href="api/uccsd.html#tencirchem.UCCSD" title="tencirchem.UCCSD"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCCSD</span></code></a> class functions normally
-as if the <a class="reference internal" href="api/uccsd.html#tencirchem.UCCSD.kernel" title="tencirchem.UCCSD.kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel</span></code></a> method was called.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
-<span class="linenos">2</span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
-<span class="linenos">3</span><span class="c1"># accepts parameters and returns a tuple of energy nad parameter gradient</span>
-<span class="linenos">4</span><span class="n">energy_and_grad</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">get_opt_function</span><span class="p">()</span>
-<span class="linenos">5</span><span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">energy_and_grad</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">uccsd</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CG&quot;</span><span class="p">)</span>
-<span class="linenos">6</span><span class="n">uccsd</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">opt_res</span><span class="o">.</span><span class="n">x</span>
-<span class="linenos">7</span><span class="c1"># prints everything except the optimization information</span>
-<span class="linenos">8</span><span class="n">uccsd</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
 <section id="why-is-jax-backend-so-slow-on-first-run">
 <h2>Why is JAX backend so slow on first run?<a class="headerlink" href="#why-is-jax-backend-so-slow-on-first-run" title="Permalink to this heading">#</a></h2>
 <p>JAX features JIT compilation, and the compile time can be quite long for typical TenCirChem use cases.
@@ -455,7 +433,6 @@ Otherwise, to the author’s knowledge currently there’s no way to solve the s
 <li><a class="reference internal" href="#why-is-tencirchem-so-fast">Why is TenCirChem so fast?</a></li>
 <li><a class="reference internal" href="#how-does-tencirchem-evaluate-ucc-gradient">How does TenCirChem evaluate UCC gradient?</a></li>
 <li><a class="reference internal" href="#how-to-use-gpu-in-tencirchem">How to use GPU in TenCirChem?</a></li>
-<li><a class="reference internal" href="#how-do-i-use-a-different-optimizer-in-vqe">How do I use a different optimizer in VQE?</a></li>
 <li><a class="reference internal" href="#why-is-jax-backend-so-slow-on-first-run">Why is JAX backend so slow on first run?</a></li>
 </ul>
 </li>

@@ -177,31 +177,6 @@ More fine-grained control over the devices is achieved through the JAX or CuPy p
     cp.cuda.Device(1).use()
 
 
-How do I use a different optimizer in VQE?
-------------------------------------------
-
-By default, TenCirChem uses the L-BFGS-B/COBYLA optimizer for gradient/gradient-free optimization.
-To use a different optimizer, the recommended way is to extract the optimization cost function
-from the :class:`UCC <tencirchem.UCC>`,
-and then call any optimizer with any preferred configuration to perform the optimization,
-and finally set the optimized parameters back to :class:`UCC <tencirchem.UCC>`.
-The following code shows how to use a different SciPy optimizer to perform the optimization.
-Line 5 sets the externally optimized variational parameters back to the :class:`UCCSD <tencirchem.UCCSD>` class,
-and then the :class:`UCCSD <tencirchem.UCCSD>` class functions normally
-as if the :func:`kernel <tencirchem.UCCSD.kernel>` method was called.
-
-.. code-block::
-    :linenos:
-
-    from scipy.optimize import minimize
-    uccsd = UCCSD(h2)
-    # accepts parameters and returns a tuple of energy nad parameter gradient
-    energy_and_grad = uccsd.get_opt_function()
-    opt_res = minimize(energy_and_grad, x0=uccsd.init_guess, jac=True, method="CG")
-    uccsd.params = opt_res.x
-    # prints everything except the optimization information
-    uccsd.print_summary()
-
 Why is JAX backend so slow on first run?
 ----------------------------------------
 
