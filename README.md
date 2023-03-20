@@ -11,7 +11,7 @@ TenCirChem is an efficient and versatile quantum computation package for molecul
 TenCirChem is based on [TensorCircuit](https://github.com/tencent-quantum-lab/tensorcircuit), with heavy optimization for chemistry applications.
 
 ## Install
-The package is purely written in Python and can be obtained via `pip` as:
+The package is written in pure Python and can be obtained via `pip` as:
 
 ```sh
 pip install tencirchem
@@ -34,7 +34,8 @@ uccsd.kernel()
 # analyze result
 uccsd.print_summary(include_circuit=True)
 ```
-Plugin your own code is easy
+Running uccsd.kernel() in the above code determines the optimized circuit ansatz parameters and VQE energy.  
+It is equally straightforward for the user to supply their own custom parameters:
 
 ```python
 import numpy as np
@@ -53,11 +54,11 @@ Please refer to the [documentation](https://tencent-quantum-lab.github.io/TenCir
 for more examples and customization.
 
 ## Features
-- Static module
+- Statics module
   - Extremely fast UCC calculation with UCCSD, kUpCCGSD, pUCCD
   - Noisy circuit simulation via TensorCircuit
   - Custom integrals, active space approximation, RDMs, GPU support, etc.
-- Dynamic module
+- Dynamics module
   - Transformation from [renormalizer](https://github.com/shuaigroup/Renormalizer) models to qubit representation
   - VQA algorithm based on JAX
   - Built-in models: spin-boson model, pyrazine S1/S2 internal conversion dynamics
@@ -75,7 +76,7 @@ for more examples and customization.
   - Expose internal variables through class attributes
 
 ## License
-TenCirChem uses its own [license](https://github.com/tencent-quantum-lab/TenCirChem/blob/master/LICENSE)
-adopted from [openCARP](https://opencarp.org/download/license).
-In short, you can use TenCirChem freely for non-commercial/academic purpose 
+TenCirChem is released under Academic Public License.
+See the [LICENSE file](https://github.com/tencent-quantum-lab/TenCirChem/blob/master/LICENSE) for details.
+In short, you can use TenCirChem freely for non-commercial/academic purpose
 and commercial use requires a commercial license.

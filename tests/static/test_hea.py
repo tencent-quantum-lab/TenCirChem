@@ -2,9 +2,8 @@ import numpy as np
 import pytest
 from qiskit.circuit.library import RealAmplitudes
 
-from tencirchem import UCCSD, HEA
+from tencirchem import UCCSD, HEA, parity
 from tencirchem.molecule import h2
-from tencirchem.static.hea import parity
 from tests.static.test_engine import set_backend_with_skip
 
 

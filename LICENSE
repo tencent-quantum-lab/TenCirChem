@@ -119,3 +119,5 @@ permitted above be liable for damage, including general, special, accidental or 
 by law or agreed in writing. The disclaimer also includes consequential damages that result from using the Program
 alone or in conjunction with other programs, including but not limited to the loss or corruption of data.
 
+Initially written by Andras Varga (public domain) for OMNeT++ https://omnetpp.org/intro/license,
+adapted by THL A29 Limited. The adaptation is licensed under CC0 1.0 (Public Domain Dedication).
