@@ -4,21 +4,25 @@
 
 [![ci](https://img.shields.io/github/actions/workflow/status/tencent-quantum-lab/tencirchem/ci.yml?branch=master)](https://github.com/tencent-quantum-lab/TenCirChem/actions)
 [![codecov](https://codecov.io/github/tencent-quantum-lab/TenCirChem/branch/master/graph/badge.svg?token=6QZP1RKVTT)](https://app.codecov.io/github/tencent-quantum-lab/TenCirChem)
+[![pypi](https://img.shields.io/pypi/v/tencirchem.svg?logo=pypi)](https://pypi.org/project/tencirchem/)
 [![doc](https://img.shields.io/badge/docs-link-green.svg)](https://tencent-quantum-lab.github.io/TenCirChem/index.html)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tencent-quantum-lab/TenCirChem/master?labpath=docs%2Fsource%2Ftutorial_jupyter)
 
-TenCirChem is an efficient and versatile quantum computation package for molecular properties.
-TenCirChem is based on [TensorCircuit](https://github.com/tencent-quantum-lab/tensorcircuit), with heavy optimization for chemistry applications.
+English | [简体中文](https://github.com/tencent-quantum-lab/TenCirChem/blob/master/README_CN.md)
 
-## Install
-The package is written in pure Python and can be obtained via `pip` as:
+TenCirChem is an efficient and versatile quantum computation package for molecular properties.
+TenCirChem is based on [TensorCircuit](https://github.com/tencent-quantum-lab/tensorcircuit) 
+and is optimized for chemistry applications.
+
+## Easy Installation
+Getting started with TenCirChem is a breeze. Simply install the package via pip:
 
 ```sh
 pip install tencirchem
 ```
 
-## Getting Started
-UCCSD calculation example
+## Simple to Use
+TenCirChem is written in pure Python, and its use is straightforward. Here's an example of calculating UCCSD:
 
 ```python
 from tencirchem import UCCSD, M
@@ -35,7 +39,7 @@ uccsd.kernel()
 uccsd.print_summary(include_circuit=True)
 ```
 Running uccsd.kernel() in the above code determines the optimized circuit ansatz parameters and VQE energy.  
-It is equally straightforward for the user to supply their own custom parameters:
+TenCirChem also allows the user to supply custom parameters. Here's an example:
 
 ```python
 import numpy as np
@@ -50,12 +54,14 @@ print(uccsd.statevector(params))
 print(uccsd.energy(params))
 print(uccsd.energy_and_grad(params))
 ```
-Please refer to the [documentation](https://tencent-quantum-lab.github.io/TenCirChem/index.html) 
-for more examples and customization.
+For more examples and customization,
+please refer to the [documentation](https://tencent-quantum-lab.github.io/TenCirChem/index.html) 
 
-## Features
+
+## Exciting Features
+TenCirChem's features include:
 - Statics module
-  - Extremely fast UCC calculation with UCCSD, kUpCCGSD, pUCCD
+  - UCC calculation with UCCSD, kUpCCGSD, pUCCD at an extremely fast speed
   - Noisy circuit simulation via TensorCircuit
   - Custom integrals, active space approximation, RDMs, GPU support, etc.
 - Dynamics module
@@ -65,8 +71,9 @@ for more examples and customization.
 
 
 ## Design principle
+TenCirChem is designed to be:
 - Fast
-  - UCC speed 10000x faster than other packages
+  - UCC speed is 10000x faster than other packages
     - Example: H8 with 16 qubits in 2s (CPU). H10 with 20 qubits in 14s (GPU)
     - Achieved by analytical expansion of UCC factors and exploitation of symmetry
 - Easy to hack
@@ -80,3 +87,10 @@ TenCirChem is released under Academic Public License.
 See the [LICENSE file](https://github.com/tencent-quantum-lab/TenCirChem/blob/master/LICENSE) for details.
 In short, you can use TenCirChem freely for non-commercial/academic purpose
 and commercial use requires a commercial license.
+
+## Citing TenCirChem
+If this project helps in your research, please cite our software whitepaper:
+
+[TenCirChem: An Efficient Quantum Computational Chemistry Package for the NISQ Era](https://arxiv.org/abs/2303.10825)
+
+which is also a good introduction to the software.
