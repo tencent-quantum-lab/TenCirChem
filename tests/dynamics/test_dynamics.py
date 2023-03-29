@@ -6,7 +6,7 @@ from tencirchem import set_backend
 from tencirchem.dynamic import sbm, qubit_encode_op, qubit_encode_basis, TimeEvolution
 
 
-@pytest.mark.parametrize("algorithm", ["vanilla", "include_phase", "p-VQD"])
+@pytest.mark.parametrize("algorithm", ["vanilla", "include_phase", "p-VQD", "trotter"])
 def test_sbm(reset_backend, algorithm):
     set_backend("jax")
     epsilon = 0
@@ -30,11 +30,19 @@ def test_sbm(reset_backend, algorithm):
         eps=1e-5,
     )
     te.include_phase = algorithm == "include_phase"
-
-    pvqd = algorithm == "p-VQD"
-    tau = 0.1
+    
+    if algorithm in ["vanilla", "include_phase"]:
+        algo = "vqd"
+        tau = 0.1
+    elif algorithm == "p-VQD":
+        algo = "pvqd"
+        tau = 0.1
+    else:
+        algo = "trotter"
+        tau = 0.02
+    
     for _ in range(50):
-        te.kernel(tau, pvqd=pvqd)
+        te.kernel(tau, algo=algo)
     z = te.property_dict["Z"]
     np.testing.assert_allclose(z[:, 0], z[:, 1], atol=1e-2)
 
