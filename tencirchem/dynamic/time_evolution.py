@@ -69,6 +69,8 @@ class TimeEvolution:
         self.include_phase = False
         if ivp_config is None:
             self.ivp_config = Ivp_Config()
+        else:
+            self.ivp_config = ivp_config
 
         def scipy_deriv(t, _params):
             return get_deriv(self.ansatz, self.jacobian_func, _params, self.h, self.eps, self.include_phase)
