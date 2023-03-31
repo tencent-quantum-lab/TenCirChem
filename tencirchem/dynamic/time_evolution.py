@@ -1,4 +1,5 @@
 import time
+import logging
 from functools import partial
 from collections import defaultdict
 from typing import Dict, List, Optional
@@ -12,12 +13,12 @@ from renormalizer import Model, Mps, Mpo, BasisHalfSpin
 from renormalizer.model.basis import BasisSet
 
 from tencirchem.dynamic.transform import qubit_encode_op, qubit_encode_basis, get_init_circuit
-from tencirchem.dynamic.time_derivative import get_circuit, get_ansatz, get_jacobian_func, get_deriv, get_pvqd_loss_func
+from tencirchem.dynamic.time_derivative import get_circuit, get_ansatz, get_jacobian_func, get_deriv, get_pvqd_loss_func, one_trotter_step
 
+logger = logging.getLogger(__name__)
 
 def evolve_exact(evals: np.ndarray, evecs: np.ndarray, init: np.ndarray, t: float):
     return evecs @ (np.diag(np.exp(-1j * t * evals)) @ (evecs.T @ init))
-
 
 class TimeEvolution:
     def __init__(
@@ -30,6 +31,7 @@ class TimeEvolution:
         eps: float = 1e-5,
         property_op_dict: Dict = None,
         ref_only: bool = False,
+        ivp_config = None,
     ):
         # handling defaults
         if init_condition is None:
@@ -61,9 +63,14 @@ class TimeEvolution:
         self.ansatz = get_ansatz(self.model.ham_terms, self.model.basis, self.n_layers, self.init_circuit)
         self.jacobian_func = get_jacobian_func(self.ansatz)
 
+        self.current_circuit = self.init_circuit
         # setup runtime components
         self.eps = eps
         self.include_phase = False
+        if ivp_config is None:
+            self.ivp_config = Ivp_Config()
+        else:
+            self.ivp_config = ivp_config
 
         def scipy_deriv(t, _params):
             return get_deriv(self.ansatz, self.jacobian_func, _params, self.h, self.eps, self.include_phase)
@@ -102,26 +109,36 @@ class TimeEvolution:
 
         self.wall_time_list = []
 
-    def kernel(self, tau, pvqd=False):
+    def kernel(self, tau, algo="vqd"):
         # one step of time evolution
         if self.ref_only:
             return self.kernel_ref_only(tau)
         time0 = time.time()
-        if not pvqd:
-            scipy_sol = solve_ivp(self.scipy_deriv, [self.t, self.t + tau], self.params)
-            new_params = scipy_sol.y[:, -1]
+        if algo == "vqd" or algo == "pvqd":
+            if algo == "vqd":
+                method, rtol, atol = self.ivp_config.method, self.ivp_config.rtol, self.ivp_config.atol
+                scipy_sol = solve_ivp(self.scipy_deriv, [self.t, self.t + tau],
+                        self.params, method=method, rtol=rtol, atol=atol)
+                new_params = scipy_sol.y[:, -1]
+            else:
+                scipy_sol = self.solve_pvqd(self.params, tau)
+                new_params = self.params + scipy_sol.x
+
+            self.params_list.append(new_params)
+            state = self.ansatz(self.params)
+            self.scipy_sol_list.append(scipy_sol)
         else:
-            scipy_sol = self.solve_pvqd(self.params, tau)
-            new_params = self.params + scipy_sol.x
+            assert algo == "trotter"
+            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis,
+                    self.current_circuit, tau)
+            state = self.current_circuit.state()
+
         time1 = time.time()
         self.t_list.append(self.t + tau)
-        self.params_list.append(new_params)
         # t and params already updated
-        state = self.ansatz(self.params)
         self.state_list.append(state)
         state_ref = evolve_exact(self.evals_ref, self.evecs_ref, self.init_ref, self.t)
         self.state_ref_list.append(state_ref)
-        self.scipy_sol_list.append(scipy_sol)
         # calculate properties
         self.update_property_dict(state, state_ref)
 
@@ -203,3 +220,13 @@ class TimeEvolution:
     @property
     def wall_time(self):
         return self.wall_time_list[-1]
+
+class Ivp_Config:
+    def __init__(self,
+                 method="RK45",
+                 rtol=1e-3,
+                 atol=1e-6):
+        self.method = method
+        self.rtol = rtol
+        self.atol = atol
+

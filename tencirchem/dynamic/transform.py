@@ -248,9 +248,15 @@ def get_encoding(m, boson_encoding):
 
 
 def get_init_circuit(model_ref, model, boson_encoding, init_condition):
-    for v in init_condition.values():
+    for k, v in init_condition.items():
+        basis = model_ref.dof_to_basis[k]
         if not isinstance(v, int):
-            return get_init_circuit_general(model_ref, model, boson_encoding, init_condition)
+            if isinstance(basis, BasisHalfSpin) and v.shape == (2,2) and \
+                np.allclose(np.eye(2), v @ v.T.conj) and np.allclose(np.eye(2), v.T.conj @ v):
+                continue
+            else:
+                return get_init_circuit_general(model_ref, model, boson_encoding, init_condition)
+    
     # replace the dof_name key to site_index key
     circuit = tc.Circuit(len(model.basis))
     for k, v in init_condition.items():
@@ -258,10 +264,16 @@ def get_init_circuit(model_ref, model, boson_encoding, init_condition):
         if isinstance(basis, BasisHalfSpin):
             if v == 1:
                 circuit.X(model.dof_to_siteidx[k])
+            elif v.shape == (2,2):
+                circuit.ANY(idx, unitary=v)
+            else:
+                assert v == 0
         elif isinstance(basis, BasisMultiElectron):
             if v == 1:
                 idx = model.dof_to_siteidx[basis.dofs]
                 circuit.X(idx)
+            else:
+                assert v == 0
         else:
             assert basis.is_phonon
             if boson_encoding is None:
