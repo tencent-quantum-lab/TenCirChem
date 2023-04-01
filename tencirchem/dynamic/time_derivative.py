@@ -16,8 +16,8 @@ from tencirchem.utils.circuit import evolve_pauli
 
 logger = logging.getLogger(__name__)
 
-def construct_ansatz_op(ham_terms, spin_basis):
 
+def construct_ansatz_op(ham_terms, spin_basis):
     dof_idx_dict = {b.dof: i for i, b in enumerate(spin_basis)}
     ansatz_op_list = []
 
@@ -40,8 +40,9 @@ def construct_ansatz_op(ham_terms, spin_basis):
                 name += "Z"
         qubit_idx_list = [dof_idx_dict[dof] for dof in op.dofs]
         ansatz_op_list.append((op_mat, op.factor, name, qubit_idx_list))
-    
+
     return ansatz_op_list
+
 
 def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=None, compile_evolution=False):
     if param_ids is None:
@@ -57,7 +58,7 @@ def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=N
         c = tc.Circuit(len(spin_basis), inputs=init_state)
 
     for i in range(0, n_layers):
-        for j, (ansatz_op, op_factor, name, qubit_idx_list) in enumerate(ansatz_op_list):
+        for j, (ansatz_op, _, name, qubit_idx_list) in enumerate(ansatz_op_list):
             param_id = np.abs(param_ids[j])
             # +0.1 is to avoid np.sign(0) problem
             sign = np.sign(param_ids[j] + 0.1)
@@ -71,9 +72,10 @@ def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=N
                 c = evolve_pauli(c, pauli_string, theta=theta)
     return c
 
+
 def one_trotter_step(ham_terms, spin_basis, init_state, dt):
     """
-    one step first order trotter decompostion 
+    one step first order trotter decompostion
     """
     ansatz_op_list = construct_ansatz_op(ham_terms, spin_basis)
 
@@ -81,10 +83,11 @@ def one_trotter_step(ham_terms, spin_basis, init_state, dt):
         c = tc.Circuit.from_qir(init_state.to_qir(), circuit_params=init_state.circuit_param)
     else:
         c = tc.Circuit(len(spin_basis), inputs=init_state)
-    
-    for (ansatz_op, op_factor, name, qubit_idx_list) in ansatz_op_list:
-        c.exp1(*qubit_idx_list, unitary=ansatz_op, theta=dt*op_factor, name=name)
+
+    for ansatz_op, op_factor, name, qubit_idx_list in ansatz_op_list:
+        c.exp1(*qubit_idx_list, unitary=ansatz_op, theta=dt * op_factor, name=name)
     return c
+
 
 def get_ansatz(ham_terms, spin_basis, n_layers, init_state, param_ids=None):
     @jit

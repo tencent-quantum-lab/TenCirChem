@@ -4,7 +4,7 @@
 #  and WITHOUT ANY WARRANTY. See the LICENSE file for details.
 
 
-from renormalizer import BasisHalfSpin, BasisSHO, Op, Model, Mpo, Mps
+from renormalizer import BasisHalfSpin, BasisSHO, Op
 
 
 def get_ham_terms(epsilon, delta, nmode, omega_list, g_list):

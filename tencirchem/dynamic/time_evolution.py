@@ -19,12 +19,28 @@ from renormalizer import Model, Mps, Mpo, BasisHalfSpin
 from renormalizer.model.basis import BasisSet
 
 from tencirchem.dynamic.transform import qubit_encode_op, qubit_encode_basis, get_init_circuit
-from tencirchem.dynamic.time_derivative import get_circuit, get_ansatz, get_jacobian_func, get_deriv, get_pvqd_loss_func, one_trotter_step
+from tencirchem.dynamic.time_derivative import (
+    get_circuit,
+    get_ansatz,
+    get_jacobian_func,
+    get_deriv,
+    get_pvqd_loss_func,
+    one_trotter_step,
+)
 
 logger = logging.getLogger(__name__)
 
+
+class Ivp_Config:
+    def __init__(self, method="RK45", rtol=1e-3, atol=1e-6):
+        self.method = method
+        self.rtol = rtol
+        self.atol = atol
+
+
 def evolve_exact(evals: np.ndarray, evecs: np.ndarray, init: np.ndarray, t: float):
     return evecs @ (np.diag(np.exp(-1j * t * evals)) @ (evecs.T @ init))
+
 
 class TimeEvolution:
     def __init__(
@@ -37,7 +53,7 @@ class TimeEvolution:
         eps: float = 1e-5,
         property_op_dict: Dict = None,
         ref_only: bool = False,
-        ivp_config = None,
+        ivp_config: Ivp_Config = None,
     ):
         # handling defaults
         if init_condition is None:
@@ -123,8 +139,9 @@ class TimeEvolution:
         if algo == "vqd" or algo == "pvqd":
             if algo == "vqd":
                 method, rtol, atol = self.ivp_config.method, self.ivp_config.rtol, self.ivp_config.atol
-                scipy_sol = solve_ivp(self.scipy_deriv, [self.t, self.t + tau],
-                        self.params, method=method, rtol=rtol, atol=atol)
+                scipy_sol = solve_ivp(
+                    self.scipy_deriv, [self.t, self.t + tau], self.params, method=method, rtol=rtol, atol=atol
+                )
                 new_params = scipy_sol.y[:, -1]
             else:
                 scipy_sol = self.solve_pvqd(self.params, tau)
@@ -135,8 +152,7 @@ class TimeEvolution:
             self.scipy_sol_list.append(scipy_sol)
         else:
             assert algo == "trotter"
-            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis,
-                    self.current_circuit, tau)
+            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis, self.current_circuit, tau)
             state = self.current_circuit.state()
 
         time1 = time.time()
@@ -226,13 +242,3 @@ class TimeEvolution:
     @property
     def wall_time(self):
         return self.wall_time_list[-1]
-
-class Ivp_Config:
-    def __init__(self,
-                 method="RK45",
-                 rtol=1e-3,
-                 atol=1e-6):
-        self.method = method
-        self.rtol = rtol
-        self.atol = atol
-

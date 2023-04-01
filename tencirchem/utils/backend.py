@@ -4,7 +4,6 @@
 #  and WITHOUT ANY WARRANTY. See the LICENSE file for details.
 
 
-import sys
 from typing import Any, List, Dict
 from functools import wraps
 import logging

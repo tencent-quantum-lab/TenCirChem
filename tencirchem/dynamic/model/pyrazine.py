@@ -10,9 +10,9 @@ from itertools import product
 
 
 import numpy as np
-from renormalizer.model import Model, Op
-from renormalizer.model.basis import BasisSHO, BasisMultiElectron, BasisHalfSpin
-from renormalizer.utils.constant import ev2au, fs2au
+from renormalizer.model import Op
+from renormalizer.model.basis import BasisSHO, BasisMultiElectron
+from renormalizer.utils.constant import ev2au
 
 
 logger = logging.getLogger(__name__)
