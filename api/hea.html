@@ -328,6 +328,9 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># HF state, gate noise</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
 <span class="go">-1.1001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># HF state, measurement noise. Set the number of shots by `hea.shots`</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">-1.12</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># HF state, gate+measurement noise</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">)</span>  
 <span class="go">-1...</span>
@@ -348,7 +351,8 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <li><p><strong>grad</strong> (<em>str</em><em>, </em><em>optional</em>) – The algorithm to use for the gradient. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which means <code class="docutils literal notranslate"><span class="pre">self.grad</span></code> will be used.
 Possible options are <code class="docutils literal notranslate"><span class="pre">&quot;param-shift&quot;</span></code> for parameter-shift rule and
 <code class="docutils literal notranslate"><span class="pre">&quot;autodiff&quot;</span></code> for auto-differentiation.
-Note that <code class="docutils literal notranslate"><span class="pre">&quot;autodiff&quot;</span></code> is not compatible with <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> engine.</p></li>
+Note that <code class="docutils literal notranslate"><span class="pre">&quot;autodiff&quot;</span></code> is not compatible with <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-shot&quot;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> engine.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -529,7 +533,7 @@ which creates an HF initial state.</p></li>
 <dt class="sig sig-object py" id="tencirchem.HEA.statevector">
 <span class="sig-name descname"><span class="pre">statevector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.statevector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.statevector" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate the circuit state vector without considering noise.
-Only valid for <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork&quot;</span></code> engine.</p>
+Valid for <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-shot&quot;</span></code> engine.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – The circuit parameters. Defaults to None, which uses the optimized parameter

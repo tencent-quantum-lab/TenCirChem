@@ -125,7 +125,9 @@ TenCirChem supports noisy circuit simulation through the :class:`HEA <tencirchem
 :func:`HEA.ry <tencirchem.HEA.ry>` accepts integrals and setups the class with :math:`R_y` ansatz.
 The ``engine`` argument controls how the energy is evaluated.
 ``"tensornetwork"`` is for noiseless simulation,
-``"tensornetwork-noise"`` includes gate noise and ``"tensornetwork-noise&shot"`` further includes measurement noise.
+``"tensornetwork-noise"`` includes gate noise,
+``"tensornetwork-shot"`` includes measurement uncertainty,
+and ``"tensornetwork-noise&shot"`` includes both.
 
 .. literalinclude:: ../../example/noisy_circuit.py
     :linenos:

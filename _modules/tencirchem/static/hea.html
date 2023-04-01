@@ -246,9 +246,11 @@
     <span class="n">get_densitymatrix</span><span class="p">,</span>
     <span class="n">get_energy_tensornetwork</span><span class="p">,</span>
     <span class="n">get_energy_tensornetwork_noise</span><span class="p">,</span>
+    <span class="n">get_energy_tensornetwork_shot</span><span class="p">,</span>
     <span class="n">get_energy_tensornetwork_noise_shot</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork_noise</span><span class="p">,</span>
+    <span class="n">get_energy_and_grad_tensornetwork_shot</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork_noise_shot</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">tencirchem.static.hamiltonian</span> <span class="kn">import</span> <span class="n">get_hop_from_integral</span>
@@ -618,7 +620,14 @@
         <span class="k">return</span> <span class="n">dmcircuit</span></div>
 
     <span class="k">def</span> <span class="nf">_check_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
-        <span class="n">supported_engine</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">,</span> <span class="s2">&quot;qpu&quot;</span><span class="p">]</span>
+        <span class="n">supported_engine</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;qpu&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">supported_engine</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine &#39;</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">&#39; not supported&quot;</span><span class="p">)</span>
 
@@ -642,7 +651,7 @@
 <div class="viewcode-block" id="HEA.statevector"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.statevector">[docs]</a>    <span class="k">def</span> <span class="nf">statevector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the circuit state vector without considering noise.</span>
-<span class="sd">        Only valid for ``&quot;tensornetwork&quot;`` engine.</span>
+<span class="sd">        Valid for ``&quot;tensornetwork&quot;`` and ``&quot;tensornetwork-shot&quot;`` engine.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -755,6 +764,9 @@
 <span class="sd">        &gt;&gt;&gt; # HF state, gate noise</span>
 <span class="sd">        &gt;&gt;&gt; round(hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-noise&quot;), 4)</span>
 <span class="sd">        -1.1001</span>
+<span class="sd">        &gt;&gt;&gt; # HF state, measurement noise. Set the number of shots by `hea.shots`</span>
+<span class="sd">        &gt;&gt;&gt; round(hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-shot&quot;), 2)</span>
+<span class="sd">        -1.12</span>
 <span class="sd">        &gt;&gt;&gt; # HF state, gate+measurement noise</span>
 <span class="sd">        &gt;&gt;&gt; hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-noise&amp;shot&quot;)  # doctest:+ELLIPSIS</span>
 <span class="sd">        -1...</span>
@@ -766,6 +778,14 @@
             <span class="n">e</span> <span class="o">=</span> <span class="n">get_energy_tensornetwork</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">:</span>
             <span class="n">e</span> <span class="o">=</span> <span class="n">get_energy_tensornetwork_noise</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dmcircuit_no_noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">get_energy_tensornetwork_shot</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shots</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">:</span>
             <span class="n">e</span> <span class="o">=</span> <span class="n">get_energy_tensornetwork_noise_shot</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
@@ -795,7 +815,8 @@
 <span class="sd">            The algorithm to use for the gradient. Defaults to ``None``, which means ``self.grad`` will be used.</span>
 <span class="sd">            Possible options are ``&quot;param-shift&quot;`` for parameter-shift rule and</span>
 <span class="sd">            ``&quot;autodiff&quot;`` for auto-differentiation.</span>
-<span class="sd">            Note that ``&quot;autodiff&quot;`` is not compatible with ``&quot;tensornetwork-noise&amp;shot&quot;`` engine.</span>
+<span class="sd">            Note that ``&quot;autodiff&quot;`` is not compatible with ``&quot;tensornetwork-shot&quot;``</span>
+<span class="sd">            and ``&quot;tensornetwork-noise&amp;shot&quot;`` engine.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -828,6 +849,17 @@
             <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_noise</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dmcircuit_no_noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">,</span> <span class="n">grad</span>
             <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> is incompatible with grad method </span><span class="si">{</span><span class="n">grad</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_shot</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shots</span><span class="p">,</span>
+                <span class="n">grad</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> is incompatible with grad method </span><span class="si">{</span><span class="n">grad</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -854,7 +886,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">]:</span>
                 <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;COBYLA&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span>
+                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">]</span>
                 <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimizeSPSA</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">paired</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">)</span>

@@ -358,7 +358,9 @@ For more details please refer to <a class="reference internal" href="faq.html#wh
 <a class="reference internal" href="api/hea.html#tencirchem.HEA.ry" title="tencirchem.HEA.ry"><code class="xref py py-func docutils literal notranslate"><span class="pre">HEA.ry</span></code></a> accepts integrals and setups the class with <span class="math notranslate nohighlight">\(R_y\)</span> ansatz.
 The <code class="docutils literal notranslate"><span class="pre">engine</span></code> argument controls how the energy is evaluated.
 <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork&quot;</span></code> is for noiseless simulation,
-<code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&quot;</span></code> includes gate noise and <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> further includes measurement noise.</p>
+<code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&quot;</span></code> includes gate noise,
+<code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-shot&quot;</span></code> includes measurement uncertainty,
+and <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> includes both.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">HEA</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
 <span class="linenos"> 3</span>

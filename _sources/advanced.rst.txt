@@ -33,12 +33,17 @@ and is summarized below.
       - Noiseless tensor network contraction
     * - ``"tensornetwork-noise"``
       - ``HEA``
-      - statevector
+      - density matrix
       - No
       - with gate noise
-    * - ``"tensornetwork-noise&shot"``
+    * - ``"tensornetwork-shot"``
       - ``HEA``
       - statevector
+      - No
+      - with measurement noise
+    * - ``"tensornetwork-noise&shot"``
+      - ``HEA``
+      - density matrix
       - No
       - with gate and measurement noise
     * - ``"statevector"``
