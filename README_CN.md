@@ -29,7 +29,7 @@ d = 0.8
 # 距离单位是埃
 h4 = M(atom=[["H", 0, 0, d * i] for i in range(4)])
 
-# 设置
+# 配置
 uccsd = UCCSD(h4)
 # 计算
 uccsd.kernel()

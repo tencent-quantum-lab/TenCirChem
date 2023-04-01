@@ -2,6 +2,11 @@ __version__ = "2023.03"
 __author__ = "TenCirChem Authors"
 __creator__ = "Weitang Li"
 
+#  Copyright (c) 2023. The TenCirChem Developers. All Rights Reserved.
+#
+#  This file is distributed under ACADEMIC PUBLIC LICENSE
+#  and WITHOUT ANY WARRANTY. See the LICENSE file for details.
+
 import os
 import logging
 

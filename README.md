@@ -31,7 +31,7 @@ d = 0.8
 # distance unit is angstrom
 h4 = M(atom=[["H", 0, 0, d * i] for i in range(4)])
 
-# setup
+# configuration
 uccsd = UCCSD(h4)
 # calculate
 uccsd.kernel()
