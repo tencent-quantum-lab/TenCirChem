@@ -32,9 +32,11 @@ from tencirchem.static.engine_hea import (
     get_densitymatrix,
     get_energy_tensornetwork,
     get_energy_tensornetwork_noise,
+    get_energy_tensornetwork_shot,
     get_energy_tensornetwork_noise_shot,
     get_energy_and_grad_tensornetwork,
     get_energy_and_grad_tensornetwork_noise,
+    get_energy_and_grad_tensornetwork_shot,
     get_energy_and_grad_tensornetwork_noise_shot,
 )
 from tencirchem.static.hamiltonian import get_hop_from_integral
@@ -404,7 +406,14 @@ class HEA:
         return dmcircuit
 
     def _check_engine(self, engine):
-        supported_engine = [None, "tensornetwork", "tensornetwork-noise", "tensornetwork-noise&shot", "qpu"]
+        supported_engine = [
+            None,
+            "tensornetwork",
+            "tensornetwork-noise",
+            "tensornetwork-shot",
+            "tensornetwork-noise&shot",
+            "qpu",
+        ]
         if not engine in supported_engine:
             raise ValueError(f"Engine '{engine}' not supported")
 
@@ -428,7 +437,7 @@ class HEA:
     def statevector(self, params: Tensor = None) -> Tensor:
         """
         Evaluate the circuit state vector without considering noise.
-        Only valid for ``"tensornetwork"`` engine.
+        Valid for ``"tensornetwork"`` and ``"tensornetwork-shot"`` engine.
 
         Parameters
         ----------
@@ -541,6 +550,9 @@ class HEA:
         >>> # HF state, gate noise
         >>> round(hea.energy([0, np.pi, 0, 0], "tensornetwork-noise"), 4)
         -1.1001
+        >>> # HF state, measurement noise. Set the number of shots by `hea.shots`
+        >>> round(hea.energy([0, np.pi, 0, 0], "tensornetwork-shot"), 2)
+        -1.12
         >>> # HF state, gate+measurement noise
         >>> hea.energy([0, np.pi, 0, 0], "tensornetwork-noise&shot")  # doctest:+ELLIPSIS
         -1...
@@ -552,6 +564,14 @@ class HEA:
             e = get_energy_tensornetwork(params, self.h_array, self.get_circuit)
         elif engine == "tensornetwork-noise":
             e = get_energy_tensornetwork_noise(params, self.h_array, self.get_dmcircuit_no_noise, self.engine_conf)
+        elif engine == "tensornetwork-shot":
+            e = get_energy_tensornetwork_shot(
+                params,
+                tuple(self.h_qubit_op.terms.keys()),
+                list(self.h_qubit_op.terms.values()),
+                self.get_circuit,
+                self.shots,
+            )
         elif engine == "tensornetwork-noise&shot":
             e = get_energy_tensornetwork_noise_shot(
                 params,
@@ -581,7 +601,8 @@ class HEA:
             The algorithm to use for the gradient. Defaults to ``None``, which means ``self.grad`` will be used.
             Possible options are ``"param-shift"`` for parameter-shift rule and
             ``"autodiff"`` for auto-differentiation.
-            Note that ``"autodiff"`` is not compatible with ``"tensornetwork-noise&shot"`` engine.
+            Note that ``"autodiff"`` is not compatible with ``"tensornetwork-shot"``
+            and ``"tensornetwork-noise&shot"`` engine.
 
         Returns
         -------
@@ -614,6 +635,17 @@ class HEA:
             e, grad = get_energy_and_grad_tensornetwork_noise(
                 params, self.h_array, self.get_dmcircuit_no_noise, self.engine_conf, grad
             )
+        elif engine == "tensornetwork-shot":
+            if grad == "autodiff":
+                raise ValueError(f"Engine {engine} is incompatible with grad method {grad}")
+            e, grad = get_energy_and_grad_tensornetwork_shot(
+                params,
+                tuple(self.h_qubit_op.terms.keys()),
+                list(self.h_qubit_op.terms.values()),
+                self.get_circuit,
+                self.shots,
+                grad,
+            )
         elif engine == "tensornetwork-noise&shot":
             if grad == "autodiff":
                 raise ValueError(f"Engine {engine} is incompatible with grad method {grad}")
@@ -640,7 +672,7 @@ class HEA:
             if self.engine in ["tensornetwork", "tensornetwork-noise"]:
                 opt_res = minimize(func, x0=self.init_guess, method="COBYLA")
             else:
-                assert self.engine == "tensornetwork-noise&shot"
+                assert self.engine in ["tensornetwork-shot", "tensornetwork-noise&shot"]
                 opt_res = minimizeSPSA(func, x0=self.init_guess, paired=False, niter=125)
         else:
             opt_res = minimize(func, x0=self.init_guess, jac=True, method="L-BFGS-B")

@@ -12,6 +12,7 @@ from tests.static.test_engine import set_backend_with_skip
     [
         "tensornetwork",
         "tensornetwork-noise",
+        "tensornetwork-shot",
         "tensornetwork-noise&shot",
     ],
 )
@@ -20,7 +21,7 @@ from tests.static.test_engine import set_backend_with_skip
 def test_hea(engine, backend_str, grad, reset_backend):
     if backend_str in ["numpy", "cupy"] and grad == "autodiff":
         pytest.xfail("Incompatible backend and gradient method")
-    if engine == "tensornetwork-noise&shot" and grad == "autodiff":
+    if engine in ["tensornetwork-shot", "tensornetwork-noise&shot"] and grad == "autodiff":
         pytest.xfail("Incompatible engine and gradient method")
     set_backend_with_skip(backend_str)
     m = h2

@@ -41,11 +41,7 @@ def get_energy_tensornetwork_noise(params, h_array, get_dmcircuit, noise_conf):
     return tc.backend.trace(dm @ h_array).real
 
 
-@partial(jit, static_argnums=[1, 3, 4, 5])
-def get_energy_tensornetwork_noise_shot(params, paulis, coeffs, get_dmcircuit, noise_conf, shots: int):
-    dm = get_densitymatrix(params, get_dmcircuit, noise_conf)
-    n_qubits = round(np.log2(dm.shape[0]))
-    c = DMCircuit(n_qubits, dminputs=dm)
+def sample_expectation_pauli(c, paulis, coeffs, shots, noise_conf):
     expectations = []
     for pauli, coef in zip(paulis, coeffs):
         x = []
@@ -60,6 +56,20 @@ def get_energy_tensornetwork_noise_shot(params, paulis, coeffs, get_dmcircuit, n
         expectations.append(expectation)
     # already real
     return sum(expectations)
+
+
+@partial(jit, static_argnums=[1, 3, 4])
+def get_energy_tensornetwork_shot(params, paulis, coeffs, get_circuit, shots):
+    c = get_circuit(params)
+    return sample_expectation_pauli(c, paulis, coeffs, shots, None)
+
+
+@partial(jit, static_argnums=[1, 3, 4, 5])
+def get_energy_tensornetwork_noise_shot(params, paulis, coeffs, get_dmcircuit, noise_conf, shots: int):
+    dm = get_densitymatrix(params, get_dmcircuit, noise_conf)
+    n_qubits = round(np.log2(dm.shape[0]))
+    c = DMCircuit(n_qubits, dminputs=dm)
+    return sample_expectation_pauli(c, paulis, coeffs, shots, noise_conf)
 
 
 def _get_energy_and_grad(partial_get_energy, params, grad):
@@ -83,6 +93,18 @@ def get_energy_and_grad_tensornetwork(params, h_array, get_circuit, grad):
 def get_energy_and_grad_tensornetwork_noise(params, h_array, get_dmcircuit, noise_conf, grad):
     partial_get_energy = partial(
         get_energy_tensornetwork_noise, h_array=h_array, get_dmcircuit=get_dmcircuit, noise_conf=noise_conf
+    )
+    return _get_energy_and_grad(partial_get_energy, params, grad)
+
+
+@partial(jit, static_argnums=[1, 3, 4, 5])
+def get_energy_and_grad_tensornetwork_shot(params, paulis, coeffs, get_circuit, shots, grad):
+    partial_get_energy = partial(
+        get_energy_tensornetwork_shot,
+        paulis=paulis,
+        coeffs=coeffs,
+        get_circuit=get_circuit,
+        shots=shots,
     )
     return _get_energy_and_grad(partial_get_energy, params, grad)
 
