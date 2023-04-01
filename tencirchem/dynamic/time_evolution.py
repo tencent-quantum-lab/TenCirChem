@@ -85,8 +85,8 @@ class TimeEvolution:
         self.ansatz = get_ansatz(self.model.ham_terms, self.model.basis, self.n_layers, self.init_circuit)
         self.jacobian_func = get_jacobian_func(self.ansatz)
 
-        self.current_circuit = self.init_circuit
         # setup runtime components
+        self.current_circuit = self.init_circuit
         self.eps = eps
         self.include_phase = False
         if ivp_config is None:
@@ -152,8 +152,9 @@ class TimeEvolution:
             self.scipy_sol_list.append(scipy_sol)
         else:
             assert algo == "trotter"
-            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis, self.current_circuit, tau)
-            state = self.current_circuit.state()
+            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis, self.current_circuit, tau, inplace=True)
+            shortcut = one_trotter_step(self.model.ham_terms, self.model.basis, self.state, tau)
+            state = shortcut.state()
 
         time1 = time.time()
         self.t_list.append(self.t + tau)

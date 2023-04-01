@@ -73,14 +73,17 @@ def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=N
     return c
 
 
-def one_trotter_step(ham_terms, spin_basis, init_state, dt):
+def one_trotter_step(ham_terms, spin_basis, init_state, dt, inplace=False):
     """
     one step first order trotter decompostion
     """
     ansatz_op_list = construct_ansatz_op(ham_terms, spin_basis)
 
     if isinstance(init_state, tc.Circuit):
-        c = tc.Circuit.from_qir(init_state.to_qir(), circuit_params=init_state.circuit_param)
+        if inplace:
+            c = init_state
+        else:
+            c = tc.Circuit.from_qir(init_state.to_qir(), circuit_params=init_state.circuit_param)
     else:
         c = tc.Circuit(len(spin_basis), inputs=init_state)
 
