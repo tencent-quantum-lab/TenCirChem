@@ -152,7 +152,9 @@ class TimeEvolution:
             self.scipy_sol_list.append(scipy_sol)
         else:
             assert algo == "trotter"
-            self.current_circuit = one_trotter_step(self.model.ham_terms, self.model.basis, self.current_circuit, tau, inplace=True)
+            self.current_circuit = one_trotter_step(
+                self.model.ham_terms, self.model.basis, self.current_circuit, tau, inplace=True
+            )
             shortcut = one_trotter_step(self.model.ham_terms, self.model.basis, self.state, tau)
             state = shortcut.state()
 

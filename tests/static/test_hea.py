@@ -42,3 +42,5 @@ def test_qiskit_circuit():
     hea = HEA(parity(uccsd.h_fermion_op, 4, 2), circuit, np.random.rand(circuit.num_parameters))
     e = hea.kernel()
     np.testing.assert_allclose(e, uccsd.e_fci, atol=1e-5)
+    hea.print_summary()
+

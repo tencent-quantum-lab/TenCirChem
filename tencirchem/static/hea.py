@@ -132,19 +132,6 @@ def parity(fermion_operator: FermionOperator, n_modes: int, n_elec: int) -> Qubi
     return res
 
 
-def get_init_circuit_parity(n_sorb, n_elec):
-    n_qubits = n_sorb - 2
-    occupation_list = ([0] * (n_sorb // 2 - n_elec // 2) + [1] * (n_elec // 2)) * 2
-    parity_list = (np.cumsum(occupation_list) % 2).tolist()
-    parity_list.pop(n_sorb // 2)
-    parity_list = parity_list[:-1]
-    assert len(parity_list) == n_qubits
-    c = Circuit(n_qubits)
-    for i in np.nonzero(parity_list)[0]:
-        c.X(i)
-    return c
-
-
 def get_ry_circuit(params: Tensor, n_qubits: int, n_layers: int) -> Circuit:
     """
     Get the parameterized :math:`R_y` circuit.

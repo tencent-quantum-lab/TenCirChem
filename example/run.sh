@@ -8,6 +8,10 @@
 export PYTHONPATH=../:PYTHONPATH
 code=0
 for python_args in *.py; do
+    # run water_pes.py requires CuPy
+    if [ "$python_args" = "water_pes.py" ]; then
+      continue
+    fi
     echo ============================$python_args=============================
     timeout 20s python $python_args
     exit_code=$?
