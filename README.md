@@ -15,7 +15,7 @@ TenCirChem is based on [TensorCircuit](https://github.com/tencent-quantum-lab/te
 and is optimized for chemistry applications.
 
 ## Easy Installation
-Getting started with TenCirChem is a breeze. Simply install the package via pip:
+Getting started with TenCirChem by installing the package via pip:
 
 ```sh
 pip install tencirchem

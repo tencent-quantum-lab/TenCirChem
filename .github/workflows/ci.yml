@@ -27,6 +27,10 @@ jobs:
           pytest tencirchem tests --durations=0 --cov=tencirchem
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+      - name: run examples
+        run: |
+            cd example; bash run.sh
+            cd ..
       - name: test build doc
         run: |
           sudo apt install pandoc
