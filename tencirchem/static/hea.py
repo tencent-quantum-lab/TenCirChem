@@ -215,7 +215,7 @@ class HEA:
             if init_circuit is None:
                 c = Circuit(n_qubits)
             else:
-                c = Circuit.from_qir(init_circuit.to_qir())
+                c = Circuit.from_qir(init_circuit.to_qir(), init_circuit.circuit_param)
             return c.append(get_ry_circuit(params, n_qubits, n_layers))
 
         return cls.from_integral(int1e, int2e, n_elec, e_core, "parity", get_circuit, init_guess, **kwargs)
