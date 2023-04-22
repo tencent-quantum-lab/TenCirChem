@@ -38,7 +38,7 @@ based on the :class:`UCC <tencirchem.UCC>` base class.
 
 
 Apart from the high-level interface inherited from PySCF,
-TenCirChem offers a rich set of useful intermediate interfaces for access and modication,
+TenCirChem offers a rich set of useful intermediate interfaces for access and modification,
 to facilitate the development and validation of novel algorithms.
 Functions of the :class:`UCC <tencirchem.UCC>` classes include
 
@@ -50,13 +50,13 @@ Functions of the :class:`UCC <tencirchem.UCC>` classes include
 
 and much more. Please refer to the
 :doc:`tutorial_jupyter/ucc_functions` tutorial for detailed guide and
-the the `Examples <https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example>`__ directory
+the `Examples <https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example>`__ directory
 for working examples.
 
 
 UCC Speed
 ---------
-The :class:`UCC <tencirchem.UCC>` classes exploits particle number conservation
+The :class:`UCC <tencirchem.UCC>` class exploits particle number conservation
 and *UCC factor expansion* for extremely efficient simulation.
 Here we show the tested UCCSD wall time of TenCirChem over hydrogen chain system,
 along with corresponding error compared to FCI.
