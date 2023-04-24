@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Advanced Topics" href="advanced.html" /><link rel="prev" title="Guide to TenCirChem" href="index.html" />
 
-    <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 6.1.3 and Furo 2023.03.27 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 6.2.0 and Furo 2023.03.27 -->
         <title>Quick Start - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
@@ -261,7 +261,7 @@ based on the <a class="reference internal" href="api/ucc.html#tencirchem.UCC" ti
 </pre></div>
 </div>
 <p>Apart from the high-level interface inherited from PySCF,
-TenCirChem offers a rich set of useful intermediate interfaces for access and modication,
+TenCirChem offers a rich set of useful intermediate interfaces for access and modification,
 to facilitate the development and validation of novel algorithms.
 Functions of the <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a> classes include</p>
 <ul class="simple">
@@ -273,12 +273,12 @@ Functions of the <a class="reference internal" href="api/ucc.html#tencirchem.UCC
 </ul>
 <p>and much more. Please refer to the
 <a class="reference internal" href="tutorial_jupyter/ucc_functions.html"><span class="doc">UCC Functions</span></a> tutorial for detailed guide and
-the the <a class="reference external" href="https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example">Examples</a> directory
+the <a class="reference external" href="https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example">Examples</a> directory
 for working examples.</p>
 </section>
 <section id="ucc-speed">
 <h2>UCC Speed<a class="headerlink" href="#ucc-speed" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a> classes exploits particle number conservation
+<p>The <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a> class exploits particle number conservation
 and <em>UCC factor expansion</em> for extremely efficient simulation.
 Here we show the tested UCCSD wall time of TenCirChem over hydrogen chain system,
 along with corresponding error compared to FCI.
