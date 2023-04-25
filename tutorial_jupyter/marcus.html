@@ -234,7 +234,6 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">Op</span><span class="p">,</span> <span class="n">BasisMultiElectron</span><span class="p">,</span> <span class="n">BasisSHO</span><span class="p">,</span> <span class="n">TimeEvolution</span><span class="p">,</span> <span class="n">set_backend</span>
-<span class="kn">from</span> <span class="nn">tencirchem.dynamic</span> <span class="kn">import</span> <span class="n">qubit_encode_op</span><span class="p">,</span> <span class="n">qubit_encode_basis</span>
 
 <span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;jax&quot;</span><span class="p">)</span>
 </pre></div>
@@ -298,11 +297,9 @@ jax_backend
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">delta_g_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">delta_g</span> <span class="ow">in</span> <span class="n">delta_g_list</span><span class="p">:</span>
-    <span class="n">ham_terms_spin</span><span class="p">,</span> <span class="n">basis_spin</span> <span class="o">=</span> <span class="n">get_hamiltonian</span><span class="p">(</span><span class="n">delta_g</span><span class="p">)</span>
+    <span class="n">ham_terms</span><span class="p">,</span> <span class="n">basis</span> <span class="o">=</span> <span class="n">get_hamiltonian</span><span class="p">(</span><span class="n">delta_g</span><span class="p">)</span>
     <span class="n">init_condition</span> <span class="o">=</span> <span class="n">get_init_condition</span><span class="p">()</span>
-    <span class="n">te</span> <span class="o">=</span> <span class="n">TimeEvolution</span><span class="p">(</span>
-        <span class="n">ham_terms_spin</span><span class="p">,</span> <span class="n">basis_spin</span><span class="p">,</span> <span class="n">init_condition</span><span class="o">=</span><span class="n">init_condition</span><span class="p">,</span> <span class="n">property_op_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">Op</span><span class="p">(</span><span class="s2">&quot;a^\dagger a&quot;</span><span class="p">,</span> <span class="s2">&quot;e0&quot;</span><span class="p">)}</span>
-    <span class="p">)</span>
+    <span class="n">te</span> <span class="o">=</span> <span class="n">TimeEvolution</span><span class="p">(</span><span class="n">ham_terms</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">init_condition</span><span class="o">=</span><span class="n">init_condition</span><span class="p">,</span> <span class="n">property_op_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">Op</span><span class="p">(</span><span class="s2">&quot;a^\dagger a&quot;</span><span class="p">,</span> <span class="s2">&quot;e0&quot;</span><span class="p">)})</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">):</span>
         <span class="n">te</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
     <span class="n">n_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">te</span><span class="o">.</span><span class="n">property_dict</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
@@ -335,11 +332,20 @@ jax_backend
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fa8d0673890&gt;
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_jupyter_marcus_11_0.png" src="../_images/tutorial_jupyter_marcus_11_0.png" />
+<img alt="../_images/tutorial_jupyter_marcus_11_1.png" src="../_images/tutorial_jupyter_marcus_11_1.png" />
 </div>
 </div>
 <p>The Marcus rate is</p>
@@ -365,24 +371,38 @@ jax_backend
 
 <span class="c1"># fit temperature</span>
 <span class="n">beta</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">marcus_rate</span><span class="p">,</span> <span class="n">delta_g_list</span><span class="p">,</span> <span class="n">rate</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">dense_delta_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dense_delta_g</span><span class="p">,</span> <span class="p">[</span><span class="n">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="k">for</span> <span class="n">delta_g</span> <span class="ow">in</span> <span class="n">dense_delta_g</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Marcus rate&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delta_g_list</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
+<span class="n">dense_delta_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">dense_delta_g</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">([</span><span class="n">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="k">for</span> <span class="n">delta_g</span> <span class="ow">in</span> <span class="n">dense_delta_g</span><span class="p">]),</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Marcus rate&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delta_g_list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">rate</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Delta G$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Transfer rate $k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Transfer rate log$_</span><span class="si">{10}</span><span class="s2"> \ k$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fa8d0433150&gt;
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_jupyter_marcus_13_0.png" src="../_images/tutorial_jupyter_marcus_13_0.png" />
+<img alt="../_images/tutorial_jupyter_marcus_13_1.png" src="../_images/tutorial_jupyter_marcus_13_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">tight_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -398,11 +418,16 @@ jax_backend
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dense_delta_g</span><span class="p">,</span> <span class="p">[</span><span class="n">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="k">for</span> <span class="n">delta_g</span> <span class="ow">in</span> <span class="n">dense_delta_g</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Marcus rate&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delta_g_list</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">dense_delta_g</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">([</span><span class="n">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="k">for</span> <span class="n">delta_g</span> <span class="ow">in</span> <span class="n">dense_delta_g</span><span class="p">]),</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Marcus rate&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delta_g_list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">rate</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Delta G$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Transfer rate $k$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">2.6</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$(\bf</span><span class="si">{b}</span><span class="s2">)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Transfer rate log$_</span><span class="si">{10}</span><span class="s2"> \ k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">4.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.43</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$(\bf</span><span class="si">{b}</span><span class="s2">)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;marcus.pdf&quot;</span><span class="p">)</span>
 </pre></div>
@@ -413,14 +438,6 @@ jax_backend
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/tutorial_jupyter_marcus_14_0.png" src="../_images/tutorial_jupyter_marcus_14_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
 </div>
 </div>
 </section>
