@@ -31,7 +31,7 @@ h4 = M(atom=[["H", 0, 0, d * i] for i in range(4)])
 
 # 配置
 uccsd = UCCSD(h4)
-# 计算
+# 计算并返回能量
 uccsd.kernel()
 # 分析结果
 uccsd.print_summary(include_circuit=True)

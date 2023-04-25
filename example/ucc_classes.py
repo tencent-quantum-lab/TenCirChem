@@ -8,7 +8,7 @@ m = M(atom=[["H", 0, 0, d * i] for i in range(2)])
 
 # setup
 uccsd = UCCSD(m)
-# calculate
+# calculate and returns energy
 uccsd.kernel()
 # analyze result
 uccsd.print_summary(include_circuit=True)

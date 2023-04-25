@@ -40,7 +40,7 @@ from tencirchem.static.engine_hea import (
     get_energy_and_grad_tensornetwork_noise_shot,
 )
 from tencirchem.static.hamiltonian import get_hop_from_integral
-from tencirchem.utils.misc import reverse_fop_idx, scipy_opt_wrap
+from tencirchem.utils.misc import reverse_fop_idx, scipy_opt_wrap, reverse_qop_idx
 from tencirchem.utils.circuit import get_circuit_dataframe
 
 logger = logging.getLogger(__file__)
@@ -153,11 +153,13 @@ def get_ry_circuit(params: Tensor, n_qubits: int, n_layers: int) -> Circuit:
     params = params.reshape(n_layers + 1, n_qubits)
     for i in range(n_qubits):
         c.ry(i, theta=params[0, i])
+    c.barrier_instruction(*range(n_qubits))
     for l in range(n_layers):
         for i in range(n_qubits - 1):
             c.cnot(i, (i + 1))
         for i in range(n_qubits):
             c.ry(i, theta=params[l + 1, i])
+        c.barrier_instruction(*range(n_qubits))
     return c
 
 
@@ -176,6 +178,7 @@ class HEA:
         e_core: float,
         n_layers: int,
         init_circuit: Circuit = None,
+        mapping: str = "parity",
         **kwargs,
     ):
         """
@@ -198,6 +201,8 @@ class HEA:
         init_circuit: Circuit
             The initial circuit before the :math:`R_y` ansatz. Defaults to None,
             which creates an HF initial state.
+        mapping: str
+            The fermion to qubit mapping. Supported mappings are ``"parity"`` and ``"jordan-wigner"``.
 
         kwargs:
             Other arguments to be passed to the :func:`__init__` function such as ``engine``.
@@ -208,7 +213,13 @@ class HEA:
              An HEA instance
         """
         n_sorb = 2 * len(int1e)
-        n_qubits = n_sorb - 2
+        if mapping == "parity":
+            n_qubits = n_sorb - 2
+        elif mapping == "jordan-wigner":
+            n_qubits = n_sorb
+        else:
+            raise ValueError(f"Unknown mapping: {mapping}")
+
         init_guess = np.random.random((n_layers + 1, n_qubits)).ravel()
 
         def get_circuit(params):
@@ -218,7 +229,7 @@ class HEA:
                 c = Circuit.from_qir(init_circuit.to_qir(), init_circuit.circuit_param)
             return c.append(get_ry_circuit(params, n_qubits, n_layers))
 
-        return cls.from_integral(int1e, int2e, n_elec, e_core, "parity", get_circuit, init_guess, **kwargs)
+        return cls.from_integral(int1e, int2e, n_elec, e_core, mapping, get_circuit, init_guess, **kwargs)
 
     @classmethod
     def from_integral(
@@ -266,7 +277,7 @@ class HEA:
         if mapping == "parity":
             h_qubit_op = parity(hop, n_sorb, n_elec)
         elif mapping == "jordan-wigner":
-            h_qubit_op = jordan_wigner(hop)
+            h_qubit_op = reverse_qop_idx(jordan_wigner(hop))
         else:
             raise ValueError(f"Unknown mapping: {mapping}")
 

@@ -43,4 +43,3 @@ def test_qiskit_circuit():
     e = hea.kernel()
     np.testing.assert_allclose(e, uccsd.e_fci, atol=1e-5)
     hea.print_summary()
-
