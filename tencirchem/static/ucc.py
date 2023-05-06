@@ -335,7 +335,6 @@ class UCC:
         The kernel to perform the VQE algorithm.
         The L-BFGS-B method in SciPy is used for optimization
         and configuration is possible by setting the ``self.scipy_minimize_options`` attribute.
-        :ref:`faq:How do I use a different optimizer in VQE?`
 
         Returns
         -------

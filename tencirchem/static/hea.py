@@ -15,6 +15,7 @@ from noisyopt import minimizeSPSA
 
 from openfermion import (
     jordan_wigner,
+    bravyi_kitaev,
     binary_code_transform,
     checksum_code,
     parity_code,
@@ -202,7 +203,8 @@ class HEA:
             The initial circuit before the :math:`R_y` ansatz. Defaults to None,
             which creates an HF initial state.
         mapping: str
-            The fermion to qubit mapping. Supported mappings are ``"parity"`` and ``"jordan-wigner"``.
+            The fermion to qubit mapping. Supported mappings are ``"parity"``,
+            and ``"bravyi-kitaev"``.
 
         kwargs:
             Other arguments to be passed to the :func:`__init__` function such as ``engine``.
@@ -215,7 +217,7 @@ class HEA:
         n_sorb = 2 * len(int1e)
         if mapping == "parity":
             n_qubits = n_sorb - 2
-        elif mapping == "jordan-wigner":
+        elif mapping in ["jordan-wigner", "bravyi-kitaev"]:
             n_qubits = n_sorb
         else:
             raise ValueError(f"Unknown mapping: {mapping}")
@@ -258,7 +260,8 @@ class HEA:
         e_core: float
             The nuclear energy or core energy if active space approximation is involved.
         mapping: str
-            The fermion to qubit mapping. Supported mappings are ``"parity"`` and ``"jordan-wigner"``.
+            The fermion to qubit mapping. Supported mappings are ``"parity"``,
+            and ``"bravyi-kitaev"``.
         circuit: Callable or QuantumCircuit
             The ansatz as a function or Qiskit :class:`QuantumCircuit`
         init_guess: list of float or :class:`np.ndarray`
@@ -277,7 +280,9 @@ class HEA:
         if mapping == "parity":
             h_qubit_op = parity(hop, n_sorb, n_elec)
         elif mapping == "jordan-wigner":
-            h_qubit_op = reverse_qop_idx(jordan_wigner(hop))
+            h_qubit_op = reverse_qop_idx(jordan_wigner(hop), n_sorb)
+        elif mapping == "bravyi-kitaev":
+            h_qubit_op = reverse_qop_idx(bravyi_kitaev(hop, n_sorb), n_sorb)
         else:
             raise ValueError(f"Unknown mapping: {mapping}")
 

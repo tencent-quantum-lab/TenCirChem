@@ -10,4 +10,4 @@ qiskit
 pylatexenc
 SciencePlots
 noisyopt
-renormalizer==0.0.8
+renormalizer==0.0.9

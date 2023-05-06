@@ -28,10 +28,6 @@ from tencirchem.constants import DISCARD_EPS
 logger = logging.getLogger(__name__)
 
 
-def get_integral(m: Mole):
-    return get_integral_from_hf(m.HF())
-
-
 def get_integral_from_hf(hf: RHF, active_space: Tuple = None):
     if not isinstance(hf, RHF):
         raise TypeError(f"hf object must be RHF class, got {type(hf)}")

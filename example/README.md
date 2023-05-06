@@ -14,4 +14,7 @@
 - `simple_uccsd.py`: Simple UCCSD calculation.
 - `switch_backend.py`: Switch backend at runtime.
 - `ucc_classes.py`: UCC subclasses share the same interface.
+- `vbe_lib.py`: The library for variational basis state encoder.
+- `vbe_td.py`: Variational basis state encoder for the dynamics of the spin-boson model.
+- `vbe_ti.py`: Variational basis state encoder for the ground state of the Holstein model.
 - `water_pes.py`: Water potential energy curve with 6-31G(d) basis set, enabled by GPU acceleration.

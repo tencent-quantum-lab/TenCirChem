@@ -43,3 +43,11 @@ def test_qiskit_circuit():
     e = hea.kernel()
     np.testing.assert_allclose(e, uccsd.e_fci, atol=1e-5)
     hea.print_summary()
+
+
+@pytest.mark.parametrize("mapping", ["jordan-wigner", "bravyi-kitaev"])
+def test_mapping(mapping):
+    uccsd= UCCSD(h2)
+    hea = HEA.ry(uccsd.int1e, uccsd.int2e, uccsd.n_elec, uccsd.e_core, 3, mapping=mapping)
+    e = hea.kernel()
+    np.testing.assert_allclose(e, uccsd.e_fci)
