@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="UCC" href="ucc.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 6.2.0 and Furo 2023.03.27 -->
+    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
         <title>Headware-Efficient Ansatz and Noisy Circuit Simulation - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
@@ -329,8 +329,8 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
 <span class="go">-1.1001</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># HF state, measurement noise. Set the number of shots by `hea.shots`</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-<span class="go">-1.12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">-1.1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># HF state, gate+measurement noise</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">)</span>  
 <span class="go">-1...</span>
@@ -388,7 +388,8 @@ Overlap integral is assumed to be identity.</p>
 <li><p><strong>int2e</strong> (<em>np.ndarray</em>) – Two-body integral, in spatial orbital, chemists’ notation, and without considering symmetry.</p></li>
 <li><p><strong>n_elec</strong> (<em>int</em>) – The number of electrons</p></li>
 <li><p><strong>e_core</strong> (<em>float</em>) – The nuclear energy or core energy if active space approximation is involved.</p></li>
-<li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;jordan-wigner&quot;</span></code>.</p></li>
+<li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&quot;bravyi-kitaev&quot;</span></code>.</p></li>
 <li><p><strong>circuit</strong> (<em>Callable</em><em> or </em><em>QuantumCircuit</em>) – The ansatz as a function or Qiskit <code class="xref py py-class docutils literal notranslate"><span class="pre">QuantumCircuit</span></code></p></li>
 <li><p><strong>init_guess</strong> (list of float or <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – The parameter initial guess.</p></li>
 <li><p><strong>kwargs</strong> – Other arguments to be passed to the <a class="reference internal" href="#tencirchem.HEA.__init__" title="tencirchem.HEA.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a> function such as <code class="docutils literal notranslate"><span class="pre">engine</span></code>.</p></li>
@@ -517,7 +518,8 @@ Parity transformation is used to transform from fermion operators to qubit opera
 <li><p><strong>n_layers</strong> (<em>int</em>) – The number of layers in the ansatz.</p></li>
 <li><p><strong>init_circuit</strong> (<em>Circuit</em>) – The initial circuit before the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz. Defaults to None,
 which creates an HF initial state.</p></li>
-<li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;jordan-wigner&quot;</span></code>.</p></li>
+<li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&quot;bravyi-kitaev&quot;</span></code>.</p></li>
 <li><p><strong>kwargs</strong> – Other arguments to be passed to the <a class="reference internal" href="#tencirchem.HEA.__init__" title="tencirchem.HEA.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a> function such as <code class="docutils literal notranslate"><span class="pre">engine</span></code>.</p></li>
 </ul>
 </dd>

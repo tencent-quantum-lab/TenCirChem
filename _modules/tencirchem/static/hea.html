@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 6.2.0 and Furo 2023.03.27 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
         <title>tencirchem.static.hea - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
@@ -229,6 +229,7 @@
 
 <span class="kn">from</span> <span class="nn">openfermion</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">jordan_wigner</span><span class="p">,</span>
+    <span class="n">bravyi_kitaev</span><span class="p">,</span>
     <span class="n">binary_code_transform</span><span class="p">,</span>
     <span class="n">checksum_code</span><span class="p">,</span>
     <span class="n">parity_code</span><span class="p">,</span>
@@ -416,7 +417,8 @@
 <span class="sd">            The initial circuit before the :math:`R_y` ansatz. Defaults to None,</span>
 <span class="sd">            which creates an HF initial state.</span>
 <span class="sd">        mapping: str</span>
-<span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;`` and ``&quot;jordan-wigner&quot;``.</span>
+<span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;``,</span>
+<span class="sd">            and ``&quot;bravyi-kitaev&quot;``.</span>
 
 <span class="sd">        kwargs:</span>
 <span class="sd">            Other arguments to be passed to the :func:`__init__` function such as ``engine``.</span>
@@ -429,7 +431,7 @@
         <span class="n">n_sorb</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">int1e</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
             <span class="n">n_qubits</span> <span class="o">=</span> <span class="n">n_sorb</span> <span class="o">-</span> <span class="mi">2</span>
-        <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;jordan-wigner&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">mapping</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;jordan-wigner&quot;</span><span class="p">,</span> <span class="s2">&quot;bravyi-kitaev&quot;</span><span class="p">]:</span>
             <span class="n">n_qubits</span> <span class="o">=</span> <span class="n">n_sorb</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown mapping: </span><span class="si">{</span><span class="n">mapping</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -472,7 +474,8 @@
 <span class="sd">        e_core: float</span>
 <span class="sd">            The nuclear energy or core energy if active space approximation is involved.</span>
 <span class="sd">        mapping: str</span>
-<span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;`` and ``&quot;jordan-wigner&quot;``.</span>
+<span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;``,</span>
+<span class="sd">            and ``&quot;bravyi-kitaev&quot;``.</span>
 <span class="sd">        circuit: Callable or QuantumCircuit</span>
 <span class="sd">            The ansatz as a function or Qiskit :class:`QuantumCircuit`</span>
 <span class="sd">        init_guess: list of float or :class:`np.ndarray`</span>
@@ -491,7 +494,9 @@
         <span class="k">if</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
             <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">parity</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;jordan-wigner&quot;</span><span class="p">:</span>
-            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">jordan_wigner</span><span class="p">(</span><span class="n">hop</span><span class="p">))</span>
+            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">jordan_wigner</span><span class="p">(</span><span class="n">hop</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;bravyi-kitaev&quot;</span><span class="p">:</span>
+            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">bravyi_kitaev</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown mapping: </span><span class="si">{</span><span class="n">mapping</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -763,8 +768,8 @@
 <span class="sd">        &gt;&gt;&gt; round(hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-noise&quot;), 4)</span>
 <span class="sd">        -1.1001</span>
 <span class="sd">        &gt;&gt;&gt; # HF state, measurement noise. Set the number of shots by `hea.shots`</span>
-<span class="sd">        &gt;&gt;&gt; round(hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-shot&quot;), 2)</span>
-<span class="sd">        -1.12</span>
+<span class="sd">        &gt;&gt;&gt; round(hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-shot&quot;), 1)</span>
+<span class="sd">        -1.1</span>
 <span class="sd">        &gt;&gt;&gt; # HF state, gate+measurement noise</span>
 <span class="sd">        &gt;&gt;&gt; hea.energy([0, np.pi, 0, 0], &quot;tensornetwork-noise&amp;shot&quot;)  # doctest:+ELLIPSIS</span>
 <span class="sd">        -1...</span>
