@@ -13,9 +13,8 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from opt_einsum import contract
 import tensorcircuit as tc
-from renormalizer import Op, Mpo, Model, OpSum
 
-from tencirchem import set_backend
+from tencirchem import set_backend, Op, Mpo, Model, OpSum
 from tencirchem.dynamic import get_ansatz, get_deriv, get_jacobian_func, qubit_encode_basis, sbm
 
 from vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args

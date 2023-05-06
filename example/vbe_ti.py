@@ -13,9 +13,8 @@ import numpy as np
 import scipy
 from opt_einsum import contract
 import tensorcircuit as tc
-from renormalizer import Op, BasisSHO, BasisSimpleElectron, Mpo, Model
 
-from tencirchem import set_backend
+from tencirchem import set_backend, Op, BasisSHO, BasisSimpleElectron, Mpo, Model
 from tencirchem.dynamic import get_ansatz, qubit_encode_op, qubit_encode_basis
 from tencirchem.utils import scipy_opt_wrap
 

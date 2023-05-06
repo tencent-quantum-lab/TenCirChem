@@ -45,7 +45,9 @@ from tencirchem.static.hea import HEA, parity, binary, get_noise_conf
 
 # dynamic module
 # as an external interface
-from renormalizer import Op, BasisSHO, BasisHalfSpin, BasisSimpleElectron, BasisMultiElectron
+from renormalizer import Op, BasisSHO, BasisHalfSpin, BasisSimpleElectron, BasisMultiElectron, Model, Mpo
+from renormalizer.model import OpSum
+
 from tencirchem.utils.misc import get_dense_operator
 from tencirchem.dynamic.time_evolution import TimeEvolution
 

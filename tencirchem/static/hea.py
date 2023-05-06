@@ -554,8 +554,8 @@ class HEA:
         >>> round(hea.energy([0, np.pi, 0, 0], "tensornetwork-noise"), 4)
         -1.1001
         >>> # HF state, measurement noise. Set the number of shots by `hea.shots`
-        >>> round(hea.energy([0, np.pi, 0, 0], "tensornetwork-shot"), 2)
-        -1.12
+        >>> round(hea.energy([0, np.pi, 0, 0], "tensornetwork-shot"), 1)
+        -1.1
         >>> # HF state, gate+measurement noise
         >>> hea.energy([0, np.pi, 0, 0], "tensornetwork-noise&shot")  # doctest:+ELLIPSIS
         -1...

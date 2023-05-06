@@ -91,3 +91,11 @@ TenCirChem 使用 Academic Public License 发布。
 [TenCirChem: An Efficient Quantum Computational Chemistry Package for the NISQ Era](https://arxiv.org/abs/2303.10825)
 
 这也是软件的一个很好的介绍。
+
+## 研究和应用
+
+### 变分基矢编码器
+变分基矢编码器是编码电声子系统中的声子用以量子计算的高效算法。
+请参考[例子](https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example).
+参考论文: https://arxiv.org/pdf/2301.01442.pdf (发表于PRR).
+
