@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20 -->
         <title>tencirchem.static.hea - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -158,7 +158,7 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../advanced.html">Advanced Topics</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/ucc_functions.html">UCC Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/h2o_pes.html">Potential Energy Surface of the Water Molecule</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_jupyter/adapt_vqe.html">ADAPT VQE</a></li>
@@ -170,7 +170,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../faq.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/uccsd.html">UCCSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/kupccgsd.html">k-UpCCGSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/puccd.html">Paired UCCD (pUCCD)</a></li>
@@ -249,10 +249,12 @@
     <span class="n">get_energy_tensornetwork_noise</span><span class="p">,</span>
     <span class="n">get_energy_tensornetwork_shot</span><span class="p">,</span>
     <span class="n">get_energy_tensornetwork_noise_shot</span><span class="p">,</span>
+    <span class="n">get_energy_qpu</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork_noise</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork_shot</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_tensornetwork_noise_shot</span><span class="p">,</span>
+    <span class="n">get_energy_and_grad_qpu</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">tencirchem.static.hamiltonian</span> <span class="kn">import</span> <span class="n">get_hop_from_integral</span>
 <span class="kn">from</span> <span class="nn">tencirchem.utils.misc</span> <span class="kn">import</span> <span class="n">reverse_fop_idx</span><span class="p">,</span> <span class="n">scipy_opt_wrap</span><span class="p">,</span> <span class="n">reverse_qop_idx</span>
@@ -575,6 +577,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shots</span> <span class="o">=</span> <span class="mi">4096</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grad</span> <span class="o">=</span> <span class="s2">&quot;param-shift&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">scipy_minimize_options</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opt_res</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -799,8 +802,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">shots</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;qpu&quot;</span>
-            <span class="k">assert</span> <span class="kc">False</span>
+            <span class="k">assert</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;qpu&quot;</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">get_energy_qpu</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shots</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">e</span></div>
 
 <div class="viewcode-block" id="HEA.energy_and_grad"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.energy_and_grad">[docs]</a>    <span class="k">def</span> <span class="nf">energy_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
@@ -847,15 +856,15 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must provide a gradient algorithm&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork&quot;</span><span class="p">:</span>
-            <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">:</span>
-            <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_noise</span><span class="p">(</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_noise</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dmcircuit_no_noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">,</span> <span class="n">grad</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> is incompatible with grad method </span><span class="si">{</span><span class="n">grad</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_shot</span><span class="p">(</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_shot</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
                 <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
                 <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
@@ -866,7 +875,7 @@
         <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> is incompatible with grad method </span><span class="si">{</span><span class="n">grad</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">e</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_noise_shot</span><span class="p">(</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span> <span class="o">=</span> <span class="n">get_energy_and_grad_tensornetwork_noise_shot</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
                 <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
                 <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
@@ -876,23 +885,35 @@
                 <span class="n">grad</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;qpu&quot;</span>
-            <span class="k">assert</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="n">grad</span></div>
+            <span class="k">assert</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;qpu&quot;</span>
+            <span class="k">if</span> <span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> is incompatible with grad method </span><span class="si">{</span><span class="n">grad</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span> <span class="o">=</span> <span class="n">get_energy_and_grad_qpu</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shots</span><span class="p">,</span>
+                <span class="n">grad</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="n">grad_array</span></div>
 
 <div class="viewcode-block" id="HEA.kernel"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.kernel">[docs]</a>    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Begin optimization&quot;</span><span class="p">)</span>
 
         <span class="n">func</span><span class="p">,</span> <span class="n">stating_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_opt_function</span><span class="p">(</span><span class="n">with_time</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">==</span> <span class="s2">&quot;free&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">]:</span>
-                <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;COBYLA&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">,</span> <span class="s2">&quot;qpu&quot;</span><span class="p">]:</span>
+                <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;COBYLA&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scipy_minimize_options</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tensornetwork-shot&quot;</span><span class="p">,</span> <span class="s2">&quot;tensornetwork-noise&amp;shot&quot;</span><span class="p">]</span>
-                <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimizeSPSA</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">paired</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
+                <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimizeSPSA</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">paired</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">)</span>
+            <span class="n">opt_res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+                <span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scipy_minimize_options</span>
+            <span class="p">)</span>
 
         <span class="n">time2</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
