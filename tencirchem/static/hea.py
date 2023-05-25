@@ -35,10 +35,12 @@ from tencirchem.static.engine_hea import (
     get_energy_tensornetwork_noise,
     get_energy_tensornetwork_shot,
     get_energy_tensornetwork_noise_shot,
+    get_energy_qpu,
     get_energy_and_grad_tensornetwork,
     get_energy_and_grad_tensornetwork_noise,
     get_energy_and_grad_tensornetwork_shot,
     get_energy_and_grad_tensornetwork_noise_shot,
+    get_energy_and_grad_qpu,
 )
 from tencirchem.static.hamiltonian import get_hop_from_integral
 from tencirchem.utils.misc import reverse_fop_idx, scipy_opt_wrap, reverse_qop_idx
@@ -361,6 +363,7 @@ class HEA:
         self.shots = 4096
         self._grad = "param-shift"
 
+        self.scipy_minimize_options = None
         self._params = None
         self.opt_res = None
 
@@ -585,8 +588,14 @@ class HEA:
                 self.shots,
             )
         else:
-            assert self.engine == "qpu"
-            assert False
+            assert engine == "qpu"
+            e = get_energy_qpu(
+                params,
+                tuple(self.h_qubit_op.terms.keys()),
+                list(self.h_qubit_op.terms.values()),
+                self.get_circuit,
+                self.shots,
+            )
         return e
 
     def energy_and_grad(self, params: Tensor = None, engine: str = None, grad: str = None) -> Tuple[float, Tensor]:
@@ -633,15 +642,15 @@ class HEA:
             raise ValueError("Must provide a gradient algorithm")
 
         if engine == "tensornetwork":
-            e, grad = get_energy_and_grad_tensornetwork(params, self.h_array, self.get_circuit, grad)
+            e, grad_array = get_energy_and_grad_tensornetwork(params, self.h_array, self.get_circuit, grad)
         elif engine == "tensornetwork-noise":
-            e, grad = get_energy_and_grad_tensornetwork_noise(
+            e, grad_array = get_energy_and_grad_tensornetwork_noise(
                 params, self.h_array, self.get_dmcircuit_no_noise, self.engine_conf, grad
             )
         elif engine == "tensornetwork-shot":
             if grad == "autodiff":
                 raise ValueError(f"Engine {engine} is incompatible with grad method {grad}")
-            e, grad = get_energy_and_grad_tensornetwork_shot(
+            e, grad_array = get_energy_and_grad_tensornetwork_shot(
                 params,
                 tuple(self.h_qubit_op.terms.keys()),
                 list(self.h_qubit_op.terms.values()),
@@ -652,7 +661,7 @@ class HEA:
         elif engine == "tensornetwork-noise&shot":
             if grad == "autodiff":
                 raise ValueError(f"Engine {engine} is incompatible with grad method {grad}")
-            e, grad = get_energy_and_grad_tensornetwork_noise_shot(
+            e, grad_array = get_energy_and_grad_tensornetwork_noise_shot(
                 params,
                 tuple(self.h_qubit_op.terms.keys()),
                 list(self.h_qubit_op.terms.values()),
@@ -662,23 +671,35 @@ class HEA:
                 grad,
             )
         else:
-            assert self.engine == "qpu"
-            assert False
-        return e, grad
+            assert engine == "qpu"
+            if grad == "autodiff":
+                raise ValueError(f"Engine {engine} is incompatible with grad method {grad}")
+            e, grad_array = get_energy_and_grad_qpu(
+                params,
+                tuple(self.h_qubit_op.terms.keys()),
+                list(self.h_qubit_op.terms.values()),
+                self.get_circuit,
+                self.shots,
+                grad,
+            )
+        return e, grad_array
 
     def kernel(self):
         logger.info("Begin optimization")
 
         func, stating_time = self.get_opt_function(with_time=True)
+
         time1 = time()
         if self.grad == "free":
-            if self.engine in ["tensornetwork", "tensornetwork-noise"]:
-                opt_res = minimize(func, x0=self.init_guess, method="COBYLA")
+            if self.engine in ["tensornetwork", "tensornetwork-noise", "qpu"]:
+                opt_res = minimize(func, x0=self.init_guess, method="COBYLA", options=self.scipy_minimize_options)
             else:
                 assert self.engine in ["tensornetwork-shot", "tensornetwork-noise&shot"]
-                opt_res = minimizeSPSA(func, x0=self.init_guess, paired=False, niter=125)
+                opt_res = minimizeSPSA(func, x0=self.init_guess, paired=False, niter=100, disp=True)
         else:
-            opt_res = minimize(func, x0=self.init_guess, jac=True, method="L-BFGS-B")
+            opt_res = minimize(
+                func, x0=self.init_guess, jac=True, method="L-BFGS-B", options=self.scipy_minimize_options
+            )
 
         time2 = time()
 

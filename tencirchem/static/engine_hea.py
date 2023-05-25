@@ -8,9 +8,10 @@ from functools import partial
 
 import numpy as np
 import tensorcircuit as tc
-from tensorcircuit import DMCircuit
+from tensorcircuit import Circuit, DMCircuit
 from tensorcircuit.noisemodel import circuit_with_noise
 from tensorcircuit.experimental import parameter_shift_grad
+from tensorcircuit.cloud.wrapper import batch_expectation_ps
 
 from tencirchem.utils.backend import jit
 
@@ -72,6 +73,23 @@ def get_energy_tensornetwork_noise_shot(params, paulis, coeffs, get_dmcircuit, n
     return sample_expectation_pauli(c, paulis, coeffs, shots, noise_conf)
 
 
+def get_energy_qpu(params, paulis, coeffs, get_circuit, shots: int):
+    c: Circuit = get_circuit(params)
+    pss = []
+    symbol_mapping = {"X": 1, "Y": 2, "Z": 3}
+    for pauli in paulis:
+        ps = [0] * c.circuit_param["nqubits"]
+        for idx, symbol in pauli:
+            ps[idx] = symbol_mapping[symbol]
+        pss.append(ps)
+    es = []
+    for _ in range((shots - 1) // 8192 + 1):
+        e = batch_expectation_ps(c, pss, device="tianxuan_s1", ws=coeffs, shots=8192)
+        es.append(e)
+    print(es)
+    return np.mean(es)
+
+
 def _get_energy_and_grad(partial_get_energy, params, grad):
     if grad == "param-shift":
         e = partial_get_energy(params)
@@ -117,6 +135,17 @@ def get_energy_and_grad_tensornetwork_noise_shot(params, paulis, coeffs, get_dmc
         coeffs=coeffs,
         get_dmcircuit=get_dmcircuit,
         noise_conf=noise_conf,
+        shots=shots,
+    )
+    return _get_energy_and_grad(partial_get_energy, params, grad)
+
+
+def get_energy_and_grad_qpu(params, paulis, coeffs, get_circuit, shots: int, grad):
+    partial_get_energy = partial(
+        get_energy_qpu,
+        paulis=paulis,
+        coeffs=coeffs,
+        get_circuit=get_circuit,
         shots=shots,
     )
     return _get_energy_and_grad(partial_get_energy, params, grad)

@@ -4,10 +4,10 @@ pandas
 jax
 jaxlib
 pyscf
-tensorcircuit-nightly
+tensorcircuit
 openfermion
 qiskit
 pylatexenc
 SciencePlots
 noisyopt
-renormalizer==0.0.9
+renormalizer==0.0.10

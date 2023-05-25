@@ -704,7 +704,7 @@ class UCC:
 
     def apply_excitation(self, state: Tensor, ex_op: Tuple, engine: str = None) -> Tensor:
         """
-        Apply a given excitation operator to a give state.
+        Apply a given excitation operator to a given state.
 
         Parameters
         ----------

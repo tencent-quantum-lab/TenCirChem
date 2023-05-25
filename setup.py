@@ -20,7 +20,7 @@ setuptools.setup(
         "numpy",
         "scipy",
         "pandas",
-        "tensorcircuit-nightly",
+        "tensorcircuit",
         "pyscf",
         "openfermion",
         "qiskit",
