@@ -6,6 +6,7 @@
 
 import logging
 from functools import partial
+from itertools import product
 from time import time
 from typing import Callable, Union, Any, List, Tuple
 
@@ -135,6 +136,18 @@ def parity(fermion_operator: FermionOperator, n_modes: int, n_elec: int) -> Qubi
     return res
 
 
+def fop_to_qop(fop: FermionOperator, mapping: str, n_sorb: int, n_elec: int) -> QubitOperator:
+    if mapping == "parity":
+        qop = parity(fop, n_sorb, n_elec)
+    elif mapping == "jordan-wigner":
+        qop = reverse_qop_idx(jordan_wigner(fop), n_sorb)
+    elif mapping == "bravyi-kitaev":
+        qop = reverse_qop_idx(bravyi_kitaev(fop, n_sorb), n_sorb)
+    else:
+        raise ValueError(f"Unknown mapping: {mapping}")
+    return qop
+
+
 def get_ry_circuit(params: Tensor, n_qubits: int, n_layers: int) -> Circuit:
     """
     Get the parameterized :math:`R_y` circuit.
@@ -233,7 +246,9 @@ class HEA:
                 c = Circuit.from_qir(init_circuit.to_qir(), init_circuit.circuit_param)
             return c.append(get_ry_circuit(params, n_qubits, n_layers))
 
-        return cls.from_integral(int1e, int2e, n_elec, e_core, mapping, get_circuit, init_guess, **kwargs)
+        instance = cls.from_integral(int1e, int2e, n_elec, e_core, mapping, get_circuit, init_guess, **kwargs)
+        instance.mapping = mapping
+        return instance
 
     @classmethod
     def from_integral(
@@ -279,19 +294,14 @@ class HEA:
         """
         hop = get_hop_from_integral(int1e, int2e) + e_core
         n_sorb = 2 * len(int1e)
-        if mapping == "parity":
-            h_qubit_op = parity(hop, n_sorb, n_elec)
-        elif mapping == "jordan-wigner":
-            h_qubit_op = reverse_qop_idx(jordan_wigner(hop), n_sorb)
-        elif mapping == "bravyi-kitaev":
-            h_qubit_op = reverse_qop_idx(bravyi_kitaev(hop, n_sorb), n_sorb)
-        else:
-            raise ValueError(f"Unknown mapping: {mapping}")
+        h_qubit_op = fop_to_qop(hop, mapping, n_sorb, n_elec)
 
         instance = cls(h_qubit_op, circuit, init_guess, **kwargs)
 
+        instance.mapping = mapping
         instance.int1e = int1e
         instance.int2e = int2e
+        instance.n_elec = n_elec
         instance.e_core = e_core
         instance.hop = hop
         return instance
@@ -335,7 +345,6 @@ class HEA:
         init_guess = np.array(init_guess)
 
         self.h_qubit_op = h_qubit_op
-        self.h_array = np.array(get_sparse_operator(self.h_qubit_op).todense())
 
         if isinstance(circuit, Callable):
             self.get_circuit = circuit
@@ -355,6 +364,8 @@ class HEA:
         else:
             raise TypeError("circuit must be callable or qiskit QuantumCircuit")
 
+        self.h_array = np.array(get_sparse_operator(self.h_qubit_op, self.n_qubits).todense())
+
         if init_guess.ndim != 1:
             raise ValueError(f"Init guess should be one-dimensional. Got shape {init_guess}")
         self.init_guess = init_guess
@@ -366,6 +377,15 @@ class HEA:
         self.scipy_minimize_options = None
         self._params = None
         self.opt_res = None
+
+        # allow setting these attributes for features such as calculating RDM
+        # could make it a function for customized mapping
+        self.mapping: str = None # fermion-to-qubit mapping
+        self.int1e = None
+        self.int2e = None
+        self.n_elec = None
+        self.e_core = None
+        self.hop = None
 
     def get_dmcircuit(self, params: Tensor = None, noise_conf: NoiseConf = None) -> DMCircuit:
         """
@@ -754,6 +774,118 @@ class HEA:
         if with_time:
             return func, time2 - time1
         return func
+
+    def make_rdm1(self, params: Tensor = None) -> np.ndarray:
+        r"""
+        Evaluate the spin-traced one-body reduced density matrix (1RDM).
+
+        .. math::
+
+            \textrm{1RDM}[p,q] = \langle p_{\alpha}^\dagger q_{\alpha} \rangle
+                + \langle p_{\beta}^\dagger q_{\beta} \rangle
+
+        Parameters
+        ----------
+        params: Tensor, optional
+            The circuit parameters. Defaults to None, which uses the optimized parameter
+            and :func:`kernel` must be called before.
+
+        Returns
+        -------
+        rdm1: np.ndarray
+            The spin-traced one-body RDM.
+
+        See Also
+        --------
+        make_rdm2: Evaluate the spin-traced two-body reduced density matrix (2RDM).
+        """
+
+        if params is None:
+            params = self._check_params_argument(params)
+        if self.mapping is None:
+            raise ValueError("Must first set the fermion-to-qubit mapping")
+
+        if self.mapping == "parity":
+            n_sorb = self.n_qubits + 2
+        else:
+            n_sorb = self.n_qubits
+        n_orb = n_sorb // 2
+        rdm1 = np.zeros([n_orb] * 2)
+
+        # assuming closed shell
+        # could optimize for tn engine by caching the statevector or dm
+        for i in range(n_orb):
+            for j in range(i + 1):
+                fop = FermionOperator(f"{i}^ {j}")
+                qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
+                hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
+                v = hea.energy(params)
+                rdm1[i, j] = rdm1[j, i] = 2 * v
+
+        return rdm1
+
+    def make_rdm2(self, params: Tensor = None) -> np.ndarray:
+        r"""
+        Evaluate the spin-traced two-body reduced density matrix (2RDM).
+
+        .. math::
+
+            \begin{aligned}
+                \textrm{2RDM}[p,q,r,s] & = \langle p_{\alpha}^\dagger r_{\alpha}^\dagger
+                s_{\alpha}  q_{\alpha} \rangle
+                   + \langle p_{\beta}^\dagger r_{\alpha}^\dagger s_{\alpha}  q_{\beta} \rangle \\
+                   & \quad + \langle p_{\alpha}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\alpha} \rangle
+                   + \langle p_{\beta}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\beta} \rangle
+            \end{aligned}
+
+
+        Parameters
+        ----------
+        params: Tensor, optional
+            The circuit parameters. Defaults to None, which uses the optimized parameter
+            and :func:`kernel` must be called before.
+
+        Returns
+        -------
+        rdm2: np.ndarray
+            The spin-traced two-body RDM.
+
+        See Also
+        --------
+        make_rdm1: Evaluate the spin-traced one-body reduced density matrix (1RDM).
+        """
+        if params is None:
+            params = self._check_params_argument(params)
+        if self.mapping is None:
+            raise ValueError("Must first set the fermion-to-qubit mapping")
+
+        if self.mapping == "parity":
+            n_sorb = self.n_qubits + 2
+        else:
+            n_sorb = self.n_qubits
+        n_orb = n_sorb // 2
+        rdm2 = np.zeros([n_orb] * 4)
+
+        calculated_indices = set()
+        # a^\dagger_p a^\dagger_q a_r a_s
+        # possible spins: aaaa, abba, baab, bbbb
+        for p, q, r, s in product(range(n_orb), repeat=4):
+            if (p, q, r, s) in calculated_indices:
+                continue
+            # aaaa is the same as bbbb, abba is the same as baab
+            fop_aaaa = FermionOperator(f"{p}^ {q}^ {r} {s}")
+            fop_abba = FermionOperator(f"{p}^ {q+n_orb}^ {r+n_orb} {s}")
+            fop = fop_aaaa + fop_abba
+            qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
+            hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
+            v = hea.energy(params)
+            indices = [(p, q, r, s), (s, r, q, p), (q, p, s, r), (r, s, p, q)]
+            for idx in indices:
+                rdm2[idx] = 2 * v
+                calculated_indices.add(idx)
+        # transpose to PySCF notation: rdm2[p,q,r,s] = <p^+ r^+ s q>
+        rdm2 = rdm2.transpose(0, 3, 1, 2)
+        return rdm2
 
     def print_circuit(self):
         c = self.get_circuit(self.init_guess)

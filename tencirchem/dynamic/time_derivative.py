@@ -69,7 +69,7 @@ def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=N
                 c.exp1(*qubit_idx_list, unitary=ansatz_op, theta=theta, name=name)
             else:
                 pauli_string = tuple(zip(qubit_idx_list, name))
-                c = evolve_pauli(c, pauli_string, theta=theta)
+                c = evolve_pauli(c, pauli_string, theta=2 * theta)
     return c
 
 

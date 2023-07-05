@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from qiskit.circuit.library import RealAmplitudes
 
-from tencirchem import UCCSD, HEA, parity
+from tencirchem import UCCSD, HEA, parity, set_backend
 from tencirchem.molecule import h2
 from tests.static.test_engine import set_backend_with_skip
 
@@ -51,3 +51,14 @@ def test_mapping(mapping):
     hea = HEA.ry(uccsd.int1e, uccsd.int2e, uccsd.n_elec, uccsd.e_core, 3, mapping=mapping)
     e = hea.kernel()
     np.testing.assert_allclose(e, uccsd.e_fci)
+
+
+@pytest.mark.parametrize("mapping", ["jordan-wigner", "parity", "bravyi-kitaev"])
+def test_rdm(mapping, reset_backend):
+    set_backend("jax")
+    uccsd = UCCSD(h2)
+    uccsd.kernel()
+    hea = HEA.ry(uccsd.int1e, uccsd.int2e, uccsd.n_elec, uccsd.e_core, 3, mapping=mapping)
+    hea.kernel()
+    np.testing.assert_allclose(hea.make_rdm1(), uccsd.make_rdm1(basis="MO"), atol=1e-4)
+    np.testing.assert_allclose(hea.make_rdm2(), uccsd.make_rdm2(basis="MO"), atol=1e-4)

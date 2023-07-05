@@ -791,7 +791,7 @@ class UCC:
 
     def make_rdm2(self, statevector: Tensor = None, basis: str = "AO") -> np.ndarray:
         r"""
-        Evaluate the spin-traced two-body reduced density matrix (1RDM).
+        Evaluate the spin-traced two-body reduced density matrix (2RDM).
 
         .. math::
 
