@@ -219,6 +219,7 @@
 
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
@@ -514,22 +515,25 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">e_nuc</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">energy_nuc</span><span class="p">()</span>
 
-        <span class="c1"># initial guess</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">init_method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">init_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;zeros&quot;</span><span class="p">,</span> <span class="s2">&quot;zero&quot;</span><span class="p">]:</span>
-            <span class="k">pass</span>
-        <span class="k">elif</span> <span class="n">init_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ccsd&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">ccsd_t1</span><span class="p">,</span> <span class="n">ccsd_t2</span>
-        <span class="k">elif</span> <span class="n">init_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mp2&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">mp2_t2</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown initialization method: </span><span class="si">{</span><span class="n">init_method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
         <span class="c1"># Hamiltonian related</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian_lib</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">int1e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">int2e</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># e_core includes nuclear repulsion energy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hamiltonian_and_core</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+        <span class="c1"># initial guess</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">init_method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">init_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;zeros&quot;</span><span class="p">,</span> <span class="s2">&quot;zero&quot;</span><span class="p">]:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">init_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ccsd&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">ccsd_t1</span><span class="p">,</span> <span class="n">ccsd_t2</span>
+        <span class="k">elif</span> <span class="n">init_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;fe&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">compute_fe_t2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int2e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">init_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mp2&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">mp2_t2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown initialization method: </span><span class="si">{</span><span class="n">init_method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># circuit related</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_state</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1005,7 +1009,7 @@
 
 <div class="viewcode-block" id="UCC.make_rdm2"><a class="viewcode-back" href="../../../api/ucc.html#tencirchem.UCC.make_rdm2">[docs]</a>    <span class="k">def</span> <span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;AO&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Evaluate the spin-traced two-body reduced density matrix (1RDM).</span>
+<span class="sd">        Evaluate the spin-traced two-body reduced density matrix (2RDM).</span>
 
 <span class="sd">        .. math::</span>
 
@@ -1122,9 +1126,12 @@
         <span class="c1"># single excitations</span>
         <span class="n">no</span><span class="p">,</span> <span class="n">nv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span>
         <span class="k">if</span> <span class="n">t1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no</span><span class="p">,</span> <span class="n">nv</span><span class="p">))</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span>
 
-        <span class="n">t1</span> <span class="o">=</span> <span class="n">spatial2spin</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">):</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">spatial2spin</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">t1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">)</span>
 
         <span class="n">ex1_ops</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># unique parameters. -1 is a place holder</span>
@@ -1169,9 +1176,12 @@
         <span class="c1"># t2 in oovv 1212 format</span>
         <span class="n">no</span><span class="p">,</span> <span class="n">nv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span>
         <span class="k">if</span> <span class="n">t2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> <span class="n">nv</span><span class="p">))</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span>
 
-        <span class="n">t2</span> <span class="o">=</span> <span class="n">spatial2spin</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t2</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">):</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">spatial2spin</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">t2</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nv</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">alpha_o</span><span class="p">(</span><span class="n">_i</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">no</span> <span class="o">+</span> <span class="n">nv</span> <span class="o">+</span> <span class="n">_i</span>
@@ -1534,6 +1544,101 @@
     <span class="nd">@param_ids</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">param_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_param_ids</span> <span class="o">=</span> <span class="n">v</span></div>
+
+
+<span class="k">def</span> <span class="nf">compute_fe_t2</span><span class="p">(</span><span class="n">no</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> <span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">):</span>
+    <span class="n">n_orb</span> <span class="o">=</span> <span class="n">no</span> <span class="o">+</span> <span class="n">nv</span>
+
+    <span class="k">def</span> <span class="nf">translate_o</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">n_orb</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">translate_v</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">no</span> <span class="o">+</span> <span class="n">n_orb</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">no</span>
+
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">no</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">no</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nv</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nv</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">no</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">no</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nv</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nv</span><span class="p">)):</span>
+        <span class="c1"># spin not conserved</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="n">k</span> <span class="o">%</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="n">l</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">translate_o</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">translate_o</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">translate_v</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">translate_v</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># r^ s^ b a</span>
+        <span class="n">rr</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">aa</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">n_orb</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">n_orb</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="n">n_orb</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="n">n_orb</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="n">n_orb</span><span class="p">):</span>
+            <span class="n">e_inter</span> <span class="o">=</span> <span class="n">int2e</span><span class="p">[</span><span class="n">aa</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">ss</span><span class="p">]</span> <span class="o">-</span> <span class="n">int2e</span><span class="p">[</span><span class="n">aa</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">rr</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">e_inter</span> <span class="o">=</span> <span class="n">int2e</span><span class="p">[</span><span class="n">aa</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">ss</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">e_inter</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">e_diff</span> <span class="o">=</span> <span class="n">_compute_e_diff</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">,</span> <span class="n">n_orb</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">e_diff</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;RHF degenerate ground state&quot;</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">e_inter</span> <span class="o">/</span> <span class="n">e_diff</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">t2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="k">return</span> <span class="n">t2</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_e_diff</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">,</span> <span class="n">n_orb</span><span class="p">,</span> <span class="n">no</span><span class="p">):</span>
+    <span class="n">inert_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">no</span><span class="p">))</span>
+    <span class="n">inert_b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">no</span><span class="p">))</span>
+    <span class="n">old_a</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">old_b</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n_orb</span><span class="p">:</span>
+            <span class="n">inert_b</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">old_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inert_a</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">n_orb</span><span class="p">)</span>
+            <span class="n">old_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">n_orb</span><span class="p">)</span>
+
+    <span class="n">new_a</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_b</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n_orb</span><span class="p">:</span>
+            <span class="n">new_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">n_orb</span><span class="p">)</span>
+
+    <span class="n">diag1e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">int1e</span><span class="p">)</span>
+    <span class="n">diagj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;iijj-&gt;ij&quot;</span><span class="p">,</span> <span class="n">int2e</span><span class="p">)</span>
+    <span class="n">diagk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijji-&gt;ij&quot;</span><span class="p">,</span> <span class="n">int2e</span><span class="p">)</span>
+
+    <span class="n">e_diff_1e</span> <span class="o">=</span> <span class="n">diag1e</span><span class="p">[</span><span class="n">new_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diag1e</span><span class="p">[</span><span class="n">new_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">diag1e</span><span class="p">[</span><span class="n">old_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">diag1e</span><span class="p">[</span><span class="n">old_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="c1"># fmt: off</span>
+    <span class="n">e_diff_j</span> <span class="o">=</span> <span class="n">_compute_j_outer</span><span class="p">(</span><span class="n">diagj</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">new_a</span><span class="p">,</span> <span class="n">new_b</span><span class="p">)</span> \
+               <span class="o">-</span> <span class="n">_compute_j_outer</span><span class="p">(</span><span class="n">diagj</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">old_a</span><span class="p">,</span> <span class="n">old_b</span><span class="p">)</span>
+    <span class="n">e_diff_k</span> <span class="o">=</span> <span class="n">_compute_k_outer</span><span class="p">(</span><span class="n">diagk</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">new_a</span><span class="p">,</span> <span class="n">new_b</span><span class="p">)</span> \
+               <span class="o">-</span> <span class="n">_compute_k_outer</span><span class="p">(</span><span class="n">diagk</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">old_a</span><span class="p">,</span> <span class="n">old_b</span><span class="p">)</span>
+    <span class="c1"># fmt: on</span>
+    <span class="k">return</span> <span class="n">e_diff_1e</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">e_diff_j</span> <span class="o">-</span> <span class="n">e_diff_k</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_j_outer</span><span class="p">(</span><span class="n">diagj</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">outer_a</span><span class="p">,</span> <span class="n">outer_b</span><span class="p">):</span>
+    <span class="c1"># fmt: off</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">diagj</span><span class="p">[</span><span class="n">inert_a</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">inert_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> \
+      <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">inert_a</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">inert_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> \
+      <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">inert_b</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">inert_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> \
+      <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">inert_b</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">inert_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagj</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="c1"># fmt: on</span>
+    <span class="k">return</span> <span class="n">v</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_k_outer</span><span class="p">(</span><span class="n">diagk</span><span class="p">,</span> <span class="n">inert_a</span><span class="p">,</span> <span class="n">inert_b</span><span class="p">,</span> <span class="n">outer_a</span><span class="p">,</span> <span class="n">outer_b</span><span class="p">):</span>
+    <span class="c1"># fmt: off</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">diagk</span><span class="p">[</span><span class="n">inert_a</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagk</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">inert_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagk</span><span class="p">[</span><span class="n">outer_a</span><span class="p">][:,</span> <span class="n">outer_a</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> \
+      <span class="o">+</span> <span class="n">diagk</span><span class="p">[</span><span class="n">inert_b</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagk</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">inert_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">diagk</span><span class="p">[</span><span class="n">outer_b</span><span class="p">][:,</span> <span class="n">outer_b</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="c1"># fmt: on</span>
+    <span class="k">return</span> <span class="n">v</span>
 </pre></div>
         </article>
       </div>

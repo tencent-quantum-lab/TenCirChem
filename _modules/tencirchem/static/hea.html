@@ -220,6 +220,7 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
@@ -349,6 +350,18 @@
     <span class="k">return</span> <span class="n">res</span></div>
 
 
+<span class="k">def</span> <span class="nf">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
+        <span class="n">qop</span> <span class="o">=</span> <span class="n">parity</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;jordan-wigner&quot;</span><span class="p">:</span>
+        <span class="n">qop</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">jordan_wigner</span><span class="p">(</span><span class="n">fop</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;bravyi-kitaev&quot;</span><span class="p">:</span>
+        <span class="n">qop</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">bravyi_kitaev</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown mapping: </span><span class="si">{</span><span class="n">mapping</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qop</span>
+
+
 <div class="viewcode-block" id="get_ry_circuit"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.get_ry_circuit">[docs]</a><span class="k">def</span> <span class="nf">get_ry_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the parameterized :math:`R_y` circuit.</span>
@@ -447,7 +460,9 @@
                 <span class="n">c</span> <span class="o">=</span> <span class="n">Circuit</span><span class="o">.</span><span class="n">from_qir</span><span class="p">(</span><span class="n">init_circuit</span><span class="o">.</span><span class="n">to_qir</span><span class="p">(),</span> <span class="n">init_circuit</span><span class="o">.</span><span class="n">circuit_param</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_ry_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_integral</span><span class="p">(</span><span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">,</span> <span class="n">e_core</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_integral</span><span class="p">(</span><span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">,</span> <span class="n">e_core</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">mapping</span> <span class="o">=</span> <span class="n">mapping</span>
+        <span class="k">return</span> <span class="n">instance</span></div>
 
 <div class="viewcode-block" id="HEA.from_integral"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.from_integral">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_integral</span><span class="p">(</span>
@@ -493,19 +508,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hop</span> <span class="o">=</span> <span class="n">get_hop_from_integral</span><span class="p">(</span><span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">)</span> <span class="o">+</span> <span class="n">e_core</span>
         <span class="n">n_sorb</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">int1e</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
-            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">parity</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;jordan-wigner&quot;</span><span class="p">:</span>
-            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">jordan_wigner</span><span class="p">(</span><span class="n">hop</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;bravyi-kitaev&quot;</span><span class="p">:</span>
-            <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">reverse_qop_idx</span><span class="p">(</span><span class="n">bravyi_kitaev</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">),</span> <span class="n">n_sorb</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown mapping: </span><span class="si">{</span><span class="n">mapping</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
 
         <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
+        <span class="n">instance</span><span class="o">.</span><span class="n">mapping</span> <span class="o">=</span> <span class="n">mapping</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">int1e</span> <span class="o">=</span> <span class="n">int1e</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">int2e</span> <span class="o">=</span> <span class="n">int2e</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">n_elec</span> <span class="o">=</span> <span class="n">n_elec</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">e_core</span> <span class="o">=</span> <span class="n">e_core</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">hop</span> <span class="o">=</span> <span class="n">hop</span>
         <span class="k">return</span> <span class="n">instance</span></div>
@@ -549,7 +559,6 @@
         <span class="n">init_guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">init_guess</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">h_qubit_op</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_sparse_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">Callable</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
@@ -569,6 +578,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;circuit must be callable or qiskit QuantumCircuit&quot;</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_sparse_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+
         <span class="k">if</span> <span class="n">init_guess</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Init guess should be one-dimensional. Got shape </span><span class="si">{</span><span class="n">init_guess</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span> <span class="o">=</span> <span class="n">init_guess</span>
@@ -579,7 +590,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">scipy_minimize_options</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">opt_res</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt_res</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># allow setting these attributes for features such as calculating RDM</span>
+        <span class="c1"># could make it a function for customized mapping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># fermion-to-qubit mapping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">int1e</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">int2e</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_core</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hop</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="HEA.get_dmcircuit"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.get_dmcircuit">[docs]</a>    <span class="k">def</span> <span class="nf">get_dmcircuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">noise_conf</span><span class="p">:</span> <span class="n">NoiseConf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DMCircuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -968,6 +988,118 @@
         <span class="k">if</span> <span class="n">with_time</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">,</span> <span class="n">time2</span> <span class="o">-</span> <span class="n">time1</span>
         <span class="k">return</span> <span class="n">func</span></div>
+
+<div class="viewcode-block" id="HEA.make_rdm1"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.make_rdm1">[docs]</a>    <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the spin-traced one-body reduced density matrix (1RDM).</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \textrm{1RDM}[p,q] = \langle p_{\alpha}^\dagger q_{\alpha} \rangle</span>
+<span class="sd">                + \langle p_{\beta}^\dagger q_{\beta} \rangle</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params: Tensor, optional</span>
+<span class="sd">            The circuit parameters. Defaults to None, which uses the optimized parameter</span>
+<span class="sd">            and :func:`kernel` must be called before.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rdm1: np.ndarray</span>
+<span class="sd">            The spin-traced one-body RDM.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        make_rdm2: Evaluate the spin-traced two-body reduced density matrix (2RDM).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_params_argument</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must first set the fermion-to-qubit mapping&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
+            <span class="n">n_sorb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_sorb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span>
+        <span class="n">n_orb</span> <span class="o">=</span> <span class="n">n_sorb</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">rdm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_orb</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># assuming closed shell</span>
+        <span class="c1"># could optimize for tn engine by caching the statevector or dm</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_orb</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">fop</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">qop</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">)</span>
+                <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">qop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">)</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="n">rdm1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdm1</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span>
+
+        <span class="k">return</span> <span class="n">rdm1</span></div>
+
+<div class="viewcode-block" id="HEA.make_rdm2"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.make_rdm2">[docs]</a>    <span class="k">def</span> <span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the spin-traced two-body reduced density matrix (2RDM).</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \begin{aligned}</span>
+<span class="sd">                \textrm{2RDM}[p,q,r,s] &amp; = \langle p_{\alpha}^\dagger r_{\alpha}^\dagger</span>
+<span class="sd">                s_{\alpha}  q_{\alpha} \rangle</span>
+<span class="sd">                   + \langle p_{\beta}^\dagger r_{\alpha}^\dagger s_{\alpha}  q_{\beta} \rangle \\</span>
+<span class="sd">                   &amp; \quad + \langle p_{\alpha}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\alpha} \rangle</span>
+<span class="sd">                   + \langle p_{\beta}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\beta} \rangle</span>
+<span class="sd">            \end{aligned}</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params: Tensor, optional</span>
+<span class="sd">            The circuit parameters. Defaults to None, which uses the optimized parameter</span>
+<span class="sd">            and :func:`kernel` must be called before.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rdm2: np.ndarray</span>
+<span class="sd">            The spin-traced two-body RDM.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        make_rdm1: Evaluate the spin-traced one-body reduced density matrix (1RDM).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_params_argument</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must first set the fermion-to-qubit mapping&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
+            <span class="n">n_sorb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_sorb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span>
+        <span class="n">n_orb</span> <span class="o">=</span> <span class="n">n_sorb</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">rdm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_orb</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="n">calculated_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="c1"># a^\dagger_p a^\dagger_q a_r a_s</span>
+        <span class="c1"># possible spins: aaaa, abba, baab, bbbb</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_orb</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="ow">in</span> <span class="n">calculated_indices</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># aaaa is the same as bbbb, abba is the same as baab</span>
+            <span class="n">fop_aaaa</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fop_abba</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">q</span><span class="o">+</span><span class="n">n_orb</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">r</span><span class="o">+</span><span class="n">n_orb</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fop</span> <span class="o">=</span> <span class="n">fop_aaaa</span> <span class="o">+</span> <span class="n">fop_abba</span>
+            <span class="n">qop</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">)</span>
+            <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">qop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="p">[(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="n">rdm2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span>
+                <span class="n">calculated_indices</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="c1"># transpose to PySCF notation: rdm2[p,q,r,s] = &lt;p^+ r^+ s q&gt;</span>
+        <span class="n">rdm2</span> <span class="o">=</span> <span class="n">rdm2</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rdm2</span></div>
 
 <div class="viewcode-block" id="HEA.print_circuit"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.print_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">print_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">)</span>

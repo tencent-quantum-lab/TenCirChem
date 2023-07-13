@@ -480,6 +480,71 @@ Note that <code class="docutils literal notranslate"><span class="pre">&quot;aut
 <span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.kernel" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="tencirchem.HEA.make_rdm1">
+<span class="sig-name descname"><span class="pre">make_rdm1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.make_rdm1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.make_rdm1" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluate the spin-traced one-body reduced density matrix (1RDM).</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\textrm{1RDM}[p,q] = \langle p_{\alpha}^\dagger q_{\alpha} \rangle
+    + \langle p_{\beta}^\dagger q_{\beta} \rangle\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – The circuit parameters. Defaults to None, which uses the optimized parameter
+and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirchem.HEA.kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel()</span></code></a> must be called before.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rdm1</strong> – The spin-traced one-body RDM.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#tencirchem.HEA.make_rdm2" title="tencirchem.HEA.make_rdm2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_rdm2</span></code></a></dt><dd><p>Evaluate the spin-traced two-body reduced density matrix (2RDM).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tencirchem.HEA.make_rdm2">
+<span class="sig-name descname"><span class="pre">make_rdm2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.make_rdm2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.make_rdm2" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluate the spin-traced two-body reduced density matrix (2RDM).</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+    \textrm{2RDM}[p,q,r,s] &amp; = \langle p_{\alpha}^\dagger r_{\alpha}^\dagger
+    s_{\alpha}  q_{\alpha} \rangle
+       + \langle p_{\beta}^\dagger r_{\alpha}^\dagger s_{\alpha}  q_{\beta} \rangle \\
+       &amp; \quad + \langle p_{\alpha}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\alpha} \rangle
+       + \langle p_{\beta}^\dagger r_{\beta}^\dagger s_{\beta}  q_{\beta} \rangle
+\end{aligned}\end{split}\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – The circuit parameters. Defaults to None, which uses the optimized parameter
+and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirchem.HEA.kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel()</span></code></a> must be called before.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rdm2</strong> – The spin-traced two-body RDM.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#tencirchem.HEA.make_rdm1" title="tencirchem.HEA.make_rdm1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_rdm1</span></code></a></dt><dd><p>Evaluate the spin-traced one-body reduced density matrix (1RDM).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="tencirchem.HEA.n_params">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_params</span></span><a class="headerlink" href="#tencirchem.HEA.n_params" title="Permalink to this definition">#</a></dt>
@@ -698,6 +763,8 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <li><a class="reference internal" href="#tencirchem.HEA.get_opt_function"><code class="docutils literal notranslate"><span class="pre">HEA.get_opt_function()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.grad"><code class="docutils literal notranslate"><span class="pre">HEA.grad</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.kernel"><code class="docutils literal notranslate"><span class="pre">HEA.kernel()</span></code></a></li>
+<li><a class="reference internal" href="#tencirchem.HEA.make_rdm1"><code class="docutils literal notranslate"><span class="pre">HEA.make_rdm1()</span></code></a></li>
+<li><a class="reference internal" href="#tencirchem.HEA.make_rdm2"><code class="docutils literal notranslate"><span class="pre">HEA.make_rdm2()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.n_params"><code class="docutils literal notranslate"><span class="pre">HEA.n_params</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.params"><code class="docutils literal notranslate"><span class="pre">HEA.params</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.print_circuit"><code class="docutils literal notranslate"><span class="pre">HEA.print_circuit()</span></code></a></li>
