@@ -113,6 +113,7 @@ BeH2 = beh2 = lambda d=1.6: M(atom=[["H", 0, 0, -d], ["Be", 0, 0, 0], ["H", 0, 0
 
 N2 = n2 = nitrogen = lambda d=1.09: M(atom=[["N", 0, 0, 0], ["N", 0, 0, d]])
 
+
 def get_ch4_coord(d):
     x = d / np.sqrt(3)
     ch4_coord = [
@@ -123,6 +124,8 @@ def get_ch4_coord(d):
         ["H", x, x, -x],
     ]
     return ch4_coord
+
+
 CH4 = ch4 = methane = lambda x=1.09: M(atom=get_ch4_coord(x))
 
 

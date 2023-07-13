@@ -380,7 +380,7 @@ class HEA:
 
         # allow setting these attributes for features such as calculating RDM
         # could make it a function for customized mapping
-        self.mapping: str = None # fermion-to-qubit mapping
+        self.mapping: str = None  # fermion-to-qubit mapping
         self.int1e = None
         self.int2e = None
         self.n_elec = None

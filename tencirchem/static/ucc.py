@@ -321,7 +321,6 @@ class UCC:
         else:
             raise ValueError(f"Unknown initialization method: {init_method}")
 
-
         # circuit related
         self._init_state = None
         self.ex_ops = None
@@ -1334,7 +1333,6 @@ class UCC:
 
 
 def compute_fe_t2(no, nv, int1e, int2e):
-
     n_orb = no + nv
 
     def translate_o(n):
@@ -1349,8 +1347,8 @@ def compute_fe_t2(no, nv, int1e, int2e):
         else:
             return n // 2 + no
 
-    t2 = np.zeros((2*no, 2*no, 2*nv, 2*nv))
-    for i, j, k, l in product(range(2*no), range(2*no), range(2*nv), range(2*nv)):
+    t2 = np.zeros((2 * no, 2 * no, 2 * nv, 2 * nv))
+    for i, j, k, l in product(range(2 * no), range(2 * no), range(2 * nv), range(2 * nv)):
         # spin not conserved
         if i % 2 != k % 2 or j % 2 != l % 2:
             continue
@@ -1398,23 +1396,32 @@ def _compute_e_diff(r, s, b, a, int1e, int2e, n_orb, no):
             new_a.append(i % n_orb)
 
     diag1e = np.diag(int1e)
-    diagj = np.einsum('iijj->ij', int2e)
-    diagk = np.einsum('ijji->ij', int2e)
+    diagj = np.einsum("iijj->ij", int2e)
+    diagk = np.einsum("ijji->ij", int2e)
 
     e_diff_1e = diag1e[new_a].sum() + diag1e[new_b].sum() - diag1e[old_a].sum() - diag1e[old_b].sum()
-    e_diff_j = _compute_j_outer(diagj, inert_a, inert_b, new_a, new_b) - _compute_j_outer(diagj, inert_a, inert_b, old_a, old_b)
-    e_diff_k = _compute_k_outer(diagk, inert_a, inert_b, new_a, new_b) - _compute_k_outer(diagk, inert_a, inert_b, old_a, old_b)
+    # fmt: off
+    e_diff_j = _compute_j_outer(diagj, inert_a, inert_b, new_a, new_b) \
+               - _compute_j_outer(diagj, inert_a, inert_b, old_a, old_b)
+    e_diff_k = _compute_k_outer(diagk, inert_a, inert_b, new_a, new_b) \
+               - _compute_k_outer(diagk, inert_a, inert_b, old_a, old_b)
+    # fmt: on
     return e_diff_1e + 1 / 2 * (e_diff_j - e_diff_k)
 
 
 def _compute_j_outer(diagj, inert_a, inert_b, outer_a, outer_b):
+    # fmt: off
     v = diagj[inert_a][:, outer_a].sum() + diagj[outer_a][:, inert_a].sum() + diagj[outer_a][:, outer_a].sum() \
-    + diagj[inert_a][:, outer_b].sum() + diagj[outer_a][:, inert_b].sum() + diagj[outer_a][:, outer_b].sum() \
-    + diagj[inert_b][:, outer_a].sum() + diagj[outer_b][:, inert_a].sum() + diagj[outer_b][:, outer_a].sum() \
-    + diagj[inert_b][:, outer_b].sum() + diagj[outer_b][:, inert_b].sum() + diagj[outer_b][:, outer_b].sum()
+      + diagj[inert_a][:, outer_b].sum() + diagj[outer_a][:, inert_b].sum() + diagj[outer_a][:, outer_b].sum() \
+      + diagj[inert_b][:, outer_a].sum() + diagj[outer_b][:, inert_a].sum() + diagj[outer_b][:, outer_a].sum() \
+      + diagj[inert_b][:, outer_b].sum() + diagj[outer_b][:, inert_b].sum() + diagj[outer_b][:, outer_b].sum()
+    # fmt: on
     return v
 
+
 def _compute_k_outer(diagk, inert_a, inert_b, outer_a, outer_b):
+    # fmt: off
     v = diagk[inert_a][:, outer_a].sum() + diagk[outer_a][:, inert_a].sum() + diagk[outer_a][:, outer_a].sum() \
-        + diagk[inert_b][:, outer_b].sum() + diagk[outer_b][:, inert_b].sum() + diagk[outer_b][:, outer_b].sum()
+      + diagk[inert_b][:, outer_b].sum() + diagk[outer_b][:, inert_b].sum() + diagk[outer_b][:, outer_b].sum()
+    # fmt: on
     return v
