@@ -5,6 +5,7 @@
 
 
 from functools import partial
+from itertools import product
 from time import time
 import logging
 from typing import Any, Tuple, Callable, List, Union
@@ -300,22 +301,26 @@ class UCC:
 
         self.e_nuc = mol.energy_nuc()
 
-        # initial guess
-        self.t1 = self.t2 = None
-        if init_method is None or init_method in ["zeros", "zero"]:
-            pass
-        elif init_method.lower() == "ccsd":
-            self.t1, self.t2 = ccsd_t1, ccsd_t2
-        elif init_method.lower() == "mp2":
-            self.t2 = mp2_t2
-        else:
-            raise ValueError(f"Unknown initialization method: {init_method}")
-
         # Hamiltonian related
         self.hamiltonian_lib = {}
         self.int1e = self.int2e = None
         # e_core includes nuclear repulsion energy
         self.hamiltonian, self.e_core, _ = self._get_hamiltonian_and_core(self.engine)
+
+        # initial guess
+        self.t1 = np.zeros([self.no, self.nv])
+        self.t2 = np.zeros([self.no, self.no, self.nv, self.nv])
+        if init_method is None or init_method in ["zeros", "zero"]:
+            pass
+        elif init_method.lower() == "ccsd":
+            self.t1, self.t2 = ccsd_t1, ccsd_t2
+        elif init_method.lower() == "fe":
+            self.t2 = compute_fe_t2(self.no, self.nv, self.int1e, self.int2e)
+        elif init_method.lower() == "mp2":
+            self.t2 = mp2_t2
+        else:
+            raise ValueError(f"Unknown initialization method: {init_method}")
+
 
         # circuit related
         self._init_state = None
@@ -908,9 +913,12 @@ class UCC:
         # single excitations
         no, nv = self.no, self.nv
         if t1 is None:
-            t1 = np.zeros((no, nv))
+            t1 = self.t1
 
-        t1 = spatial2spin(t1)
+        if t1.shape == (self.no, self.nv):
+            t1 = spatial2spin(t1)
+        else:
+            assert t1.shape == (2 * self.no, 2 * self.nv)
 
         ex1_ops = []
         # unique parameters. -1 is a place holder
@@ -955,9 +963,12 @@ class UCC:
         # t2 in oovv 1212 format
         no, nv = self.no, self.nv
         if t2 is None:
-            t2 = np.zeros((no, no, nv, nv))
+            t2 = self.t2
 
-        t2 = spatial2spin(t2)
+        if t2.shape == (self.no, self.no, self.nv, self.nv):
+            t2 = spatial2spin(t2)
+        else:
+            assert t2.shape == (2 * self.no, 2 * self.no, 2 * self.nv, 2 * self.nv)
 
         def alpha_o(_i):
             return no + nv + _i
@@ -1320,3 +1331,90 @@ class UCC:
     @param_ids.setter
     def param_ids(self, v):
         self._param_ids = v
+
+
+def compute_fe_t2(no, nv, int1e, int2e):
+
+    n_orb = no + nv
+
+    def translate_o(n):
+        if n % 2 == 0:
+            return n // 2 + n_orb
+        else:
+            return n // 2
+
+    def translate_v(n):
+        if n % 2 == 0:
+            return n // 2 + no + n_orb
+        else:
+            return n // 2 + no
+
+    t2 = np.zeros((2*no, 2*no, 2*nv, 2*nv))
+    for i, j, k, l in product(range(2*no), range(2*no), range(2*nv), range(2*nv)):
+        # spin not conserved
+        if i % 2 != k % 2 or j % 2 != l % 2:
+            continue
+        a = translate_o(i)
+        b = translate_o(j)
+        s = translate_v(l)
+        r = translate_v(k)
+        if len(set([a, b, s, r])) != 4:
+            continue
+        # r^ s^ b a
+        rr, ss, bb, aa = [i % n_orb for i in [r, s, b, a]]
+        if (r < n_orb and s < n_orb) or (r >= n_orb and s >= n_orb):
+            e_inter = int2e[aa, rr, bb, ss] - int2e[aa, ss, bb, rr]
+        else:
+            e_inter = int2e[aa, rr, bb, ss]
+        if np.allclose(e_inter, 0):
+            continue
+        e_diff = _compute_e_diff(r, s, b, a, int1e, int2e, n_orb, no)
+        if np.allclose(e_diff, 0):
+            raise RuntimeError("RHF degenerate ground state")
+        theta = np.arctan(-2 * e_inter / e_diff) / 2
+        t2[i, j, k, l] = theta
+    return t2
+
+
+def _compute_e_diff(r, s, b, a, int1e, int2e, n_orb, no):
+    inert_a = list(range(no))
+    inert_b = list(range(no))
+    old_a = []
+    old_b = []
+    for i in [b, a]:
+        if i < n_orb:
+            inert_b.remove(i)
+            old_b.append(i)
+        else:
+            inert_a.remove(i % n_orb)
+            old_a.append(i % n_orb)
+
+    new_a = []
+    new_b = []
+    for i in [r, s]:
+        if i < n_orb:
+            new_b.append(i)
+        else:
+            new_a.append(i % n_orb)
+
+    diag1e = np.diag(int1e)
+    diagj = np.einsum('iijj->ij', int2e)
+    diagk = np.einsum('ijji->ij', int2e)
+
+    e_diff_1e = diag1e[new_a].sum() + diag1e[new_b].sum() - diag1e[old_a].sum() - diag1e[old_b].sum()
+    e_diff_j = _compute_j_outer(diagj, inert_a, inert_b, new_a, new_b) - _compute_j_outer(diagj, inert_a, inert_b, old_a, old_b)
+    e_diff_k = _compute_k_outer(diagk, inert_a, inert_b, new_a, new_b) - _compute_k_outer(diagk, inert_a, inert_b, old_a, old_b)
+    return e_diff_1e + 1 / 2 * (e_diff_j - e_diff_k)
+
+
+def _compute_j_outer(diagj, inert_a, inert_b, outer_a, outer_b):
+    v = diagj[inert_a][:, outer_a].sum() + diagj[outer_a][:, inert_a].sum() + diagj[outer_a][:, outer_a].sum() \
+    + diagj[inert_a][:, outer_b].sum() + diagj[outer_a][:, inert_b].sum() + diagj[outer_a][:, outer_b].sum() \
+    + diagj[inert_b][:, outer_a].sum() + diagj[outer_b][:, inert_a].sum() + diagj[outer_b][:, outer_a].sum() \
+    + diagj[inert_b][:, outer_b].sum() + diagj[outer_b][:, inert_b].sum() + diagj[outer_b][:, outer_b].sum()
+    return v
+
+def _compute_k_outer(diagk, inert_a, inert_b, outer_a, outer_b):
+    v = diagk[inert_a][:, outer_a].sum() + diagk[outer_a][:, inert_a].sum() + diagk[outer_a][:, outer_a].sum() \
+        + diagk[inert_b][:, outer_b].sum() + diagk[outer_b][:, inert_b].sum() + diagk[outer_b][:, outer_b].sum()
+    return v

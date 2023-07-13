@@ -111,16 +111,19 @@ HeHp = hehp = lambda d=1: M(atom=[["H", 0, 0, 0], ["He", 0, 0, d]], charge=1)
 LiH = lih = lambda d=1.6: M(atom=[["H", 0, 0, 0], ["Li", 0, 0, d]])
 BeH2 = beh2 = lambda d=1.6: M(atom=[["H", 0, 0, -d], ["Be", 0, 0, 0], ["H", 0, 0, d]])
 
-N2 = n2 = nitrogen = lambda x: M(atom=[["N", 0, 0, 0], ["N", 0, 0, 1.09]])
+N2 = n2 = nitrogen = lambda d=1.09: M(atom=[["N", 0, 0, 0], ["N", 0, 0, d]])
 
-ch4_coord = [
-    ["C", 0, 0, 0],
-    ["H", -0.629, 0.629, 0.629],
-    ["H", 0.629, -0.629, 0.629],
-    ["H", -0.629, -0.629, -0.629],
-    ["H", 0.629, 0.629, -0.629],
-]
-CH4 = ch4 = methane = lambda x: M(atom=ch4_coord)
+def get_ch4_coord(d):
+    x = d / np.sqrt(3)
+    ch4_coord = [
+        ["C", 0, 0, 0],
+        ["H", -x, x, x],
+        ["H", x, -x, x],
+        ["H", -x, -x, -x],
+        ["H", x, x, -x],
+    ]
+    return ch4_coord
+CH4 = ch4 = methane = lambda x=1.09: M(atom=get_ch4_coord(x))
 
 
 if __name__ == "__main__":

@@ -143,8 +143,8 @@ class UCCSD(UCC):
         >>> init_guess  # doctest:+ELLIPSIS
         [0.0, ...]
         """
-        ex1_ops, ex1_param_ids, ex1_init_guess = self.get_ex1_ops(self.t1)
-        ex2_ops, ex2_param_ids, ex2_init_guess = self.get_ex2_ops(self.t2)
+        ex1_ops, ex1_param_ids, ex1_init_guess = self.get_ex1_ops(t1)
+        ex2_ops, ex2_param_ids, ex2_init_guess = self.get_ex2_ops(t2)
 
         # screen out symmetrically not allowed excitation
         ex2_ops, ex2_param_ids, ex2_init_guess = self.pick_and_sort(
