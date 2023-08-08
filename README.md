@@ -99,5 +99,6 @@ which is also a good introduction to the software.
 
 ### Variational basis state encoder
 An efficient algorithm to encode phonon states in electron-phonon systems for quantum computation.
-See [examples](https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example).
+See [examples](https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example)
+and the [tutorial](https://tencent-quantum-lab.github.io/TenCirChem/tutorial_jupyter/vbe_tutorial_td.html).
 Reference paper: https://arxiv.org/pdf/2301.01442.pdf (published in PRR).

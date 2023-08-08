@@ -12,3 +12,5 @@ Tutorials
     tutorial_jupyter/noisy_simulation.ipynb
     tutorial_jupyter/sbm_dynamics.ipynb
     tutorial_jupyter/marcus.ipynb
+    tutorial_jupyter/vbe_tutorial_groundstate.ipynb
+    tutorial_jupyter/vbe_tutorial_td.ipynb

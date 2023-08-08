@@ -16,8 +16,7 @@ import tensorcircuit as tc
 
 from tencirchem import set_backend, Op, Mpo, Model, OpSum
 from tencirchem.dynamic import get_ansatz, get_deriv, get_jacobian_func, qubit_encode_basis, sbm
-
-from vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args
+from tencirchem.applications.vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args
 
 set_backend("jax")
 

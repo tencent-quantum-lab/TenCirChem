@@ -17,8 +17,7 @@ import tensorcircuit as tc
 from tencirchem import set_backend, Op, BasisSHO, BasisSimpleElectron, Mpo, Model
 from tencirchem.dynamic import get_ansatz, qubit_encode_op, qubit_encode_basis
 from tencirchem.utils import scipy_opt_wrap
-
-from vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args
+from tencirchem.applications.vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args
 
 backend = set_backend("jax")
 
@@ -130,12 +129,12 @@ def solve_b_array(psi, h_mpo, b_array, i):
     es = []
     for k, new_b in enumerate(sols):
         if not np.allclose(new_b @ new_b.T, np.eye(4)):
-            print(f"Enforcing orthogonality for the {k}th root of b_array[{i}]")
+            # print(f"Enforcing orthogonality for the {k}th root of b_array[{i}]")
             new_b = np.linalg.qr(new_b.T)[0].T
         b_array[i] = new_b
         e = psi @ get_contracted_mpo(h_mpo, b_array, n_qubit_per_mode, b_dof_pidx, psi_idx_top + psi_idx_bottom) @ psi
         es.append(e)
-    print(np.array(es))
+    # print(np.array(es))
     lowest_id = np.argmin(es)
     return sols[lowest_id]
 

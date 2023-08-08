@@ -96,6 +96,7 @@ TenCirChem 使用 Academic Public License 发布。
 
 ### 变分基矢编码器
 变分基矢编码器是编码电声子系统中的声子用以量子计算的高效算法。
-请参考[例子](https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example).
+请参考[例子](https://github.com/tencent-quantum-lab/TenCirChem/tree/master/example)
+及[教程](https://tencent-quantum-lab.github.io/TenCirChem/tutorial_jupyter/vbe_tutorial_td.html)。
 参考论文: https://arxiv.org/pdf/2301.01442.pdf (发表于PRR).
 
