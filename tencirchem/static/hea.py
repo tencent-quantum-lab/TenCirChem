@@ -15,6 +15,7 @@ from scipy.optimize import minimize
 from noisyopt import minimizeSPSA
 
 from openfermion import (
+    hermitian_conjugated,
     jordan_wigner,
     bravyi_kitaev,
     binary_code_transform,
@@ -292,6 +293,12 @@ class HEA:
         hea: :class:`HEA`
              An HEA instance
         """
+
+        if isinstance(n_elec, tuple):
+            if len(n_elec) != 2 or n_elec[0] != n_elec[1]:
+                raise ValueError(f"Incompatible n_elec: {n_elec}")
+            n_elec = n_elec[0] + n_elec[1]
+
         hop = get_hop_from_integral(int1e, int2e) + e_core
         n_sorb = 2 * len(int1e)
         h_qubit_op = fop_to_qop(hop, mapping, n_sorb, n_elec)
@@ -305,6 +312,82 @@ class HEA:
         instance.e_core = e_core
         instance.hop = hop
         return instance
+
+    @classmethod
+    def as_pyscf_solver(cls, config_function: Callable = None, rdm_engine: str = None, **kwargs):
+        """
+        Converts the ``HEA`` class to a PySCF FCI solver using 1-layered :math:`R_y` ansatz.
+
+        Parameters
+        ----------
+        config_function: callable
+            A function to configure the ``HEA`` instance.
+            Accepts the ``HEA`` instance and modifies it inplace before :func:`kernel` is called.
+        rdm_engine: str
+            The engine to use when evaluating the reduced density matrices.
+            Defaults to ``None``, which uses the same engine for parameter optimization.
+        kwargs
+            Other arguments to be passed to the :func:`__init__` function such as ``engine``.
+
+        Returns
+        -------
+        FCISolver
+
+        Examples
+        --------
+        >>> from pyscf.mcscf import CASSCF
+        >>> from tencirchem import HEA
+        >>> from tencirchem.molecule import h8
+        >>> # normal PySCF workflow
+        >>> hf = h8.HF()
+        >>> round(hf.kernel(), 6)
+        -4.149619
+        >>> casscf = CASSCF(hf, 2, 2)
+        >>> # set the FCI solver for CASSCF to be HEA
+        >>> casscf.fcisolver = HEA.as_pyscf_solver()
+        >>> round(casscf.kernel()[0], 6)
+        -4.166473
+        """
+
+        class FakeFCISolver:
+            def __init__(self):
+                self.instance: HEA = None
+                self.config_function = config_function
+                self.instance_kwargs = kwargs
+
+            def kernel(self, h1, h2, norb, nelec, ci0=None, ecore=0, **kwargs):
+                self.instance = cls.ry(h1, h2, nelec, e_core=0, n_layers=1, **self.instance_kwargs)
+                if self.config_function is not None:
+                    self.config_function(self.instance)
+                e = self.instance.kernel()
+                return e + ecore, self.instance.params
+
+            def make_rdm1(self, params, norb, nelec):
+                if rdm_engine is None:
+                    rdm1 = self.instance.make_rdm1(params)
+                else:
+                    engine_bak = self.instance.engine
+                    self.instance.engine = rdm_engine
+                    rdm1 = self.instance.make_rdm1(params)
+                    self.instance.engine = engine_bak
+                return rdm1
+
+            def make_rdm12(self, params, norb, nelec):
+                if rdm_engine is None:
+                    rdm1 = self.instance.make_rdm1(params)
+                    rdm2 = self.instance.make_rdm2(params)
+                else:
+                    engine_bak = self.instance.engine
+                    self.instance.engine = rdm_engine
+                    rdm1 = self.instance.make_rdm1(params)
+                    rdm2 = self.instance.make_rdm2(params)
+                    self.instance.engine = engine_bak
+                return rdm1, rdm2
+
+            def spin_square(self, params, norb, nelec):
+                return 0, 1
+
+        return FakeFCISolver()
 
     def __init__(
         self,
@@ -817,9 +900,12 @@ class HEA:
         for i in range(n_orb):
             for j in range(i + 1):
                 fop = FermionOperator(f"{i}^ {j}")
+                fop = fop + hermitian_conjugated(fop)
                 qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
                 hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
-                v = hea.energy(params)
+                # for spin orbital RDM
+                v = hea.energy(params) / 2
+                # spatial orbital RDM
                 rdm1[i, j] = rdm1[j, i] = 2 * v
 
         return rdm1
@@ -876,11 +962,14 @@ class HEA:
             fop_aaaa = FermionOperator(f"{p}^ {q}^ {r} {s}")
             fop_abba = FermionOperator(f"{p}^ {q+n_orb}^ {r+n_orb} {s}")
             fop = fop_aaaa + fop_abba
+            fop = fop + hermitian_conjugated(fop)
             qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
             hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
-            v = hea.energy(params)
+            # for spin RDM
+            v = hea.energy(params) / 2
             indices = [(p, q, r, s), (s, r, q, p), (q, p, s, r), (r, s, p, q)]
             for idx in indices:
+                # 2* for spatial RDM
                 rdm2[idx] = 2 * v
                 calculated_indices.add(idx)
         # transpose to PySCF notation: rdm2[p,q,r,s] = <p^+ r^+ s q>

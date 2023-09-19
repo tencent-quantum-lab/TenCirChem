@@ -1,7 +1,9 @@
 # Examples
 
 - `custom_excitation.py`: Specify custom excitation operators for unitary coupled-cluster (UCC) ansatz.
+- `hea_force.py`: Calculate nuclear forces based on hardware-efficient ansatz (Ry ansatz).
 - `hea_beh2.py`: VQE of BeH2 based on hardware-efficient ansatz (Ry ansatz), with (4e, 4o) active space.
+- `hea_geom_opt.py`: Molecular geometry optimization of H2O based on hardware-efficient ansatz (Ry ansatz).
 - `hea_lih.py`: VQE of LiH based on hardware-efficient ansatz (Ry ansatz), with (2e, 3o) active space.
 - `hea_symm.py`: VQE of H4 based on symmetry-preserving hardware-efficient ansatz.
 - `mr_uccsd.py`: Multi-reference UCCSD calculation of the bond dissociation limit of the water molecule.

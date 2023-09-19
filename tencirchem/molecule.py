@@ -94,7 +94,7 @@ H6 = h6 = h_chain(6)
 H8 = h8 = h_chain(8)
 
 
-def water(bond_angle=104.45, bond_length=0.9584, basis="sto3g"):
+def water(bond_length=0.9584, bond_angle=104.45, basis="sto3g"):
     bond_angle = bond_angle / 180 * np.pi
     phi = bond_angle / 2
     r = bond_length

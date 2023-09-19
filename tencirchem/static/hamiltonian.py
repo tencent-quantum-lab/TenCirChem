@@ -13,7 +13,6 @@ import numpy as np
 import tensornetwork as tn
 from renormalizer import Mpo
 from openfermion import FermionOperator, QubitOperator
-from pyscf.gto.mole import Mole
 from pyscf.scf.hf import RHF
 from pyscf.mcscf import CASCI
 from pyscf.fci import direct_nosym, cistring
@@ -53,8 +52,8 @@ def get_hop_from_integral(int1e, int2e):
     n_orb = int1e.shape[0]
     if int1e.shape != (n_orb, n_orb):
         raise ValueError(f"Invalid one-boby integral array shape: {int1e.shape}")
-    if int2e.shape != (n_orb, n_orb, n_orb, n_orb):
-        raise ValueError(f"Invalid two-boby integral array shape: {int2e.shape}")
+    int2e = ao2mo.restore(1, int2e, n_orb)
+    assert int2e.shape == (n_orb, n_orb, n_orb, n_orb)
     n_sorb = n_orb * 2
 
     logger.info("Creating Hamiltonian operators")

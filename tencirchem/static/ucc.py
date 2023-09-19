@@ -6,6 +6,7 @@
 
 from functools import partial
 from itertools import product
+from collections import defaultdict
 from time import time
 import logging
 from typing import Any, Tuple, Callable, List, Union
@@ -1330,6 +1331,13 @@ class UCC:
     @param_ids.setter
     def param_ids(self, v):
         self._param_ids = v
+
+    @property
+    def param_to_ex_ops(self):
+        d = defaultdict(list)
+        for i, j in enumerate(self.param_ids):
+            d[j].append(self.ex_ops[i])
+        return d
 
 
 def compute_fe_t2(no, nv, int1e, int2e):
