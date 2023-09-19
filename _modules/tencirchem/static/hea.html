@@ -1,10 +1,10 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
         <title>tencirchem.static.hea - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
@@ -231,6 +231,7 @@
 <span class="kn">from</span> <span class="nn">noisyopt</span> <span class="kn">import</span> <span class="n">minimizeSPSA</span>
 
 <span class="kn">from</span> <span class="nn">openfermion</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">hermitian_conjugated</span><span class="p">,</span>
     <span class="n">jordan_wigner</span><span class="p">,</span>
     <span class="n">bravyi_kitaev</span><span class="p">,</span>
     <span class="n">binary_code_transform</span><span class="p">,</span>
@@ -508,6 +509,12 @@
 <span class="sd">        hea: :class:`HEA`</span>
 <span class="sd">             An HEA instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_elec</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_elec</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">n_elec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_elec</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incompatible n_elec: </span><span class="si">{</span><span class="n">n_elec</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">n_elec</span> <span class="o">=</span> <span class="n">n_elec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">n_elec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="n">hop</span> <span class="o">=</span> <span class="n">get_hop_from_integral</span><span class="p">(</span><span class="n">int1e</span><span class="p">,</span> <span class="n">int2e</span><span class="p">)</span> <span class="o">+</span> <span class="n">e_core</span>
         <span class="n">n_sorb</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">int1e</span><span class="p">)</span>
         <span class="n">h_qubit_op</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
@@ -521,6 +528,82 @@
         <span class="n">instance</span><span class="o">.</span><span class="n">e_core</span> <span class="o">=</span> <span class="n">e_core</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">hop</span> <span class="o">=</span> <span class="n">hop</span>
         <span class="k">return</span> <span class="n">instance</span></div>
+
+<div class="viewcode-block" id="HEA.as_pyscf_solver"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.as_pyscf_solver">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">as_pyscf_solver</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rdm_engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts the ``HEA`` class to a PySCF FCI solver using 1-layered :math:`R_y` ansatz.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_function: callable</span>
+<span class="sd">            A function to configure the ``HEA`` instance.</span>
+<span class="sd">            Accepts the ``HEA`` instance and modifies it inplace before :func:`kernel` is called.</span>
+<span class="sd">        rdm_engine: str</span>
+<span class="sd">            The engine to use when evaluating the reduced density matrices.</span>
+<span class="sd">            Defaults to ``None``, which uses the same engine for parameter optimization.</span>
+<span class="sd">        kwargs</span>
+<span class="sd">            Other arguments to be passed to the :func:`__init__` function such as ``engine``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FCISolver</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from pyscf.mcscf import CASSCF</span>
+<span class="sd">        &gt;&gt;&gt; from tencirchem import HEA</span>
+<span class="sd">        &gt;&gt;&gt; from tencirchem.molecule import h8</span>
+<span class="sd">        &gt;&gt;&gt; # normal PySCF workflow</span>
+<span class="sd">        &gt;&gt;&gt; hf = h8.HF()</span>
+<span class="sd">        &gt;&gt;&gt; round(hf.kernel(), 6)</span>
+<span class="sd">        -4.149619</span>
+<span class="sd">        &gt;&gt;&gt; casscf = CASSCF(hf, 2, 2)</span>
+<span class="sd">        &gt;&gt;&gt; # set the FCI solver for CASSCF to be HEA</span>
+<span class="sd">        &gt;&gt;&gt; casscf.fcisolver = HEA.as_pyscf_solver()</span>
+<span class="sd">        &gt;&gt;&gt; round(casscf.kernel()[0], 6)</span>
+<span class="sd">        -4.166473</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">class</span> <span class="nc">FakeFCISolver</span><span class="p">:</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">:</span> <span class="n">HEA</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span> <span class="o">=</span> <span class="n">config_function</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+            <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">ci0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecore</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">e_core</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">e</span> <span class="o">+</span> <span class="n">ecore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">params</span>
+
+            <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">rdm_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">engine_bak</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">rdm_engine</span>
+                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine_bak</span>
+                <span class="k">return</span> <span class="n">rdm1</span>
+
+            <span class="k">def</span> <span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">rdm_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                    <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">engine_bak</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">rdm_engine</span>
+                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                    <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine_bak</span>
+                <span class="k">return</span> <span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span>
+
+            <span class="k">def</span> <span class="nf">spin_square</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">FakeFCISolver</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="HEA.__init__"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1033,9 +1116,12 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_orb</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="n">fop</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">fop</span> <span class="o">=</span> <span class="n">fop</span> <span class="o">+</span> <span class="n">hermitian_conjugated</span><span class="p">(</span><span class="n">fop</span><span class="p">)</span>
                 <span class="n">qop</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">)</span>
                 <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">qop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">)</span>
-                <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="c1"># for spin orbital RDM</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="c1"># spatial orbital RDM</span>
                 <span class="n">rdm1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdm1</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span>
 
         <span class="k">return</span> <span class="n">rdm1</span></div>
@@ -1092,11 +1178,14 @@
             <span class="n">fop_aaaa</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">fop_abba</span> <span class="o">=</span> <span class="n">FermionOperator</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">q</span><span class="o">+</span><span class="n">n_orb</span><span class="si">}</span><span class="s2">^ </span><span class="si">{</span><span class="n">r</span><span class="o">+</span><span class="n">n_orb</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">fop</span> <span class="o">=</span> <span class="n">fop_aaaa</span> <span class="o">+</span> <span class="n">fop_abba</span>
+            <span class="n">fop</span> <span class="o">=</span> <span class="n">fop</span> <span class="o">+</span> <span class="n">hermitian_conjugated</span><span class="p">(</span><span class="n">fop</span><span class="p">)</span>
             <span class="n">qop</span> <span class="o">=</span> <span class="n">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">)</span>
             <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">qop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine_conf</span><span class="p">)</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="c1"># for spin RDM</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">hea</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="n">indices</span> <span class="o">=</span> <span class="p">[(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)]</span>
             <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="c1"># 2* for spatial RDM</span>
                 <span class="n">rdm2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span>
                 <span class="n">calculated_indices</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
         <span class="c1"># transpose to PySCF notation: rdm2[p,q,r,s] = &lt;p^+ r^+ s q&gt;</span>

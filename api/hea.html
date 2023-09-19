@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="UCC" href="ucc.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
         <title>Headware-Efficient Ansatz and Noisy Circuit Simulation - TenCirChem documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -241,6 +241,41 @@ with <span class="math notranslate nohighlight">\(p=0.02\)</span> is added to th
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tencirchem.HEA.as_pyscf_solver">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_pyscf_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdm_engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.as_pyscf_solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.as_pyscf_solver" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> class to a PySCF FCI solver using 1-layered <span class="math notranslate nohighlight">\(R_y\)</span> ansatz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_function</strong> (<em>callable</em>) – A function to configure the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> instance.
+Accepts the <code class="docutils literal notranslate"><span class="pre">HEA</span></code> instance and modifies it inplace before <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirchem.HEA.kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel()</span></code></a> is called.</p></li>
+<li><p><strong>rdm_engine</strong> (<em>str</em>) – The engine to use when evaluating the reduced density matrices.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which uses the same engine for parameter optimization.</p></li>
+<li><p><strong>kwargs</strong> – Other arguments to be passed to the <a class="reference internal" href="#tencirchem.HEA.__init__" title="tencirchem.HEA.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a> function such as <code class="docutils literal notranslate"><span class="pre">engine</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>FCISolver</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf.mcscf</span> <span class="kn">import</span> <span class="n">CASSCF</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># normal PySCF workflow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hf</span> <span class="o">=</span> <span class="n">h8</span><span class="o">.</span><span class="n">HF</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">(),</span> <span class="mi">6</span><span class="p">)</span>
+<span class="go">-4.149619</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">casscf</span> <span class="o">=</span> <span class="n">CASSCF</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># set the FCI solver for CASSCF to be HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">casscf</span><span class="o">.</span><span class="n">fcisolver</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">as_pyscf_solver</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">casscf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span>
+<span class="go">-4.166473</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -756,6 +791,7 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <li><a class="reference internal" href="#">Headware-Efficient Ansatz and Noisy Circuit Simulation</a><ul>
 <li><a class="reference internal" href="#tencirchem.HEA"><code class="docutils literal notranslate"><span class="pre">HEA</span></code></a><ul>
 <li><a class="reference internal" href="#tencirchem.HEA.__init__"><code class="docutils literal notranslate"><span class="pre">HEA.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#tencirchem.HEA.as_pyscf_solver"><code class="docutils literal notranslate"><span class="pre">HEA.as_pyscf_solver()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.densitymatrix"><code class="docutils literal notranslate"><span class="pre">HEA.densitymatrix()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.energy"><code class="docutils literal notranslate"><span class="pre">HEA.energy()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.energy_and_grad"><code class="docutils literal notranslate"><span class="pre">HEA.energy_and_grad()</span></code></a></li>
