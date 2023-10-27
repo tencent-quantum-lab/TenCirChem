@@ -27,7 +27,7 @@ def check_basis_type(basis):
             raise ValueError(f"For only two DOFs are allowed in BasisMultiElectron. Got {b}")
 
 
-def qubit_encode_op(terms, basis, boson_encoding=None):
+def qubit_encode_op(terms, basis, boson_encoding=None, transform_elec_dof=True):
     check_basis_type(basis)
     if isinstance(terms, Op):
         terms = [terms]
@@ -44,7 +44,8 @@ def qubit_encode_op(terms, basis, boson_encoding=None):
         terms, factor = old_ham_terms.pop()
         opsum_list = []
         for op in terms:
-            opsum = transform_op(op, model.dof_to_basis[op.dofs[0]], boson_encoding)
+            opsum = transform_op(op, model.dof_to_basis[op.dofs[0]],
+                    boson_encoding, transform_elec_dof)
             opsum_list.append(opsum)
 
         new_term = 1
@@ -69,12 +70,16 @@ def qubit_encode_op(terms, basis, boson_encoding=None):
     return non_identity_terms.simplify(atol=DISCARD_EPS), constant
 
 
-def qubit_encode_basis(basis: List[BasisSet], boson_encoding=None):
+def qubit_encode_basis(basis: List[BasisSet], boson_encoding=None,
+        transform_elec_dof=True):
     spin_basis = []
     for b in basis:
         if isinstance(b, BasisMultiElectron):
-            assert b.nbas == 2
-            spin_basis.append(BasisHalfSpin(b.dofs))
+            if transform_elec_dof:
+                assert b.nbas == 2
+                spin_basis.append(BasisHalfSpin(b.dofs))
+            else:
+                spin_basis.append(b)
         elif b.is_phonon:
             if boson_encoding is None:
                 new_dofs = [b.dof]
@@ -92,7 +97,8 @@ def qubit_encode_basis(basis: List[BasisSet], boson_encoding=None):
     return spin_basis
 
 
-def transform_op(op: Op, basis: BasisSet, boson_encoding: str = None) -> OpSum:
+def transform_op(op: Op, basis: BasisSet, boson_encoding: str = None,
+        transform_elec_dof=True) -> OpSum:
     # `op` is "elementary": all terms are in the `basis`
     assert op.factor == 1
 
@@ -100,12 +106,15 @@ def transform_op(op: Op, basis: BasisSet, boson_encoding: str = None) -> OpSum:
         return OpSum([op])
 
     if isinstance(basis, (BasisHalfSpin, BasisSimpleElectron, BasisMultiElectron)):
-        if isinstance(basis, BasisMultiElectron):
-            assert len(basis.dof) == 2
-            new_dof = basis.dofs
+        if transform_elec_dof:
+            if isinstance(basis, BasisMultiElectron):
+                assert len(basis.dof) == 2
+                new_dof = basis.dofs
+            else:
+                new_dof = op.dofs[0]
+            return transform_op_direct(op, new_dof, basis)
         else:
-            new_dof = op.dofs[0]
-        return transform_op_direct(op, new_dof, basis)
+            return OpSum([op])
 
     # in principle can encode basis sets such as BasisMultiElectron,
     # but I think it's unnatural and not necessary

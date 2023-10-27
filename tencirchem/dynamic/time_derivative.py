@@ -17,7 +17,7 @@ from tencirchem.utils.circuit import evolve_pauli
 logger = logging.getLogger(__name__)
 
 
-def construct_ansatz_op(ham_terms, spin_basis):
+def construct_ansatz_op(ham_terms, spin_basis, transform_elec_dof=True):
     dof_idx_dict = {b.dof: i for i, b in enumerate(spin_basis)}
     ansatz_op_list = []
 
@@ -26,7 +26,14 @@ def construct_ansatz_op(ham_terms, spin_basis):
 
         op_mat = 1
         name = ""
-        for symbol in op.split_symbol:
+        elec_symbol = "I"
+        for isymbol, symbol in enumerate(op.split_symbol):
+            if not transform_elec_dof and op.dofs[isymbol][0] == "e":
+                # check if only occur once
+                assert elec_symbol == "I" and dof_idx_dict[op.dofs[isymbol]]==0
+                elec_symbol = symbol
+                continue
+
             if symbol in ["X", "x", "sigma_x"]:
                 op_mat = np.kron(op_mat, tc.gates._x_matrix)
                 name += "X"
@@ -38,8 +45,13 @@ def construct_ansatz_op(ham_terms, spin_basis):
                     raise ValueError(f"Hamiltonian must be sum of Pauli strings, got term {op}")
                 op_mat = np.kron(op_mat, tc.gates._z_matrix)
                 name += "Z"
-        qubit_idx_list = [dof_idx_dict[dof] for dof in op.dofs]
-        ansatz_op_list.append((op_mat, op.factor, name, qubit_idx_list))
+        if transform_elec_dof:
+            qubit_idx_list = [dof_idx_dict[dof] for dof in op.dofs]
+            ansatz_op_list.append((op_mat, op.factor, name, qubit_idx_list))
+        else:
+            # the electronic dof is discarded
+            qubit_idx_list = [dof_idx_dict[dof]-1 for dof in op.dofs]
+            ansatz_op_list.append((elec_symbol, op_mat, op.factor, name, qubit_idx_list))
 
     return ansatz_op_list
 
