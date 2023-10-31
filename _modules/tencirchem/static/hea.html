@@ -229,7 +229,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 <span class="kn">from</span> <span class="nn">noisyopt</span> <span class="kn">import</span> <span class="n">minimizeSPSA</span>
-
+<span class="kn">from</span> <span class="nn">pyscf.gto.mole</span> <span class="kn">import</span> <span class="n">Mole</span>
 <span class="kn">from</span> <span class="nn">openfermion</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">hermitian_conjugated</span><span class="p">,</span>
     <span class="n">jordan_wigner</span><span class="p">,</span>
@@ -402,6 +402,36 @@
 <span class="sd">    For a comprehensive tutorial see :doc:`/tutorial_jupyter/noisy_simulation`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="HEA.from_molecule"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.from_molecule">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_molecule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s2">&quot;parity&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct the HEA class from the given molecule.</span>
+<span class="sd">        The :math:`R_y` ansatz is employed.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        m: Mole</span>
+<span class="sd">            The molecule object.</span>
+<span class="sd">        n_layers: int</span>
+<span class="sd">            The number of layers in the :math:`R_y` ansatz.</span>
+<span class="sd">        mapping: str</span>
+<span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;``,</span>
+<span class="sd">            and ``&quot;bravyi-kitaev&quot;``.</span>
+
+<span class="sd">        kwargs:</span>
+<span class="sd">            Other arguments to be passed to the :func:`__init__` function such as ``engine``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        hea: :class:`HEA`</span>
+<span class="sd">             An HEA instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
+
+        <span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="HEA.ry"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.ry">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">ry</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
@@ -414,10 +444,24 @@
         <span class="n">mapping</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;parity&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Construct the HEA class from electron integrals and custom quantum circuit.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct the HEA class from electron integrals and the :math:`R_y` ansatz.</span>
+<span class="sd">        The circuit consists of interleaved layers of $R_y$ and CNOT gates</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            |\Psi(\theta)\rangle=\prod_{l=k}^1\left [ L_{R_y}^{(l)}(\theta) L_{CNOT}^{(l)} \right ] L_{R_y}^{(0)}(\theta) |{\phi}\rangle</span>
+
+<span class="sd">        where $k$ is the total number of layers, and the layers are defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            L_{CNOT}^{(l)}=\prod_{j=N/2-1}^1 CNOT_{2j, 2j+1} \prod_{j=N/2}^{1} CNOT_{2j-1, 2j}</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            L_{R_y}^{(l)}(\theta)=\prod_{j=N}^{1} RY_{j}(\theta_{lj})</span>
+
 <span class="sd">        Overlap integral is assumed to be identity.</span>
-<span class="sd">        Parity transformation is used to transform from fermion operators to qubit operators.</span>
+<span class="sd">        Parity transformation is used to transform from fermion operators to qubit operators by default.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -432,8 +476,7 @@
 <span class="sd">        n_layers: int</span>
 <span class="sd">            The number of layers in the ansatz.</span>
 <span class="sd">        init_circuit: Circuit</span>
-<span class="sd">            The initial circuit before the :math:`R_y` ansatz. Defaults to None,</span>
-<span class="sd">            which creates an HF initial state.</span>
+<span class="sd">            The initial circuit before the :math:`R_y` ansatz. Defaults to None.</span>
 <span class="sd">        mapping: str</span>
 <span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;``,</span>
 <span class="sd">            and ``&quot;bravyi-kitaev&quot;``.</span>

@@ -442,6 +442,30 @@ and <code class="docutils literal notranslate"><span class="pre">&quot;bravyi-ki
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="tencirchem.HEA.from_molecule">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_molecule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parity'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.from_molecule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.from_molecule" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct the HEA class from the given molecule.
+The <span class="math notranslate nohighlight">\(R_y\)</span> ansatz is employed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>Mole</em>) – The molecule object.</p></li>
+<li><p><strong>n_layers</strong> (<em>int</em>) – The number of layers in the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz.</p></li>
+<li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&quot;bravyi-kitaev&quot;</span></code>.</p></li>
+<li><p><strong>kwargs</strong> – Other arguments to be passed to the <a class="reference internal" href="#tencirchem.HEA.__init__" title="tencirchem.HEA.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a> function such as <code class="docutils literal notranslate"><span class="pre">engine</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hea</strong> – An HEA instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tencirchem.HEA" title="tencirchem.HEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEA</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="tencirchem.HEA.get_dmcircuit">
 <span class="sig-name descname"><span class="pre">get_dmcircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseConf</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DMCircuit2</span></span></span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.get_dmcircuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.get_dmcircuit" title="Permalink to this definition">#</a></dt>
 <dd><p>Get the <code class="xref py py-class docutils literal notranslate"><span class="pre">DMCircuit</span></code> with noise.
@@ -607,9 +631,23 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <dl class="py method">
 <dt class="sig sig-object py" id="tencirchem.HEA.ry">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int1e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int2e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_elec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_core</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Circuit</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'parity'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tencirchem/static/hea.html#HEA.ry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tencirchem.HEA.ry" title="Permalink to this definition">#</a></dt>
-<dd><p>Construct the HEA class from electron integrals and custom quantum circuit.
-Overlap integral is assumed to be identity.
-Parity transformation is used to transform from fermion operators to qubit operators.</p>
+<dd><p>Construct the HEA class from electron integrals and the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz.
+The circuit consists of interleaved layers of $R_y$ and CNOT gates</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[|\Psi(\theta)\rangle=\prod_{l=k}^1\left [ L_{R_y}^{(l)}(\theta) L_{CNOT}^{(l)} \right ] L_{R_y}^{(0)}(\theta) |{\phi}\rangle\]</div>
+</div>
+<p>where $k$ is the total number of layers, and the layers are defined as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[L_{CNOT}^{(l)}=\prod_{j=N/2-1}^1 CNOT_{2j, 2j+1} \prod_{j=N/2}^{1} CNOT_{2j-1, 2j}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[L_{R_y}^{(l)}(\theta)=\prod_{j=N}^{1} RY_{j}(\theta_{lj})\]</div>
+</div>
+<p>Overlap integral is assumed to be identity.
+Parity transformation is used to transform from fermion operators to qubit operators by default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -618,8 +656,7 @@ Parity transformation is used to transform from fermion operators to qubit opera
 <li><p><strong>n_elec</strong> (<em>int</em>) – The number of electrons</p></li>
 <li><p><strong>e_core</strong> (<em>float</em>) – The nuclear energy or core energy if active space approximation is involved.</p></li>
 <li><p><strong>n_layers</strong> (<em>int</em>) – The number of layers in the ansatz.</p></li>
-<li><p><strong>init_circuit</strong> (<em>Circuit</em>) – The initial circuit before the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz. Defaults to None,
-which creates an HF initial state.</p></li>
+<li><p><strong>init_circuit</strong> (<em>Circuit</em>) – The initial circuit before the <span class="math notranslate nohighlight">\(R_y\)</span> ansatz. Defaults to None.</p></li>
 <li><p><strong>mapping</strong> (<em>str</em>) – The fermion to qubit mapping. Supported mappings are <code class="docutils literal notranslate"><span class="pre">&quot;parity&quot;</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">&quot;bravyi-kitaev&quot;</span></code>.</p></li>
 <li><p><strong>kwargs</strong> – Other arguments to be passed to the <a class="reference internal" href="#tencirchem.HEA.__init__" title="tencirchem.HEA.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a> function such as <code class="docutils literal notranslate"><span class="pre">engine</span></code>.</p></li>
@@ -796,6 +833,7 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 <li><a class="reference internal" href="#tencirchem.HEA.energy"><code class="docutils literal notranslate"><span class="pre">HEA.energy()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.energy_and_grad"><code class="docutils literal notranslate"><span class="pre">HEA.energy_and_grad()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.from_integral"><code class="docutils literal notranslate"><span class="pre">HEA.from_integral()</span></code></a></li>
+<li><a class="reference internal" href="#tencirchem.HEA.from_molecule"><code class="docutils literal notranslate"><span class="pre">HEA.from_molecule()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.get_dmcircuit"><code class="docutils literal notranslate"><span class="pre">HEA.get_dmcircuit()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.get_dmcircuit_no_noise"><code class="docutils literal notranslate"><span class="pre">HEA.get_dmcircuit_no_noise()</span></code></a></li>
 <li><a class="reference internal" href="#tencirchem.HEA.get_opt_function"><code class="docutils literal notranslate"><span class="pre">HEA.get_opt_function()</span></code></a></li>
