@@ -13,7 +13,7 @@ from typing import Callable, Union, Any, List, Tuple
 import numpy as np
 from scipy.optimize import minimize
 from noisyopt import minimizeSPSA
-
+from pyscf.gto.mole import Mole
 from openfermion import (
     hermitian_conjugated,
     jordan_wigner,
@@ -187,6 +187,36 @@ class HEA:
     """
 
     @classmethod
+    def from_molecule(cls, m: Mole, n_layers=3, mapping="parity", **kwargs):
+        """
+        Construct the HEA class from the given molecule.
+        The :math:`R_y` ansatz is employed.
+
+
+        Parameters
+        ----------
+        m: Mole
+            The molecule object.
+        n_layers: int
+            The number of layers in the :math:`R_y` ansatz.
+        mapping: str
+            The fermion to qubit mapping. Supported mappings are ``"parity"``,
+            and ``"bravyi-kitaev"``.
+
+        kwargs:
+            Other arguments to be passed to the :func:`__init__` function such as ``engine``.
+
+        Returns
+        -------
+        hea: :class:`HEA`
+             An HEA instance
+        """
+        from tencirchem import UCC
+
+        ucc = UCC(m)
+        return cls.ry(ucc.int1e, ucc.int2e, ucc.n_elec, ucc.e_core, n_layers=n_layers, mapping=mapping, **kwargs)
+
+    @classmethod
     def ry(
         cls,
         int1e: np.ndarray,
@@ -198,10 +228,24 @@ class HEA:
         mapping: str = "parity",
         **kwargs,
     ):
-        """
-        Construct the HEA class from electron integrals and custom quantum circuit.
+        r"""
+        Construct the HEA class from electron integrals and the :math:`R_y` ansatz.
+        The circuit consists of interleaved layers of $R_y$ and CNOT gates
+
+        .. math::
+
+            |\Psi(\theta)\rangle=\prod_{l=k}^1\left [ L_{R_y}^{(l)}(\theta) L_{CNOT}^{(l)} \right ] L_{R_y}^{(0)}(\theta) |{\phi}\rangle
+
+        where $k$ is the total number of layers, and the layers are defined as
+
+        .. math::
+            L_{CNOT}^{(l)}=\prod_{j=N/2-1}^1 CNOT_{2j, 2j+1} \prod_{j=N/2}^{1} CNOT_{2j-1, 2j}
+
+        .. math::
+            L_{R_y}^{(l)}(\theta)=\prod_{j=N}^{1} RY_{j}(\theta_{lj})
+
         Overlap integral is assumed to be identity.
-        Parity transformation is used to transform from fermion operators to qubit operators.
+        Parity transformation is used to transform from fermion operators to qubit operators by default.
 
         Parameters
         ----------
@@ -216,8 +260,7 @@ class HEA:
         n_layers: int
             The number of layers in the ansatz.
         init_circuit: Circuit
-            The initial circuit before the :math:`R_y` ansatz. Defaults to None,
-            which creates an HF initial state.
+            The initial circuit before the :math:`R_y` ansatz. Defaults to None.
         mapping: str
             The fermion to qubit mapping. Supported mappings are ``"parity"``,
             and ``"bravyi-kitaev"``.
