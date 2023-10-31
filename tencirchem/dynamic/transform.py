@@ -23,12 +23,12 @@ def check_basis_type(basis):
     for b in basis:
         if isinstance(b, (BasisMultiElectronVac,)):
             raise TypeError(f"Unsupported basis: {type(b)}")
-        if isinstance(b, BasisMultiElectron) and len(b.dofs) != 2:
-            raise ValueError(f"For only two DOFs are allowed in BasisMultiElectron. Got {b}")
 
 
 def qubit_encode_op(terms, basis, boson_encoding=None, transform_elec_dof=True):
-    check_basis_type(basis)
+    if transform_elec_dof:
+        check_basis_type(basis)
+    
     if isinstance(terms, Op):
         terms = [terms]
 
@@ -76,8 +76,13 @@ def qubit_encode_basis(basis: List[BasisSet], boson_encoding=None,
     for b in basis:
         if isinstance(b, BasisMultiElectron):
             if transform_elec_dof:
-                assert b.nbas == 2
-                spin_basis.append(BasisHalfSpin(b.dofs))
+                if b.nbas == 2:
+                    spin_basis.append(BasisHalfSpin(b.dofs))
+                else:
+                    n_qubits = int(np.ceil(np.log2(b.nbas)))
+                    new_dofs = [(b.dofs, f"{DOF_SALT}-{i}") for i in range(n_qubits)]
+                    new_basis = [BasisHalfSpin(dof) for dof in new_dofs]
+                    spin_basis.extend(new_basis)
             else:
                 spin_basis.append(b)
         elif b.is_phonon:
@@ -108,11 +113,15 @@ def transform_op(op: Op, basis: BasisSet, boson_encoding: str = None,
     if isinstance(basis, (BasisHalfSpin, BasisSimpleElectron, BasisMultiElectron)):
         if transform_elec_dof:
             if isinstance(basis, BasisMultiElectron):
-                assert len(basis.dof) == 2
-                new_dof = basis.dofs
+                if basis.nbas > 2:
+                    # use the the same engine as boson encoding
+                    return transform_op_boson_binary(op, basis.dofs, basis, "binary")
+                else:
+                    new_dof = basis.dofs
+                    return transform_op_direct(op, new_dof, basis)
             else:
                 new_dof = op.dofs[0]
-            return transform_op_direct(op, new_dof, basis)
+                return transform_op_direct(op, new_dof, basis)
         else:
             return OpSum([op])
 
