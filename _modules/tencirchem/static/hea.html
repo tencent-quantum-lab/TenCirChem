@@ -403,18 +403,21 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="HEA.from_molecule"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.from_molecule">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_molecule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s2">&quot;parity&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_molecule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s2">&quot;parity&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct the HEA class from the given molecule.</span>
-<span class="sd">        The :math:`R_y` ansatz is employed.</span>
+<span class="sd">        The :math:`R_y` ansatz is employed. By default, the number of layers is set to 3.</span>
 
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        m: Mole</span>
 <span class="sd">            The molecule object.</span>
+<span class="sd">        active_space: Tuple[int, int], optional</span>
+<span class="sd">            Active space approximation. The first integer is the number of electrons and the second integer is</span>
+<span class="sd">            the number or spatial-orbitals. Defaults to None.</span>
 <span class="sd">        n_layers: int</span>
-<span class="sd">            The number of layers in the :math:`R_y` ansatz.</span>
+<span class="sd">            The number of layers in the :math:`R_y` ansatz. Defaults to 3.</span>
 <span class="sd">        mapping: str</span>
 <span class="sd">            The fermion to qubit mapping. Supported mappings are ``&quot;parity&quot;``,</span>
 <span class="sd">            and ``&quot;bravyi-kitaev&quot;``.</span>
@@ -429,7 +432,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
 
-        <span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="n">active_space</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HEA.ry"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.ry">[docs]</a>    <span class="nd">@classmethod</span>
@@ -573,18 +576,17 @@
         <span class="k">return</span> <span class="n">instance</span></div>
 
 <div class="viewcode-block" id="HEA.as_pyscf_solver"><a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.as_pyscf_solver">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">as_pyscf_solver</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rdm_engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">as_pyscf_solver</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opt_engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Converts the ``HEA`` class to a PySCF FCI solver using 1-layered :math:`R_y` ansatz.</span>
+<span class="sd">        Converts the ``HEA`` class to a PySCF FCI solver using :math:`R_y` ansatz.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config_function: callable</span>
 <span class="sd">            A function to configure the ``HEA`` instance.</span>
 <span class="sd">            Accepts the ``HEA`` instance and modifies it inplace before :func:`kernel` is called.</span>
-<span class="sd">        rdm_engine: str</span>
-<span class="sd">            The engine to use when evaluating the reduced density matrices.</span>
-<span class="sd">            Defaults to ``None``, which uses the same engine for parameter optimization.</span>
+<span class="sd">        opt_engine: str</span>
+<span class="sd">            The engine to use when performing the circuit parameter optimization.</span>
 <span class="sd">        kwargs</span>
 <span class="sd">            Other arguments to be passed to the :func:`__init__` function such as ``engine``.</span>
 
@@ -603,7 +605,7 @@
 <span class="sd">        -4.149619</span>
 <span class="sd">        &gt;&gt;&gt; casscf = CASSCF(hf, 2, 2)</span>
 <span class="sd">        &gt;&gt;&gt; # set the FCI solver for CASSCF to be HEA</span>
-<span class="sd">        &gt;&gt;&gt; casscf.fcisolver = HEA.as_pyscf_solver()</span>
+<span class="sd">        &gt;&gt;&gt; casscf.fcisolver = HEA.as_pyscf_solver(n_layers=1)</span>
 <span class="sd">        &gt;&gt;&gt; round(casscf.kernel()[0], 6)</span>
 <span class="sd">        -4.166473</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -615,32 +617,26 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
 
             <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">ci0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecore</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">e_core</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">e_core</span><span class="o">=</span><span class="n">ecore</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-                <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
-                <span class="k">return</span> <span class="n">e</span> <span class="o">+</span> <span class="n">ecore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">params</span>
-
-            <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">rdm_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">opt_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">engine_bak</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">rdm_engine</span>
-                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">opt_engine</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine_bak</span>
+                    <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">params</span>
+
+            <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+                <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">rdm1</span>
 
             <span class="k">def</span> <span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">rdm_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                    <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">engine_bak</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">rdm_engine</span>
-                    <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                    <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine_bak</span>
+                <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span>
 
             <span class="k">def</span> <span class="nf">spin_square</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
