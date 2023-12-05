@@ -17,7 +17,7 @@ print(hf.kernel())
 casci = CASCI(hf, 2, 2)
 # set the FCI solver for CASSCF to be HEA
 casci.canonicalization = False
-casci.fcisolver = HEA.as_pyscf_solver()
+casci.fcisolver = HEA.as_pyscf_solver(n_layers=1)
 print(casci.kernel()[0])
 conv_params = {
     "gradientmax": 1e-3,

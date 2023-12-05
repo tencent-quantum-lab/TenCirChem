@@ -84,7 +84,7 @@ def get_energy_qpu(params, paulis, coeffs, get_circuit, shots: int):
         pss.append(ps)
     es = []
     for _ in range((shots - 1) // 8192 + 1):
-        e = batch_expectation_ps(c, pss, device="tianji_s1", ws=coeffs, shots=8192)
+        e = batch_expectation_ps(c, pss, device="tianji_s2", ws=coeffs, shots=8192)
         es.append(e)
     print(es)
     return np.mean(es)

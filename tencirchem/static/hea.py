@@ -187,18 +187,21 @@ class HEA:
     """
 
     @classmethod
-    def from_molecule(cls, m: Mole, n_layers=3, mapping="parity", **kwargs):
+    def from_molecule(cls, m: Mole, active_space=None, n_layers=3, mapping="parity", **kwargs):
         """
         Construct the HEA class from the given molecule.
-        The :math:`R_y` ansatz is employed.
+        The :math:`R_y` ansatz is employed. By default, the number of layers is set to 3.
 
 
         Parameters
         ----------
         m: Mole
             The molecule object.
+        active_space: Tuple[int, int], optional
+            Active space approximation. The first integer is the number of electrons and the second integer is
+            the number or spatial-orbitals. Defaults to None.
         n_layers: int
-            The number of layers in the :math:`R_y` ansatz.
+            The number of layers in the :math:`R_y` ansatz. Defaults to 3.
         mapping: str
             The fermion to qubit mapping. Supported mappings are ``"parity"``,
             and ``"bravyi-kitaev"``.
@@ -213,7 +216,7 @@ class HEA:
         """
         from tencirchem import UCC
 
-        ucc = UCC(m)
+        ucc = UCC(m, active_space=active_space)
         return cls.ry(ucc.int1e, ucc.int2e, ucc.n_elec, ucc.e_core, n_layers=n_layers, mapping=mapping, **kwargs)
 
     @classmethod
@@ -357,18 +360,17 @@ class HEA:
         return instance
 
     @classmethod
-    def as_pyscf_solver(cls, config_function: Callable = None, rdm_engine: str = None, **kwargs):
+    def as_pyscf_solver(cls, config_function: Callable = None, opt_engine: str = None, **kwargs):
         """
-        Converts the ``HEA`` class to a PySCF FCI solver using 1-layered :math:`R_y` ansatz.
+        Converts the ``HEA`` class to a PySCF FCI solver using :math:`R_y` ansatz.
 
         Parameters
         ----------
         config_function: callable
             A function to configure the ``HEA`` instance.
             Accepts the ``HEA`` instance and modifies it inplace before :func:`kernel` is called.
-        rdm_engine: str
-            The engine to use when evaluating the reduced density matrices.
-            Defaults to ``None``, which uses the same engine for parameter optimization.
+        opt_engine: str
+            The engine to use when performing the circuit parameter optimization.
         kwargs
             Other arguments to be passed to the :func:`__init__` function such as ``engine``.
 
@@ -387,7 +389,7 @@ class HEA:
         -4.149619
         >>> casscf = CASSCF(hf, 2, 2)
         >>> # set the FCI solver for CASSCF to be HEA
-        >>> casscf.fcisolver = HEA.as_pyscf_solver()
+        >>> casscf.fcisolver = HEA.as_pyscf_solver(n_layers=1)
         >>> round(casscf.kernel()[0], 6)
         -4.166473
         """
@@ -399,32 +401,26 @@ class HEA:
                 self.instance_kwargs = kwargs
 
             def kernel(self, h1, h2, norb, nelec, ci0=None, ecore=0, **kwargs):
-                self.instance = cls.ry(h1, h2, nelec, e_core=0, n_layers=1, **self.instance_kwargs)
+                self.instance = cls.ry(h1, h2, nelec, e_core=ecore, **self.instance_kwargs)
                 if self.config_function is not None:
                     self.config_function(self.instance)
-                e = self.instance.kernel()
-                return e + ecore, self.instance.params
-
-            def make_rdm1(self, params, norb, nelec):
-                if rdm_engine is None:
-                    rdm1 = self.instance.make_rdm1(params)
+                if opt_engine is None:
+                    e = self.instance.kernel()
                 else:
                     engine_bak = self.instance.engine
-                    self.instance.engine = rdm_engine
-                    rdm1 = self.instance.make_rdm1(params)
+                    self.instance.engine = opt_engine
+                    self.instance.kernel()
                     self.instance.engine = engine_bak
+                    e = self.instance.energy()
+                return e, self.instance.params
+
+            def make_rdm1(self, params, norb, nelec):
+                rdm1 = self.instance.make_rdm1(params)
                 return rdm1
 
             def make_rdm12(self, params, norb, nelec):
-                if rdm_engine is None:
-                    rdm1 = self.instance.make_rdm1(params)
-                    rdm2 = self.instance.make_rdm2(params)
-                else:
-                    engine_bak = self.instance.engine
-                    self.instance.engine = rdm_engine
-                    rdm1 = self.instance.make_rdm1(params)
-                    rdm2 = self.instance.make_rdm2(params)
-                    self.instance.engine = engine_bak
+                rdm1 = self.instance.make_rdm1(params)
+                rdm2 = self.instance.make_rdm2(params)
                 return rdm1, rdm2
 
             def spin_square(self, params, norb, nelec):
