@@ -4,7 +4,7 @@
 #  and WITHOUT ANY WARRANTY. See the LICENSE file for details.
 
 
-from typing import Any, List
+from typing import Any, List, Union, Tuple
 import numpy as np
 
 from renormalizer.model import Op, OpSum, Model
@@ -19,7 +19,7 @@ from tencirchem.constants import DISCARD_EPS
 DOF_SALT = "TCCQUBIT"
 
 
-def check_basis_type(basis):
+def check_basis_type(basis: List[BasisSet]):
     for b in basis:
         if isinstance(b, (BasisMultiElectronVac,)):
             raise TypeError(f"Unsupported basis: {type(b)}")
@@ -27,21 +27,18 @@ def check_basis_type(basis):
             raise ValueError(f"For only two DOFs are allowed in BasisMultiElectron. Got {b}")
 
 
-def qubit_encode_op(terms, basis, boson_encoding=None):
+def qubit_encode_op(
+    terms: Union[List[Op], Op], basis: List[BasisSet], boson_encoding: str = None
+) -> Tuple[OpSum, float]:
     check_basis_type(basis)
     if isinstance(terms, Op):
         terms = [terms]
 
-    model = Model(basis, terms)
+    model = Model(basis, [])
 
-    old_ham_terms = []
-    # `reversed` is for normal ordering with `pop`
-    for op in reversed(terms):
-        old_ham_terms.append(op.split_elementary(model.dof_to_siteidx))
-
-    new_ham_terms = []
-    while old_ham_terms:
-        terms, factor = old_ham_terms.pop()
+    new_terms = []
+    for op in terms:
+        terms, factor = op.split_elementary(model.dof_to_siteidx)
         opsum_list = []
         for op in terms:
             opsum = transform_op(op, model.dof_to_basis[op.dofs[0]], boson_encoding)
@@ -52,13 +49,13 @@ def qubit_encode_op(terms, basis, boson_encoding=None):
             new_term = new_term * opsum
         new_term = new_term * factor
 
-        new_ham_terms.extend(new_term)
+        new_terms.extend(new_term)
 
     # post process
     # pick out constants
-    identity_terms = []
+    identity_terms: List[Op] = []
     non_identity_terms = OpSum()
-    for op in new_ham_terms:
+    for op in new_terms:
         if op.is_identity:
             identity_terms.append(op)
         else:
@@ -67,6 +64,19 @@ def qubit_encode_op(terms, basis, boson_encoding=None):
     constant = sum([op.factor for op in identity_terms])
 
     return non_identity_terms.simplify(atol=DISCARD_EPS), constant
+
+
+def qubit_encode_op_grouped(
+    terms: List[Union[List[Op], Op]], basis: List[BasisSet], boson_encoding: str = None
+) -> Tuple[List[OpSum], float]:
+    new_terms = []
+    constant_sum = 0
+    for op in terms:
+        opsum, constant = qubit_encode_op(op, basis, boson_encoding)
+        new_terms.append(opsum)
+        constant_sum += constant
+
+    return new_terms, constant_sum
 
 
 def qubit_encode_basis(basis: List[BasisSet], boson_encoding=None):

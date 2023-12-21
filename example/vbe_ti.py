@@ -15,7 +15,7 @@ from opt_einsum import contract
 import tensorcircuit as tc
 
 from tencirchem import set_backend, Op, BasisSHO, BasisSimpleElectron, Mpo, Model
-from tencirchem.dynamic import get_ansatz, qubit_encode_op, qubit_encode_basis
+from tencirchem.dynamic import get_ansatz, qubit_encode_op_grouped, qubit_encode_basis
 from tencirchem.utils import scipy_opt_wrap
 from tencirchem.applications.vbe_lib import get_psi_indices, get_contracted_mpo, get_contract_args
 
@@ -25,7 +25,6 @@ nsite = 3
 omega = 1
 v = 1
 # two qubit for each mode
-# modify param_ids before modifying this
 n_qubit_per_mode = 2
 nbas_v = 1 << n_qubit_per_mode
 
@@ -51,8 +50,7 @@ def get_vha_terms():
     ansatz_terms = []
     for i in range(nsite):
         j = (i + 1) % nsite
-        ansatz_terms.append(Op(r"a^\dagger a", [i, j], v))
-        ansatz_terms.append(Op(r"a^\dagger a", [j, i], -v))
+        ansatz_terms.append(Op(r"a^\dagger a", [i, j], v) - Op(r"a^\dagger a", [j, i], v))
         ansatz_terms.append(Op(r"a^\dagger a b^\dagger-b", [i, i, (i, 0)], g * omega))
 
     basis = []
@@ -60,15 +58,18 @@ def get_vha_terms():
         basis.append(BasisSimpleElectron(i))
         basis.append(BasisSHO((i, 0), omega, nbas_v))
 
-    ansatz_terms, _ = qubit_encode_op(ansatz_terms, basis, boson_encoding="gray")
+    ansatz_terms, _ = qubit_encode_op_grouped(ansatz_terms, basis, boson_encoding="gray")
+
+    # More flexible ansatz by decoupling the parameters in the e-ph coupling term
+    ansatz_terms_extended = []
+    for i in range(nsite):
+        ansatz_terms_extended.extend([ansatz_terms[2 * i]] + ansatz_terms[2 * i + 1])
     spin_basis = qubit_encode_basis(basis, boson_encoding="gray")
-    # this is currently hard-coded for `n_qubit_per_mode==2`
-    param_ids = [1, -1, 0, 2, 3, 4, 5, 6, 7, 8] + [9, -9] + list(range(10, 18)) + [18, -18] + list(range(19, 27))
-    return ansatz_terms, spin_basis, param_ids
+    return ansatz_terms_extended, spin_basis
 
 
-ansatz_terms, spin_basis, param_ids = get_vha_terms()
-ansatz = get_ansatz(ansatz_terms, spin_basis, n_layers, c, param_ids)
+ansatz_terms, spin_basis = get_vha_terms()
+ansatz = get_ansatz(ansatz_terms, spin_basis, n_layers, c)
 
 
 def cost_fn(params, h):
@@ -141,7 +142,7 @@ def solve_b_array(psi, h_mpo, b_array, i):
 
 def main():
     vqe_e = []
-    thetas = np.zeros((max(param_ids) + 1) * n_layers)
+    thetas = np.zeros(len(ansatz_terms) * n_layers)
 
     for g in [1.5, 3]:
         for nbas in [4, 8, 12, 16, 20, 24, 28, 32]:

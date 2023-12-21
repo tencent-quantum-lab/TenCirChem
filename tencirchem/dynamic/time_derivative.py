@@ -5,9 +5,12 @@
 
 
 import logging
+from typing import List, Union
 
 import numpy as np
 import scipy
+from renormalizer.model.basis import BasisSet
+from renormalizer import Op
 import tensorcircuit as tc
 
 from tencirchem.utils.backend import jit
@@ -17,7 +20,7 @@ from tencirchem.utils.circuit import evolve_pauli
 logger = logging.getLogger(__name__)
 
 
-def construct_ansatz_op(ham_terms, spin_basis):
+def construct_ansatz_op(ham_terms: List[Op], spin_basis: List[BasisSet]):
     dof_idx_dict = {b.dof: i for i, b in enumerate(spin_basis)}
     ansatz_op_list = []
 
@@ -44,13 +47,26 @@ def construct_ansatz_op(ham_terms, spin_basis):
     return ansatz_op_list
 
 
-def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=None, compile_evolution=False):
+def get_circuit(ansatz_terms, spin_basis, n_layers, init_state, params, param_ids=None, compile_evolution=False):
     if param_ids is None:
-        param_ids = list(range(len(ham_terms)))
+        param_ids = list(range(len(ansatz_terms)))
 
     params = tc.backend.reshape(params, [n_layers, max(param_ids) + 1])
 
-    ansatz_op_list = construct_ansatz_op(ham_terms, spin_basis)
+    ansatz_terms_grouped = []
+    for term in ansatz_terms:
+        if isinstance(term, Op):
+            ansatz_terms_grouped.append([term])
+        else:
+            ansatz_terms_grouped.append(term)
+    assert isinstance(ansatz_terms_grouped[0], list) and isinstance(ansatz_terms_grouped[0][0], Op)
+
+    ansatz_op_list_grouped = []
+    for ansatz_terms in ansatz_terms_grouped:
+        ansatz_op_list = construct_ansatz_op(ansatz_terms, spin_basis)
+        factors = np.array([factor for _, factor, _, _ in ansatz_op_list])
+        assert np.allclose(factors.real, 0) or np.allclose(factors.imag, 0)
+        ansatz_op_list_grouped.append(ansatz_op_list)
 
     if isinstance(init_state, tc.Circuit):
         c = tc.Circuit.from_qir(init_state.to_qir(), circuit_params=init_state.circuit_param)
@@ -58,18 +74,19 @@ def get_circuit(ham_terms, spin_basis, n_layers, init_state, params, param_ids=N
         c = tc.Circuit(len(spin_basis), inputs=init_state)
 
     for i in range(0, n_layers):
-        for j, (ansatz_op, _, name, qubit_idx_list) in enumerate(ansatz_op_list):
-            param_id = np.abs(param_ids[j])
-            # +0.1 is to avoid np.sign(0) problem
-            sign = np.sign(param_ids[j] + 0.1)
-            theta = sign * params[i, param_id]
-            if not compile_evolution:
-                np.testing.assert_allclose(ansatz_op @ ansatz_op, np.eye(len(ansatz_op)))
-                name = f"exp(-iθ{name})"
-                c.exp1(*qubit_idx_list, unitary=ansatz_op, theta=theta, name=name)
-            else:
-                pauli_string = tuple(zip(qubit_idx_list, name))
-                c = evolve_pauli(c, pauli_string, theta=2 * theta)
+        for j, ansatz_op_list in enumerate(ansatz_op_list_grouped):
+            param_id = param_ids[j]
+            theta = params[i, param_id]
+            for ansatz_op, coeff, name, qubit_idx_list in ansatz_op_list:
+                if coeff.real == 0:
+                    coeff = coeff.imag
+                if not compile_evolution:
+                    np.testing.assert_allclose(ansatz_op.conj().T @ ansatz_op, np.eye(len(ansatz_op)))
+                    name = f"exp(-iθ{name})"
+                    c.exp1(*qubit_idx_list, unitary=ansatz_op, theta=coeff * theta, name=name)
+                else:
+                    pauli_string = tuple(zip(qubit_idx_list, name))
+                    c = evolve_pauli(c, pauli_string, theta=2 * coeff * theta)
     return c
 
 

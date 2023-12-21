@@ -216,7 +216,7 @@ class HEA:
         """
         from tencirchem import UCC
 
-        ucc = UCC(m, active_space=active_space)
+        ucc = UCC(m, active_space=active_space, run_ccsd=False, run_fci=False)
         return cls.ry(ucc.int1e, ucc.int2e, ucc.n_elec, ucc.e_core, n_layers=n_layers, mapping=mapping, **kwargs)
 
     @classmethod
@@ -398,7 +398,9 @@ class HEA:
             def __init__(self):
                 self.instance: HEA = None
                 self.config_function = config_function
-                self.instance_kwargs = kwargs
+                self.instance_kwargs = kwargs.copy()
+                if "n_layers" not in self.instance_kwargs:
+                    self.instance_kwargs["n_layers"] = 1
 
             def kernel(self, h1, h2, norb, nelec, ci0=None, ecore=0, **kwargs):
                 self.instance = cls.ry(h1, h2, nelec, e_core=ecore, **self.instance_kwargs)
