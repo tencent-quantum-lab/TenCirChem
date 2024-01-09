@@ -16,7 +16,7 @@ hf = h2o(1.5).HF()
 print(hf.kernel())
 casci = CASCI(hf, 2, 2)
 # set the FCI solver for CASSCF to be HEA
-casci.canonicalization = False
+casci.canonicalization = False  # prevent changing mo_coeffs
 casci.fcisolver = HEA.as_pyscf_solver(n_layers=1)
 print(casci.kernel()[0])
 conv_params = {

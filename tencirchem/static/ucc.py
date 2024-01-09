@@ -210,7 +210,8 @@ class UCC:
         else:
             # to set verbose = 0
             self.mol = mol.copy()
-            self.mol.symmetry = True
+            if mo_coeff is None:
+                self.mol.symmetry = True
             self.mol.build()
         if active_space is None:
             active_space = (mol.nelectron, int(mol.nao))

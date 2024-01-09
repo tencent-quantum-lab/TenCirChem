@@ -140,9 +140,9 @@ def parity(fermion_operator: FermionOperator, n_modes: int, n_elec: int) -> Qubi
 def fop_to_qop(fop: FermionOperator, mapping: str, n_sorb: int, n_elec: int) -> QubitOperator:
     if mapping == "parity":
         qop = parity(fop, n_sorb, n_elec)
-    elif mapping == "jordan-wigner":
+    elif mapping in ["jordan-wigner", "jordan_wigner"]:
         qop = reverse_qop_idx(jordan_wigner(fop), n_sorb)
-    elif mapping == "bravyi-kitaev":
+    elif mapping in ["bravyi-kitaev", "bravyi_kitaev"]:
         qop = reverse_qop_idx(bravyi_kitaev(fop, n_sorb), n_sorb)
     else:
         raise ValueError(f"Unknown mapping: {mapping}")
@@ -279,7 +279,7 @@ class HEA:
         n_sorb = 2 * len(int1e)
         if mapping == "parity":
             n_qubits = n_sorb - 2
-        elif mapping in ["jordan-wigner", "bravyi-kitaev"]:
+        elif mapping in ["jordan-wigner", "jordan_wigner", "bravyi-kitaev", "bravyi_kitaev"]:
             n_qubits = n_sorb
         else:
             raise ValueError(f"Unknown mapping: {mapping}")

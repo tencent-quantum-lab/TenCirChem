@@ -77,17 +77,26 @@ def get_energy_qpu(params, paulis, coeffs, get_circuit, shots: int):
     c: Circuit = get_circuit(params)
     pss = []
     symbol_mapping = {"X": 1, "Y": 2, "Z": 3}
-    for pauli in paulis:
+    ps_identity_idx = []
+    for i, pauli in enumerate(paulis):
         ps = [0] * c.circuit_param["nqubits"]
+        if len(pauli) == 0:
+            ps_identity_idx.append(i)
+            continue
         for idx, symbol in pauli:
             ps[idx] = symbol_mapping[symbol]
         pss.append(ps)
+    assert len(pss) + len(ps_identity_idx) == len(paulis)
+    coeffs_non_identity = [coeffs[i] for i in range(len(coeffs)) if i not in ps_identity_idx]
+    assert len(pss) == len(coeffs_non_identity)
     es = []
     for _ in range((shots - 1) // 8192 + 1):
-        e = batch_expectation_ps(c, pss, device="tianji_s2", ws=coeffs, shots=8192)
+        e = batch_expectation_ps(c, pss, device="tianji_s2", ws=coeffs_non_identity, shots=8192)
         es.append(e)
+    print(paulis)
+    print(coeffs)
     print(es)
-    return np.mean(es)
+    return np.mean(es) + sum([coeffs[i] for i in ps_identity_idx])
 
 
 def _get_energy_and_grad(partial_get_energy, params, grad):
@@ -149,3 +158,10 @@ def get_energy_and_grad_qpu(params, paulis, coeffs, get_circuit, shots: int, gra
         shots=shots,
     )
     return _get_energy_and_grad(partial_get_energy, params, grad)
+
+
+class QpuConf:
+    def __init__(self, device=None, provider=None, initial_mapping=None):
+        self.device = device
+        self.privider = provider
+        self.initial_mapping = initial_mapping
