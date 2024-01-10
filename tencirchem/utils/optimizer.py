@@ -9,6 +9,32 @@ from scipy.optimize import OptimizeResult
 
 
 def soap(fun, x0, args=(), maxfev=2000, callback=None, **kwargs):
+    """
+    Scipy Optimizer interface for sequantial optimization with
+    approximate parabola (SOAP)
+
+    Parameters
+    ----------
+    fun : callable ``f(x, *args)``
+        Function to be optimized.
+    x0 : ndarray, shape (n,)
+        Initial guess. Array of real elements of size (n,),
+        where 'n' is the number of independent variables.
+    args : tuple, optional
+        Extra arguments passed to the objective function.
+    maxfev : int
+        Maximum number of function evaluations to perform.
+        Default: 2000.
+    callback : callable, optional
+        Called after each iteration.
+
+    Returns
+    -------
+    res : OptimizeResult
+        The optimization result represented as a SciPy ``OptimizeResult`` object.
+        Important attributes are: ``x`` the solution array.
+    """
+
     nfev = 0
     nit = 0
 
