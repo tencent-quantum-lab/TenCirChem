@@ -52,7 +52,7 @@ class UCCSD(UCC):
         mol: Mole
             The molecule as PySCF ``Mole`` object.
         init_method: str, optional
-            How to determine the initial amplitude guess. Accepts ``"mp2"`` (default), ``"ccsd"``
+            How to determine the initial amplitude guess. Accepts ``"mp2"`` (default), ``"ccsd"``,``"fe"``
             and ``"zeros"``.
         active_space: Tuple[int, int], optional
             Active space approximation. The first integer is the number of electrons and the second integer is

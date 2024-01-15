@@ -1,7 +1,8 @@
 import numpy as np
+import pytest
 
 from tencirchem import clear_cache, UCCSD
-from tencirchem.molecule import h4
+from tencirchem.molecule import h4, ch4, benzene
 
 
 def test_clear_cache():
@@ -10,3 +11,10 @@ def test_clear_cache():
     clear_cache()
     e2 = uccsd.kernel()
     np.testing.assert_allclose(e2, e1)
+
+
+@pytest.mark.parametrize("mol", [ch4, benzene])
+def test_molecule(mol):
+    mol = mol()
+    hf = mol.HF()
+    hf.kernel()

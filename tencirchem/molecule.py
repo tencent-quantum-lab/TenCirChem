@@ -129,6 +129,29 @@ def get_ch4_coord(d):
 CH4 = ch4 = methane = lambda x=1.09: M(atom=get_ch4_coord(x))
 
 
+def benzene(cc_length=1.39, ch_length=1.09):
+    a, b = cc_length, ch_length
+
+    hexagon = np.array(
+        [
+            [a, 0, 0],
+            [1 / 2 * a, np.sqrt(3) / 2 * a, 0],
+            [-1 / 2 * a, np.sqrt(3) / 2 * a, 0],
+            [-a, 0, 0],
+            [-1 / 2 * a, -np.sqrt(3) / 2 * a, 0],
+            [1 / 2 * a, -np.sqrt(3) / 2 * a, 0],
+        ]
+    )
+
+    atom = []
+    for coord in hexagon:
+        atom.append(["C"] + coord.tolist())
+        atom.append(["H"] + ((1 + b / a) * coord).tolist())
+    return M(atom=atom)
+
+
+c6h6 = benzene
+
 if __name__ == "__main__":
     n = 6
     h1 = np.zeros((n, n))

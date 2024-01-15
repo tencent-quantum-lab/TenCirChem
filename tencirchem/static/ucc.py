@@ -176,7 +176,7 @@ class UCC:
         mol: Mole
             The molecule as PySCF ``Mole`` object.
         init_method: str, optional
-            How to determine the initial amplitude guess. Accepts ``"mp2"`` (default), ``"ccsd"``
+            How to determine the initial amplitude guess. Accepts ``"mp2"`` (default), ``"ccsd"``, ``"fe"``
             and ``"zeros"``.
         active_space: Tuple[int, int], optional
             Active space approximation. The first integer is the number of electrons and the second integer is
@@ -210,9 +210,7 @@ class UCC:
         else:
             # to set verbose = 0
             self.mol = mol.copy()
-            if mo_coeff is None:
-                self.mol.symmetry = True
-            self.mol.build()
+            # be cautious when modifying mol. Custom mols are common in practice
         if active_space is None:
             active_space = (mol.nelectron, int(mol.nao))
 
@@ -249,7 +247,7 @@ class UCC:
         if run_hf:
             # run this even when ``mo_coeff is not None`` because MP2 and CCSD
             # reference energy might be desired
-            self.e_hf = self.hf.kernel()
+            self.e_hf = self.hf.kernel(dump_chk=False)
             self.hf.mo_coeff = canonical_mo_coeff(self.hf.mo_coeff)
         else:
             self.e_hf = None

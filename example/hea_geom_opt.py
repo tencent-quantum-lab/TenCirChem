@@ -12,7 +12,7 @@ from tencirchem import HEA
 from tencirchem.molecule import h2o
 
 # normal PySCF workflow
-hf = h2o(1.5).HF()
+hf = h2o(1.2).HF()
 print(hf.kernel())
 casci = CASCI(hf, 2, 2)
 # set the FCI solver for CASSCF to be HEA

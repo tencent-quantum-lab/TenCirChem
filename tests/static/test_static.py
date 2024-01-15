@@ -107,3 +107,13 @@ def test_get_circuit():
     np.testing.assert_allclose(s2, s1, atol=1e-10)
     s3 = uccsd.get_circuit(params, trotter=True).state()
     np.testing.assert_allclose(s3, s1, atol=1e-10)
+
+
+@pytest.mark.parametrize("init_method", ["mp2", "ccsd", "zeros", "fe"])
+def test_init_guess(init_method):
+    pick_ex2 = sort_ex2 = True
+    if init_method == "zeros":
+        pick_ex2 = sort_ex2 = False
+    ucc = UCCSD(h4, init_method, pick_ex2=pick_ex2, sort_ex2=sort_ex2)
+    e = ucc.kernel()
+    np.testing.assert_allclose(e, ucc.e_fci, atol=1e-4)
