@@ -16,6 +16,15 @@ from tensorcircuit.cloud.wrapper import batch_expectation_ps
 from tencirchem.utils.backend import jit
 
 
+class QpuConf:
+    def __init__(self, device=None, provider=None, initial_mapping=None):
+        if device is None:
+            device = "tianji_s2"
+        self.device = device
+        self.privider = provider
+        self.initial_mapping = initial_mapping
+
+
 @partial(jit, static_argnums=[1])
 def get_statevector(params, get_circuit):
     return get_circuit(params).state()
@@ -73,7 +82,7 @@ def get_energy_tensornetwork_noise_shot(params, paulis, coeffs, get_dmcircuit, n
     return sample_expectation_pauli(c, paulis, coeffs, shots, noise_conf)
 
 
-def get_energy_qpu(params, paulis, coeffs, get_circuit, shots: int):
+def get_energy_qpu(params, paulis, coeffs, get_circuit, qpu_conf: QpuConf, shots: int):
     c: Circuit = get_circuit(params)
     pss = []
     symbol_mapping = {"X": 1, "Y": 2, "Z": 3}
@@ -91,7 +100,7 @@ def get_energy_qpu(params, paulis, coeffs, get_circuit, shots: int):
     assert len(pss) == len(coeffs_non_identity)
     es = []
     for _ in range((shots - 1) // 8192 + 1):
-        e = batch_expectation_ps(c, pss, device="tianji_s2", ws=coeffs_non_identity, shots=8192)
+        e = batch_expectation_ps(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=8192)
         es.append(e)
     print(paulis)
     print(coeffs)
@@ -158,10 +167,3 @@ def get_energy_and_grad_qpu(params, paulis, coeffs, get_circuit, shots: int, gra
         shots=shots,
     )
     return _get_energy_and_grad(partial_get_energy, params, grad)
-
-
-class QpuConf:
-    def __init__(self, device=None, provider=None, initial_mapping=None):
-        self.device = device
-        self.privider = provider
-        self.initial_mapping = initial_mapping

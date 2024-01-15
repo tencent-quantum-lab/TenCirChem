@@ -31,6 +31,7 @@ from tensorcircuit import Circuit, DMCircuit
 from tensorcircuit.noisemodel import NoiseConf, circuit_with_noise
 
 from tencirchem.static.engine_hea import (
+    QpuConf,
     get_statevector,
     get_densitymatrix,
     get_energy_tensornetwork,
@@ -436,7 +437,7 @@ class HEA:
         circuit: Union[Callable, QuantumCircuit],
         init_guess: Union[List[float], np.ndarray],
         engine: str = None,
-        engine_conf: NoiseConf = None,
+        engine_conf: [NoiseConf, QpuConf] = None,
     ):
         """
         Construct the HEA class from Hamiltonian in :class:`QubitOperator` form and the ansatz.
@@ -463,8 +464,11 @@ class HEA:
             engine = "tensornetwork"
         if engine == "tensornetwork" and engine_conf is not None:
             raise ValueError("Tensornetwork engine does not have engine configuration")
-        if engine.startswith("tensornetwork-noise") and engine_conf is None:
-            engine_conf = get_noise_conf()
+        if engine_conf is None:
+            if engine.startswith("tensornetwork-noise"):
+                engine_conf = get_noise_conf()
+            if engine.startswith("qpu"):
+                engine_conf = QpuConf()
 
         init_guess = np.array(init_guess)
 
@@ -738,6 +742,7 @@ class HEA:
                 tuple(self.h_qubit_op.terms.keys()),
                 list(self.h_qubit_op.terms.values()),
                 self.get_circuit,
+                self.engine_conf,
                 self.shots,
             )
         return e
