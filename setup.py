@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tencirchem",
-    version="2023.03",
+    version="2024.01",
     author="TenCirChem Authors",
     author_email="liw31@163.com",
     description="Efficient quantum computational chemistry based on TensorCircuit",

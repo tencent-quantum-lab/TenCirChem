@@ -18,6 +18,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r requirements.txt
           pip install --no-cache-dir -r requirements-dev.txt
+      - name: check env
+        run : |
+          pip freeze
       - name: run black
         run: |
           black . --check --verbose || echo "return 0"
