@@ -392,7 +392,7 @@
 <span class="sd">        mol: Mole</span>
 <span class="sd">            The molecule as PySCF ``Mole`` object.</span>
 <span class="sd">        init_method: str, optional</span>
-<span class="sd">            How to determine the initial amplitude guess. Accepts ``&quot;mp2&quot;`` (default), ``&quot;ccsd&quot;``</span>
+<span class="sd">            How to determine the initial amplitude guess. Accepts ``&quot;mp2&quot;`` (default), ``&quot;ccsd&quot;``, ``&quot;fe&quot;``</span>
 <span class="sd">            and ``&quot;zeros&quot;``.</span>
 <span class="sd">        active_space: Tuple[int, int], optional</span>
 <span class="sd">            Active space approximation. The first integer is the number of electrons and the second integer is</span>
@@ -426,9 +426,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># to set verbose = 0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">mo_coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">symmetry</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="c1"># be cautious when modifying mol. Custom mols are common in practice</span>
         <span class="k">if</span> <span class="n">active_space</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">active_space</span> <span class="o">=</span> <span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">nelectron</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">nao</span><span class="p">))</span>
 
@@ -465,7 +463,7 @@
         <span class="k">if</span> <span class="n">run_hf</span><span class="p">:</span>
             <span class="c1"># run this even when ``mo_coeff is not None`` because MP2 and CCSD</span>
             <span class="c1"># reference energy might be desired</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">e_hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">dump_chk</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">mo_coeff</span> <span class="o">=</span> <span class="n">canonical_mo_coeff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">e_hf</span> <span class="o">=</span> <span class="kc">None</span>
