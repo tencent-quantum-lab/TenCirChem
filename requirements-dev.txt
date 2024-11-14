@@ -1,8 +1,8 @@
-pytest
-pytest-cov
-black[jupyter]
-sphinx
-nbsphinx
-furo
-ipython
-pylint
+pytest==8.3.3
+pytest-cov==6.0.0
+black[jupyter]==24.10.0
+sphinx==7.4.7
+nbsphinx==0.9.5
+furo==2024.8.6
+ipython==8.18.1
+pylint==3.3.1
