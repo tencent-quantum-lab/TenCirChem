@@ -167,7 +167,7 @@ def main():
                 )
                 print(f"Iter {i_iter} VQE energy: {opt_res.fun}")
                 thetas = opt_res.x
-                psi = ansatz(thetas).real
+                psi = np.array(ansatz(thetas).real)
                 for i in range(len(b_array)):
                     b_array[i] = solve_b_array(psi, h_mpo, b_array, i)
             vqe_e.append(opt_res.fun)
