@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Advanced Topics - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -371,8 +371,8 @@ and then switch to the <code class="docutils literal notranslate"><span class="p
 and <code class="docutils literal notranslate"><span class="pre">&quot;civector-large&quot;</span></code> is used for larger scale calculation.
 In the <a class="reference internal" href="api/hea.html#tencirchem.HEA" title="tencirchem.HEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEA</span></code></a> class the noiseless <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork&quot;</span></code> engine is used by default.</p>
 <p>To override the default engine, pass the string to the <code class="docutils literal notranslate"><span class="pre">engine</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">UCC</span></code> class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h4</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h4</span>
 <span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h4</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;civector-large&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">kernel</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork&quot;</span><span class="p">))</span>
@@ -397,7 +397,7 @@ Thus, in general NumPy and CuPy are the recommended backends over JAX.</p>
 <p>For noisy circuit simulation, the performance of NumPy and JAX is comparable.
 For quantum dynamics simulation, the JAX backend is usually preferred.</p>
 <p>TenCirChem shares the same API with TensorCircuit for setting backends and data types, at runtime:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">set_backend</span><span class="p">,</span> <span class="n">set_dtype</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_backend</span><span class="p">,</span> <span class="n">set_dtype</span>
 <span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
 <span class="n">set_dtype</span><span class="p">(</span><span class="s2">&quot;complex64&quot;</span><span class="p">)</span>
 </pre></div>

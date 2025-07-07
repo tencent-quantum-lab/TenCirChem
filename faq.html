@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Frequently Asked Questions - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -402,12 +402,12 @@ Thus, this algorithm computes all gradients in one sweeping pass, requiring a co
 TenCirChem by default uses NumPy backend, and supports JAX and CuPy backend.
 Both JAX and CuPy supports GPU.
 Install JAX and CuPy with appropriate GPU driver and set the backend in the following way</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">set_backend</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_backend</span>
 <span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;cupy&quot;</span><span class="p">)</span>  <span class="c1"># or &quot;jax&quot;</span>
 </pre></div>
 </div>
 <p>More fine-grained control over the devices is achieved through the JAX or CuPy package</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cupy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cp</span>
 <span class="c1"># use the second GPU</span>
 <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
 </pre></div>

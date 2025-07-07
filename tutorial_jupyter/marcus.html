@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Observing Marcus Inverted Region - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -283,9 +283,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">Op</span><span class="p">,</span> <span class="n">BasisMultiElectron</span><span class="p">,</span> <span class="n">BasisSHO</span><span class="p">,</span> <span class="n">TimeEvolution</span><span class="p">,</span> <span class="n">set_backend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Op</span><span class="p">,</span> <span class="n">BasisMultiElectron</span><span class="p">,</span> <span class="n">BasisSHO</span><span class="p">,</span> <span class="n">TimeEvolution</span><span class="p">,</span> <span class="n">set_backend</span>
 
 <span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;jax&quot;</span><span class="p">)</span>
 </pre></div>
@@ -315,7 +315,7 @@ jax_backend
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_hamiltonian</span><span class="p">(</span><span class="n">delta_g</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_hamiltonian</span><span class="p">(</span><span class="n">delta_g</span><span class="p">):</span>
     <span class="n">ham_terms</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">Op</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;a^\dagger a&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;e0&quot;</span><span class="p">,</span> <span class="s2">&quot;e1&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">Op</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;a^\dagger a&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;e1&quot;</span><span class="p">,</span> <span class="s2">&quot;e0&quot;</span><span class="p">])</span>
     <span class="n">ham_terms</span> <span class="o">+=</span> <span class="n">delta_g</span> <span class="o">*</span> <span class="n">Op</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;a^\dagger a&quot;</span><span class="p">,</span> <span class="s2">&quot;e1&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
@@ -331,7 +331,7 @@ jax_backend
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># using a relaxed initial state</span>
-<span class="k">def</span> <span class="nf">get_init_condition</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_init_condition</span><span class="p">():</span>
     <span class="n">basis</span> <span class="o">=</span> <span class="n">BasisSHO</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">nbas</span><span class="p">)</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">basis</span><span class="o">.</span><span class="n">op_mat</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;b^\dagger b&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="n">basis</span><span class="o">.</span><span class="n">op_mat</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;b^\dagger+b&quot;</span><span class="p">))[</span><span class="mi">1</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;v0&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">}</span>
@@ -365,8 +365,8 @@ jax_backend
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">mpl_config</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_config</span>
 </pre></div>
 </div>
 </div>
@@ -434,9 +434,9 @@ jax_backend
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">mpl_config</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_config</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">delta_g_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">rate</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.014048168006004535</span><span class="p">,</span> <span class="mf">0.028141822635725088</span><span class="p">,</span> <span class="mf">0.02919731407299346</span><span class="p">,</span> <span class="mf">0.019324510938040215</span><span class="p">,</span> <span class="mf">0.01011515881320177</span><span class="p">]</span>
@@ -448,20 +448,20 @@ jax_backend
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># marcus rate</span>
-<span class="k">def</span> <span class="nf">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">marcus_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
     <span class="n">lam</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">g</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">omega</span>
     <span class="k">return</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">/</span> <span class="n">lam</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">lam</span> <span class="o">+</span> <span class="n">delta_g</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">lam</span><span class="p">))</span>
 
 
 <span class="c1"># fit temperature</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
 
 <span class="n">beta</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">marcus_rate</span><span class="p">,</span> <span class="n">delta_g_list</span><span class="p">,</span> <span class="n">rate</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">trapezoid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">trapezoid</span>
 
 
 <span class="c1"># nuclear tunneling rate</span>
-<span class="k">def</span> <span class="nf">nuclear_tunneling_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">nuclear_tunneling_rate</span><span class="p">(</span><span class="n">delta_g</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">g</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span>
     <span class="n">integrand</span> <span class="o">=</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>

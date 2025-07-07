@@ -6,7 +6,7 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>tencirchem.static.puccd - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -265,23 +265,23 @@
 <span class="c1">#  and WITHOUT ANY WARRANTY. See the LICENSE file for details.</span>
 
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pyscf.gto.mole</span> <span class="kn">import</span> <span class="n">Mole</span>
-<span class="kn">from</span> <span class="nn">pyscf.cc.addons</span> <span class="kn">import</span> <span class="n">spatial2spin</span>
-<span class="kn">from</span> <span class="nn">pyscf.fci</span> <span class="kn">import</span> <span class="n">cistring</span>
-<span class="kn">from</span> <span class="nn">tensorcircuit</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.gto.mole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.cc.addons</span><span class="w"> </span><span class="kn">import</span> <span class="n">spatial2spin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.fci</span><span class="w"> </span><span class="kn">import</span> <span class="n">cistring</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Circuit</span>
 
-<span class="kn">from</span> <span class="nn">tencirchem.utils.misc</span> <span class="kn">import</span> <span class="n">rdm_mo2ao</span>
-<span class="kn">from</span> <span class="nn">tencirchem.static.ucc</span> <span class="kn">import</span> <span class="n">UCC</span>
-<span class="kn">from</span> <span class="nn">tencirchem.static.ci_utils</span> <span class="kn">import</span> <span class="n">get_ci_strings</span>
-<span class="kn">from</span> <span class="nn">tencirchem.static.evolve_tensornetwork</span> <span class="kn">import</span> <span class="n">get_circuit_givens_swap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.utils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdm_mo2ao</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.ucc</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.ci_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ci_strings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.evolve_tensornetwork</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_circuit_givens_swap</span>
 
 
 <div class="viewcode-block" id="PUCCD">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD">[docs]</a>
-<span class="k">class</span> <span class="nc">PUCCD</span><span class="p">(</span><span class="n">UCC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PUCCD</span><span class="p">(</span><span class="n">UCC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run paired UCC calculation.</span>
 <span class="sd">    The interfaces are similar to :class:`UCCSD &lt;tencirchem.UCCSD&gt;`.</span>
@@ -295,7 +295,7 @@
 
 <div class="viewcode-block" id="PUCCD.__init__">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mol</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span>
         <span class="n">init_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp2&quot;</span><span class="p">,</span>
@@ -358,21 +358,21 @@
 
 <div class="viewcode-block" id="PUCCD.get_ex1_ops">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex1_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex1_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex1_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Not applicable. Use :func:`get_ex_ops`.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="PUCCD.get_ex2_ops">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex2_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex2_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex2_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Not applicable. Use :func:`get_ex_ops`.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="PUCCD.get_ex_ops">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_ex_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get paired excitation operators for pUCCD ansatz.</span>
 
@@ -422,7 +422,7 @@
 
 <div class="viewcode-block" id="PUCCD.make_rdm1">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.make_rdm1">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
         <span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">make_rdm1</span><span class="o">.</span><span class="vm">__doc__</span>
 
         <span class="n">civector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statevector_to_civector</span><span class="p">(</span><span class="n">statevector</span><span class="p">)</span>
@@ -444,7 +444,7 @@
 
 <div class="viewcode-block" id="PUCCD.make_rdm2">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.make_rdm2">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statevector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;AO&quot;</span><span class="p">):</span>
         <span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">make_rdm2</span><span class="o">.</span><span class="vm">__doc__</span>
 
         <span class="n">civector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statevector_to_civector</span><span class="p">(</span><span class="n">statevector</span><span class="p">)</span>
@@ -485,7 +485,7 @@
 
 <div class="viewcode-block" id="PUCCD.get_circuit">
 <a class="viewcode-back" href="../../../api/puccd.html#tencirchem.PUCCD.get_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trotter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">givens_swap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trotter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">givens_swap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the circuit as TensorCircuit ``Circuit`` object.</span>
 
@@ -513,7 +513,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">e_puccd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">e_puccd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns pUCCD energy</span>
 <span class="sd">        &quot;&quot;&quot;</span>

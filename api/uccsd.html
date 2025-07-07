@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>UCCSD - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -273,9 +273,9 @@
 <dd><p>Bases: <a class="reference internal" href="ucc.html#tencirchem.UCC" title="tencirchem.static.ucc.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a></p>
 <p>Run UCCSD calculation. For a comprehensive tutorial see <a class="reference internal" href="../tutorial_jupyter/ucc_functions.html"><span class="doc">UCC Functions</span></a>.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e_ucc</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">e_ucc</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">e_fci</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
@@ -338,8 +338,8 @@ Note this could lead to different ansatz for the same molecule at different geom
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span><span class="o">.</span><span class="n">apply_excitation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">array([0, 0, 0, 1])</span>
@@ -364,9 +364,9 @@ Accepts the <code class="docutils literal notranslate"><span class="pre">UCC</sp
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf.mcscf</span> <span class="kn">import</span> <span class="n">CASSCF</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h8</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.mcscf</span><span class="w"> </span><span class="kn">import</span> <span class="n">CASSCF</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h8</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># normal PySCF workflow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hf</span> <span class="o">=</span> <span class="n">h8</span><span class="o">.</span><span class="n">HF</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">(),</span> <span class="mi">8</span><span class="p">)</span>
@@ -411,8 +411,8 @@ and <a class="reference internal" href="#tencirchem.UCCSD.kernel" title="tencirc
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span><span class="o">.</span><span class="n">civector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># HF state</span>
 <span class="go">array([1., 0., 0., 0.])</span>
@@ -475,8 +475,8 @@ and <a class="reference internal" href="#tencirchem.UCCSD.kernel" title="tencirc
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">energy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">8</span><span class="p">)</span>  <span class="c1"># HF state</span>
 <span class="go">-1.11670614</span>
@@ -516,8 +516,8 @@ and <a class="reference internal" href="#tencirchem.UCCSD.kernel" title="tencirc
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">energy_and_grad</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
@@ -569,8 +569,8 @@ Defaults to 0.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">PUCCD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">PUCCD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_addr</span><span class="p">(</span><span class="s2">&quot;0101&quot;</span><span class="p">)</span>  <span class="c1"># the HF state</span>
 <span class="go">0</span>
@@ -602,8 +602,8 @@ Defaults to 0.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">PUCCD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">PUCCD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_ci_strings</span><span class="p">()</span>
 <span class="go">array([ 5,  6,  9, 10], dtype=uint64)</span>
@@ -732,8 +732,8 @@ Pick and sort two-body operators if <code class="docutils literal notranslate"><
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_op</span><span class="p">,</span> <span class="n">param_ids</span><span class="p">,</span> <span class="n">init_guess</span> <span class="o">=</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">get_ex_ops</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_op</span>
@@ -772,8 +772,8 @@ Defaults to 1e-12.</p>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span><span class="o">.</span><span class="n">init_state</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.707</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.707</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span><span class="o">.</span><span class="n">get_init_state_dataframe</span><span class="p">()</span>   
@@ -918,9 +918,9 @@ Defaults to None, which uses the optimized state by <a class="reference internal
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1">## HF state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdm1</span> <span class="o">=</span> <span class="n">ucc</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;MO&quot;</span><span class="p">)</span>
@@ -1040,8 +1040,8 @@ and <a class="reference internal" href="#tencirchem.UCCSD.kernel" title="tencirc
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uccsd</span><span class="o">.</span><span class="n">statevector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># HF state</span>
 <span class="go">array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])</span>

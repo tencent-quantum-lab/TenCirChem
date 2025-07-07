@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Noisy Circuit Simulation - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -281,8 +281,8 @@ different.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">HEA</span>
-<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">HEA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 </pre></div>
 </div>
 </div>
@@ -294,7 +294,7 @@ different.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span>
 
 <span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="c1"># Hamiltonian as openfermion.FermionOperator</span>
@@ -330,7 +330,7 @@ different.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">parity</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">parity</span>
 </pre></div>
 </div>
 </div>
@@ -366,15 +366,15 @@ different.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">tensorcircuit</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Circuit</span>
 
 <span class="c1"># the ansatz</span>
 <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">init_guess</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
     <span class="c1"># the ansatz body</span>
     <span class="n">c</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -453,8 +453,8 @@ different.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorcircuit.noisemodel</span> <span class="kn">import</span> <span class="n">NoiseConf</span>
-<span class="kn">from</span> <span class="nn">tensorcircuit.channels</span> <span class="kn">import</span> <span class="n">isotropicdepolarizingchannel</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit.noisemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoiseConf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit.channels</span><span class="w"> </span><span class="kn">import</span> <span class="n">isotropicdepolarizingchannel</span>
 
 <span class="n">engine_conf</span> <span class="o">=</span> <span class="n">NoiseConf</span><span class="p">()</span>
 <span class="c1"># larger noise, corresponding to 80% fidelity</span>
@@ -575,7 +575,7 @@ many CNOT gates in the circuit.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
 <span class="n">get_circuit</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">,</span> <span class="n">decompose_multicontrol</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="p">(</span><span class="n">uccsd</span><span class="o">.</span><span class="n">h_qubit_op</span><span class="p">,</span> <span class="n">get_circuit</span><span class="p">,</span> <span class="n">uccsd</span><span class="o">.</span><span class="n">init_guess</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
@@ -598,8 +598,8 @@ many CNOT gates in the circuit.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="kn">from</span> <span class="nn">qiskit.circuit.library</span> <span class="kn">import</span> <span class="n">TwoLocal</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.circuit.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">TwoLocal</span>
 
 <span class="n">ansatz</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">ansatz</span> <span class="o">=</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">TwoLocal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">rotation_blocks</span><span class="o">=</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="n">entanglement_blocks</span><span class="o">=</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decompose</span><span class="p">())</span>
@@ -641,7 +641,7 @@ many CNOT gates in the circuit.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">get_noise_conf</span><span class="p">,</span> <span class="n">set_backend</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_noise_conf</span><span class="p">,</span> <span class="n">set_backend</span>
 
 <span class="c1"># cnot error probabilities</span>
 <span class="n">error_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">]</span>
@@ -649,7 +649,7 @@ many CNOT gates in the circuit.</p>
 <span class="n">n_layers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="n">e_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="c1"># record run time</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">n_layer</span> <span class="ow">in</span> <span class="n">n_layers</span><span class="p">:</span>
@@ -679,8 +679,8 @@ many CNOT gates in the circuit.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">mpl_config</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_config</span>
 
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">error_probs</span><span class="p">,</span> <span class="n">e_array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Noisy 1-layer&quot;</span><span class="p">)</span>

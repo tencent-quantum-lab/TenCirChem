@@ -6,7 +6,7 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>tencirchem.static.hea - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -265,17 +265,17 @@
 <span class="c1">#  and WITHOUT ANY WARRANTY. See the LICENSE file for details.</span>
 
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
-<span class="kn">from</span> <span class="nn">noisyopt</span> <span class="kn">import</span> <span class="n">minimizeSPSA</span>
-<span class="kn">from</span> <span class="nn">pyscf.gto.mole</span> <span class="kn">import</span> <span class="n">Mole</span>
-<span class="kn">from</span> <span class="nn">openfermion</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">noisyopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimizeSPSA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.gto.mole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openfermion</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">hermitian_conjugated</span><span class="p">,</span>
     <span class="n">jordan_wigner</span><span class="p">,</span>
     <span class="n">bravyi_kitaev</span><span class="p">,</span>
@@ -286,12 +286,12 @@
     <span class="n">QubitOperator</span><span class="p">,</span>
     <span class="n">FermionOperator</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="kn">import</span> <span class="nn">tensorcircuit</span> <span class="k">as</span> <span class="nn">tc</span>
-<span class="kn">from</span> <span class="nn">tensorcircuit</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">DMCircuit</span>
-<span class="kn">from</span> <span class="nn">tensorcircuit.noisemodel</span> <span class="kn">import</span> <span class="n">NoiseConf</span><span class="p">,</span> <span class="n">circuit_with_noise</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorcircuit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">DMCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorcircuit.noisemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoiseConf</span><span class="p">,</span> <span class="n">circuit_with_noise</span>
 
-<span class="kn">from</span> <span class="nn">tencirchem.static.engine_hea</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.engine_hea</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">QpuConf</span><span class="p">,</span>
     <span class="n">get_statevector</span><span class="p">,</span>
     <span class="n">get_densitymatrix</span><span class="p">,</span>
@@ -306,9 +306,9 @@
     <span class="n">get_energy_and_grad_tensornetwork_noise_shot</span><span class="p">,</span>
     <span class="n">get_energy_and_grad_qpu</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tencirchem.static.hamiltonian</span> <span class="kn">import</span> <span class="n">get_hop_from_integral</span>
-<span class="kn">from</span> <span class="nn">tencirchem.utils.misc</span> <span class="kn">import</span> <span class="n">reverse_fop_idx</span><span class="p">,</span> <span class="n">scipy_opt_wrap</span><span class="p">,</span> <span class="n">reverse_qop_idx</span>
-<span class="kn">from</span> <span class="nn">tencirchem.utils.circuit</span> <span class="kn">import</span> <span class="n">get_circuit_dataframe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.hamiltonian</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_hop_from_integral</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.utils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse_fop_idx</span><span class="p">,</span> <span class="n">scipy_opt_wrap</span><span class="p">,</span> <span class="n">reverse_qop_idx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.utils.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_circuit_dataframe</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 
@@ -316,12 +316,12 @@
 <span class="n">Tensor</span> <span class="o">=</span> <span class="n">Any</span>
 
 
-<span class="k">def</span> <span class="nf">get_noise_conf</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_noise_conf</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
     <span class="n">noise_conf</span> <span class="o">=</span> <span class="n">NoiseConf</span><span class="p">()</span>
     <span class="c1"># note TC definition of error probability</span>
     <span class="n">channel</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">channels</span><span class="o">.</span><span class="n">isotropicdepolarizingchannel</span><span class="p">(</span><span class="n">probability</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="n">qir</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">condition</span><span class="p">(</span><span class="n">qir</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">qir</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span>
 
     <span class="n">noise_conf</span><span class="o">.</span><span class="n">add_noise_by_condition</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">channel</span><span class="p">)</span>
@@ -330,7 +330,7 @@
 
 <div class="viewcode-block" id="binary">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.binary">[docs]</a>
-<span class="k">def</span> <span class="nf">binary</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">binary</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs binary transformation.</span>
 
@@ -351,13 +351,13 @@
 
 
 
-<span class="k">def</span> <span class="nf">_parity</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_parity</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">binary_code_transform</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">parity_code</span><span class="p">(</span><span class="n">n_modes</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="parity">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.parity">[docs]</a>
-<span class="k">def</span> <span class="nf">parity</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parity</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs parity transformation.</span>
 
@@ -405,7 +405,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fop_to_qop</span><span class="p">(</span><span class="n">fop</span><span class="p">:</span> <span class="n">FermionOperator</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitOperator</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">mapping</span> <span class="o">==</span> <span class="s2">&quot;parity&quot;</span><span class="p">:</span>
         <span class="n">qop</span> <span class="o">=</span> <span class="n">parity</span><span class="p">(</span><span class="n">fop</span><span class="p">,</span> <span class="n">n_sorb</span><span class="p">,</span> <span class="n">n_elec</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">mapping</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;jordan-wigner&quot;</span><span class="p">,</span> <span class="s2">&quot;jordan_wigner&quot;</span><span class="p">]:</span>
@@ -419,7 +419,7 @@
 
 <div class="viewcode-block" id="get_ry_circuit">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.get_ry_circuit">[docs]</a>
-<span class="k">def</span> <span class="nf">get_ry_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ry_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the parameterized :math:`R_y` circuit.</span>
 
@@ -453,7 +453,7 @@
 
 <div class="viewcode-block" id="HEA">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA">[docs]</a>
-<span class="k">class</span> <span class="nc">HEA</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HEA</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run hardware-efficient ansatz calculation.</span>
 <span class="sd">    For a comprehensive tutorial see :doc:`/tutorial_jupyter/noisy_simulation`.</span>
@@ -462,7 +462,7 @@
 <div class="viewcode-block" id="HEA.from_molecule">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.from_molecule">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_molecule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s2">&quot;parity&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_molecule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s2">&quot;parity&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct the HEA class from the given molecule.</span>
 <span class="sd">        The :math:`R_y` ansatz is employed. By default, the number of layers is set to 3.</span>
@@ -489,7 +489,7 @@
 <span class="sd">        hea: :class:`HEA`</span>
 <span class="sd">             An HEA instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
 
         <span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="n">active_space</span><span class="p">,</span> <span class="n">run_ccsd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">run_fci</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -498,7 +498,7 @@
 <div class="viewcode-block" id="HEA.ry">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.ry">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">ry</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ry</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">int1e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">int2e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -564,7 +564,7 @@
 
         <span class="n">init_guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">n_layers</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-        <span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">init_circuit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -579,7 +579,7 @@
 <div class="viewcode-block" id="HEA.from_integral">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.from_integral">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_integral</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_integral</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">int1e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">int2e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -644,7 +644,7 @@
 <div class="viewcode-block" id="HEA.as_pyscf_solver">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.as_pyscf_solver">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">as_pyscf_solver</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opt_engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_pyscf_solver</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opt_engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts the ``HEA`` class to a PySCF FCI solver using :math:`R_y` ansatz.</span>
 
@@ -678,15 +678,15 @@
 <span class="sd">        -4.166473</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">class</span> <span class="nc">FakeFCISolver</span><span class="p">:</span>
-            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">FakeFCISolver</span><span class="p">:</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">:</span> <span class="n">HEA</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span> <span class="o">=</span> <span class="n">config_function</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="k">if</span> <span class="s2">&quot;n_layers&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">[</span><span class="s2">&quot;n_layers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-            <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">ci0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecore</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">ci0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecore</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">e_core</span><span class="o">=</span><span class="n">ecore</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_kwargs</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">config_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
@@ -700,16 +700,16 @@
                     <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">params</span>
 
-            <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
                 <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">rdm1</span>
 
-            <span class="k">def</span> <span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
                 <span class="n">rdm1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">make_rdm2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span>
 
-            <span class="k">def</span> <span class="nf">spin_square</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">spin_square</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">):</span>
                 <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="n">FakeFCISolver</span><span class="p">()</span></div>
@@ -717,7 +717,7 @@
 
 <div class="viewcode-block" id="HEA.__init__">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_qubit_op</span><span class="p">:</span> <span class="n">QubitOperator</span><span class="p">,</span>
         <span class="n">circuit</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">QuantumCircuit</span><span class="p">],</span>
@@ -769,7 +769,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">circuit_param</span><span class="p">[</span><span class="s2">&quot;nqubits&quot;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">QuantumCircuit</span><span class="p">):</span>
 
-            <span class="k">def</span> <span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">get_circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">Circuit</span><span class="o">.</span><span class="n">from_qiskit</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">binding_params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span> <span class="o">=</span> <span class="n">get_circuit</span>
@@ -804,7 +804,7 @@
 
 <div class="viewcode-block" id="HEA.get_dmcircuit">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.get_dmcircuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_dmcircuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">noise_conf</span><span class="p">:</span> <span class="n">NoiseConf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DMCircuit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dmcircuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">noise_conf</span><span class="p">:</span> <span class="n">NoiseConf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DMCircuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the :class:`DMCircuit` with noise.</span>
 <span class="sd">        Only valid for ``&quot;tensornetwork-noise&quot;`` and ``&quot;tensornetwork-noise&amp;shot&quot;`` engines.</span>
@@ -833,7 +833,7 @@
 
 <div class="viewcode-block" id="HEA.get_dmcircuit_no_noise">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.get_dmcircuit_no_noise">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_dmcircuit_no_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DMCircuit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dmcircuit_no_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DMCircuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the :class:`DMCircuit` without noise.</span>
 
@@ -852,7 +852,7 @@
         <span class="k">return</span> <span class="n">dmcircuit</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_check_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
         <span class="n">supported_engine</span> <span class="o">=</span> <span class="p">[</span>
             <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;tensornetwork&quot;</span><span class="p">,</span>
@@ -864,7 +864,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">supported_engine</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine &#39;</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">&#39; not supported&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_params_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_params_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
@@ -883,7 +883,7 @@
 
 <div class="viewcode-block" id="HEA.statevector">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.statevector">[docs]</a>
-    <span class="k">def</span> <span class="nf">statevector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statevector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the circuit state vector without considering noise.</span>
 <span class="sd">        Valid for ``&quot;tensornetwork&quot;`` and ``&quot;tensornetwork-shot&quot;`` engine.</span>
@@ -924,7 +924,7 @@
 
 <div class="viewcode-block" id="HEA.densitymatrix">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.densitymatrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">densitymatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">densitymatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the circuit density matrix in the presence of circuit noise.</span>
 <span class="sd">        Only valid for ``&quot;tensornetwork-noise&quot;`` and ``&quot;tensornetwork-noise&amp;shot&quot;`` engines.</span>
@@ -968,7 +968,7 @@
 
 <div class="viewcode-block" id="HEA.energy">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.energy">[docs]</a>
-    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the total energy.</span>
 
@@ -1051,7 +1051,7 @@
 
 <div class="viewcode-block" id="HEA.energy_and_grad">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.energy_and_grad">[docs]</a>
-    <span class="k">def</span> <span class="nf">energy_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">energy_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the total energy and parameter gradients using parameter-shift rule.</span>
 
@@ -1140,7 +1140,7 @@
 
 <div class="viewcode-block" id="HEA.kernel">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.kernel">[docs]</a>
-    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Begin optimization&quot;</span><span class="p">)</span>
 
         <span class="n">func</span><span class="p">,</span> <span class="n">stating_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_opt_function</span><span class="p">(</span><span class="n">with_time</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1174,7 +1174,7 @@
 
 <div class="viewcode-block" id="HEA.get_opt_function">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.get_opt_function">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_opt_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">with_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opt_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">with_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the cost function in SciPy format for optimization.</span>
 <span class="sd">        Basically a wrapper to :func:`energy_and_grad` or :func:`energy`,</span>
@@ -1217,7 +1217,7 @@
 
 <div class="viewcode-block" id="HEA.make_rdm1">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.make_rdm1">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the spin-traced one-body reduced density matrix (1RDM).</span>
 
@@ -1272,7 +1272,7 @@
 
 <div class="viewcode-block" id="HEA.make_rdm2">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.make_rdm2">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate the spin-traced two-body reduced density matrix (2RDM).</span>
 
@@ -1341,11 +1341,11 @@
 
 <div class="viewcode-block" id="HEA.print_circuit">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.print_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">print_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">print_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_circuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">get_circuit_dataframe</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">format_flop</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">format_flop</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="n">formatters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;flop&quot;</span><span class="p">:</span> <span class="n">format_flop</span><span class="p">}</span>
@@ -1354,7 +1354,7 @@
 
 <div class="viewcode-block" id="HEA.print_summary">
 <a class="viewcode-back" href="../../../api/hea.html#tencirchem.HEA.print_summary">[docs]</a>
-    <span class="k">def</span> <span class="nf">print_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">print_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;############################### Circuit ###############################&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_circuit</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;######################### Optimization Result #########################&quot;</span><span class="p">)</span>
@@ -1365,22 +1365,22 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grad</span>
 
     <span class="nd">@grad</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;param-shift&quot;</span><span class="p">,</span> <span class="s2">&quot;autodiff&quot;</span><span class="p">,</span> <span class="s2">&quot;free&quot;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid gradient method </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grad</span> <span class="o">=</span> <span class="n">v</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">n_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The number of parameter in the ansatz/circuit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The circuit parameters.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span>
@@ -1389,7 +1389,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@params</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">params</span></div>
 
 </pre></div>

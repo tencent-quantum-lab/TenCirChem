@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Variational Basis State Encoder (Time Dependent) - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -280,14 +280,14 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span>
-<span class="kn">from</span> <span class="nn">opt_einsum</span> <span class="kn">import</span> <span class="n">contract</span>
-<span class="kn">import</span> <span class="nn">tensorcircuit</span> <span class="k">as</span> <span class="nn">tc</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">solve_ivp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">opt_einsum</span><span class="w"> </span><span class="kn">import</span> <span class="n">contract</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorcircuit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tc</span>
 
-<span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">set_backend</span><span class="p">,</span> <span class="n">Op</span><span class="p">,</span> <span class="n">Mpo</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">OpSum</span>
-<span class="kn">from</span> <span class="nn">tencirchem.dynamic</span> <span class="kn">import</span> <span class="n">get_ansatz</span><span class="p">,</span> <span class="n">get_deriv</span><span class="p">,</span> <span class="n">get_jacobian_func</span><span class="p">,</span> <span class="n">qubit_encode_basis</span><span class="p">,</span> <span class="n">sbm</span>
-<span class="kn">from</span> <span class="nn">tencirchem.applications.vbe_lib</span> <span class="kn">import</span> <span class="n">get_psi_indices</span><span class="p">,</span> <span class="n">get_contracted_mpo</span><span class="p">,</span> <span class="n">get_contract_args</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_backend</span><span class="p">,</span> <span class="n">Op</span><span class="p">,</span> <span class="n">Mpo</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">OpSum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.dynamic</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ansatz</span><span class="p">,</span> <span class="n">get_deriv</span><span class="p">,</span> <span class="n">get_jacobian_func</span><span class="p">,</span> <span class="n">qubit_encode_basis</span><span class="p">,</span> <span class="n">sbm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.applications.vbe_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_psi_indices</span><span class="p">,</span> <span class="n">get_contracted_mpo</span><span class="p">,</span> <span class="n">get_contract_args</span>
 </pre></div>
 </div>
 </div>
@@ -341,7 +341,7 @@
 
 
 <span class="c1"># spin boson model has been define in tencirchem.dynamic.model</span>
-<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nmode</span><span class="p">,</span> <span class="n">omega_list</span><span class="p">,</span> <span class="n">g_list</span><span class="p">,</span> <span class="n">nlevels</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nmode</span><span class="p">,</span> <span class="n">omega_list</span><span class="p">,</span> <span class="n">g_list</span><span class="p">,</span> <span class="n">nlevels</span><span class="p">):</span>
     <span class="n">ham_terms</span> <span class="o">=</span> <span class="n">sbm</span><span class="o">.</span><span class="n">get_ham_terms</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nmode</span><span class="p">,</span> <span class="n">omega_list</span><span class="p">,</span> <span class="n">g_list</span><span class="p">)</span>
     <span class="n">basis</span> <span class="o">=</span> <span class="n">sbm</span><span class="o">.</span><span class="n">get_basis</span><span class="p">(</span><span class="n">omega_list</span><span class="p">,</span> <span class="n">nlevels</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">ham_terms</span><span class="p">)</span>
@@ -402,7 +402,7 @@ psi_shape2:  [2, 2, 2, 2, 2]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_vha_terms</span><span class="p">():</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_vha_terms</span><span class="p">():</span>
     <span class="n">basis</span> <span class="o">=</span> <span class="n">sbm</span><span class="o">.</span><span class="n">get_basis</span><span class="p">(</span><span class="n">omega_list</span><span class="p">,</span> <span class="p">[</span><span class="n">nbas_v</span><span class="p">]</span> <span class="o">*</span> <span class="n">nmode</span><span class="p">)</span>
     <span class="n">spin_basis</span> <span class="o">=</span> <span class="n">qubit_encode_basis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 
@@ -550,7 +550,7 @@ Op(&#39;Z Z Z&#39;, [&#39;spin&#39;, (&#39;v1&#39;, &#39;TCCQUBIT-0&#39;), (&#39
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">deriv_fun</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">theta_and_b</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">deriv_fun</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">theta_and_b</span><span class="p">):</span>
     <span class="c1"># split \thera and b to independent arrays</span>
     <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_and_b</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta0</span><span class="p">)]</span>
     <span class="n">psi</span> <span class="o">=</span> <span class="n">ansatz</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
@@ -576,7 +576,7 @@ Op(&#39;Z Z Z&#39;, [&#39;spin&#39;, (&#39;v1&#39;, &#39;TCCQUBIT-0&#39;), (&#39
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">psi</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">psi_top_indices</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">psi_bottom_indices</span><span class="p">,</span> <span class="n">out_indices</span><span class="p">]</span>
         <span class="n">rho</span> <span class="o">=</span> <span class="n">contract</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n_qubit_per_mode</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n_qubit_per_mode</span><span class="p">)</span>
 
-        <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">pinv</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">pinv</span>
 
         <span class="n">rho</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-5</span>
         <span class="n">rho_inv</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
@@ -644,7 +644,7 @@ Op(&#39;Z Z Z&#39;, [&#39;spin&#39;, (&#39;v1&#39;, &#39;TCCQUBIT-0&#39;), (&#39
 <span class="n">rho</span> <span class="o">=</span> <span class="n">contract</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n_qubit_per_mode</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n_qubit_per_mode</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rho: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">pinv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">pinv</span>
 
 <span class="n">rho</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-5</span>
 <span class="n">rho_inv</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
@@ -1039,8 +1039,8 @@ args in derivative:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the outcome</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">mpl_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_config</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_list</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t (a.u.)&quot;</span><span class="p">)</span>

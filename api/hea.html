@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Headware-Efficient Ansatz and Noisy Circuit Simulation - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -311,9 +311,9 @@ Accepts the <code class="docutils literal notranslate"><span class="pre">HEA</sp
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf.mcscf</span> <span class="kn">import</span> <span class="n">CASSCF</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">HEA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h8</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.mcscf</span><span class="w"> </span><span class="kn">import</span> <span class="n">CASSCF</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h8</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># normal PySCF workflow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hf</span> <span class="o">=</span> <span class="n">h8</span><span class="o">.</span><span class="n">HF</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">(),</span> <span class="mi">6</span><span class="p">)</span>
@@ -356,9 +356,9 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span>
 <span class="gp">... </span>        <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
@@ -402,9 +402,9 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span>
 <span class="gp">... </span>        <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensornetwork-noise&quot;</span><span class="p">)</span>
@@ -751,9 +751,9 @@ and <a class="reference internal" href="#tencirchem.HEA.kernel" title="tencirche
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span><span class="p">,</span> <span class="n">HEA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hea</span> <span class="o">=</span> <span class="n">HEA</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">ucc</span><span class="o">.</span><span class="n">int1e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">int2e</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">ucc</span><span class="o">.</span><span class="n">e_core</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hea</span><span class="o">.</span><span class="n">statevector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">8</span><span class="p">)</span>  <span class="c1"># HF state</span>

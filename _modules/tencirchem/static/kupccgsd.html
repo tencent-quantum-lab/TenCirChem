@@ -6,7 +6,7 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>tencirchem.static.kupccgsd - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -265,21 +265,21 @@
 <span class="c1">#  and WITHOUT ANY WARRANTY. See the LICENSE file for details.</span>
 
 
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pyscf.gto.mole</span> <span class="kn">import</span> <span class="n">Mole</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.gto.mole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mole</span>
 
-<span class="kn">from</span> <span class="nn">tencirchem.static.ucc</span> <span class="kn">import</span> <span class="n">UCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.static.ucc</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="KUPCCGSD">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD">[docs]</a>
-<span class="k">class</span> <span class="nc">KUPCCGSD</span><span class="p">(</span><span class="n">UCC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KUPCCGSD</span><span class="p">(</span><span class="n">UCC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run :math:`k`-UpCCGSD calculation.</span>
 <span class="sd">    The interfaces are similar to :class:`UCCSD &lt;tencirchem.UCCSD&gt;`.</span>
@@ -287,7 +287,7 @@
 
 <div class="viewcode-block" id="KUPCCGSD.__init__">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mol</span><span class="p">:</span> <span class="n">Mole</span><span class="p">,</span>
         <span class="n">active_space</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -363,7 +363,7 @@
 
 <div class="viewcode-block" id="KUPCCGSD.kernel">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD.kernel">[docs]</a>
-    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">stating_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_opt_function</span><span class="p">(</span><span class="n">with_time</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
@@ -395,7 +395,7 @@
 
 <div class="viewcode-block" id="KUPCCGSD.get_ex_ops">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD.get_ex_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get one-body and two-body excitation operators for :math:`k`-UpCCGSD ansatz.</span>
 <span class="sd">        The excitations are generalized and two-body excitations are restricted to paired ones.</span>
@@ -450,7 +450,7 @@
 
 <div class="viewcode-block" id="KUPCCGSD.get_ex1_ops">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD.get_ex1_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex1_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex1_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get generalized one-body excitation operators.</span>
 
@@ -494,7 +494,7 @@
 
 <div class="viewcode-block" id="KUPCCGSD.get_ex2_ops">
 <a class="viewcode-back" href="../../../api/kupccgsd.html#tencirchem.KUPCCGSD.get_ex2_ops">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_ex2_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ex2_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get generalized paired two-body excitation operators.</span>
 
@@ -538,7 +538,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">e_kupccgsd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">e_kupccgsd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns :math:`k`-UpCCGSD energy</span>
 <span class="sd">        &quot;&quot;&quot;</span>

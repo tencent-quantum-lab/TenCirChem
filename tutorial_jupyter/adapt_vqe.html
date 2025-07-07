@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>ADAPT VQE - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -278,8 +278,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCC</span>
-<span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h4</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h4</span>
 
 <span class="n">ucc</span> <span class="o">=</span> <span class="n">UCC</span><span class="p">(</span><span class="n">h4</span><span class="p">)</span>
 
@@ -291,7 +291,7 @@
 </div>
 </div>
 <p>The meanings of the numbers are best summarized in the following figure. The elements in the tuples are spin-orbital indices, with the first half and the second half corresponds to creation and annihilation operators, respectively.</p>
-<p><img alt="excitation" src="../_images/excitation.png" /></p>
+<img alt="excitation" src="../_images/excitation.png" />
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -356,7 +356,7 @@
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># group the operators to form an operator pool</span>
 <span class="c1"># operators with the same parameter are grouped together.</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 
 <span class="n">op_pool</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ex1_op</span><span class="p">,</span> <span class="n">ex1_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ex1_ops</span><span class="p">,</span> <span class="n">ex1_param_ids</span><span class="p">):</span>
@@ -414,7 +414,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">ucc</span><span class="o">.</span><span class="n">ex_ops</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">ucc</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>

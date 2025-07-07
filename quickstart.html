@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Quick Start - TenCirChem documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -292,7 +292,7 @@ TenCirChem has implemented
 and
 <a class="reference internal" href="api/puccd.html#tencirchem.PUCCD" title="tencirchem.PUCCD"><code class="xref py py-class docutils literal notranslate"><span class="pre">pUCCD</span></code></a> (<a class="reference external" href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032605">Elfving2021</a>),
 based on the <a class="reference internal" href="api/ucc.html#tencirchem.UCC" title="tencirchem.UCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCC</span></code></a> base class.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">KUPCCGSD</span><span class="p">,</span> <span class="n">PUCCD</span><span class="p">,</span> <span class="n">M</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">KUPCCGSD</span><span class="p">,</span> <span class="n">PUCCD</span><span class="p">,</span> <span class="n">M</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># distance unit is angstrom</span>
 <span class="linenos"> 4</span><span class="n">d</span> <span class="o">=</span> <span class="mf">0.8</span>
@@ -413,8 +413,8 @@ The <code class="docutils literal notranslate"><span class="pre">engine</span></
 <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&quot;</span></code> includes gate noise,
 <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-shot&quot;</span></code> includes measurement uncertainty,
 and <code class="docutils literal notranslate"><span class="pre">&quot;tensornetwork-noise&amp;shot&quot;</span></code> includes both.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">HEA</span>
-<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">tencirchem.molecule</span> <span class="kn">import</span> <span class="n">h2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCCSD</span><span class="p">,</span> <span class="n">HEA</span>
+<span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem.molecule</span><span class="w"> </span><span class="kn">import</span> <span class="n">h2</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1"># use the `UCCSD` class to access the integrals</span>
 <span class="linenos"> 5</span><span class="n">uccsd</span> <span class="o">=</span> <span class="n">UCCSD</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
@@ -446,7 +446,7 @@ The cutomization guide is included in the
 <p>TenCirChem uses the <code class="docutils literal notranslate"><span class="pre">Op</span></code> and <code class="docutils literal notranslate"><span class="pre">BasisSet</span></code> classes in <a class="reference external" href="https://github.com/shuaigroup/Renormalizer">Renormalizer</a>
 to define the Hamiltonian and the basis sets.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent to `from renormalizer import ...`</span>
-<span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">Op</span><span class="p">,</span> <span class="n">BasisHalfSpin</span><span class="p">,</span> <span class="n">BasisSHO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Op</span><span class="p">,</span> <span class="n">BasisHalfSpin</span><span class="p">,</span> <span class="n">BasisSHO</span>
 
 <span class="n">ham_terms</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">Op</span><span class="p">(</span><span class="s2">&quot;sigma_z&quot;</span><span class="p">,</span> <span class="s2">&quot;spin&quot;</span><span class="p">),</span>
@@ -460,7 +460,7 @@ to define the Hamiltonian and the basis sets.</p>
 <p>For more about these classes please refer to the
 <a class="reference external" href="https://shuaigroup.github.io/Renormalizer/model.html">Renormalizer document</a>.</p>
 <p>Next, run the time evolution</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tencirchem</span> <span class="kn">import</span> <span class="n">TimeEvolution</span><span class="p">,</span> <span class="n">set_backend</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tencirchem</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeEvolution</span><span class="p">,</span> <span class="n">set_backend</span>
 
 <span class="c1"># the dynamics module only supports JAX backend</span>
 <span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;jax&quot;</span><span class="p">)</span>
